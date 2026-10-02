@@ -89,23 +89,64 @@
     return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
-  function inline(s) {
+  function inline(s, pen) {
     return escapeHtml(s)
-      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*\*(.+?)\*\*/g, (_, t) => `<strong${pen ? ` class="${pen(t)}"` : ""}>${t}</strong>`)
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?![*\w])/g, "$1<em>$2</em>");
   }
 
+  // Highlighter pens for notes: key terms switch between pink, green and yellow
+  // (a term keeps its colour every time it comes up), traps get orange.
+  const TERM_PENS = ["hl-pink", "hl-green", "hl-yellow"];
+  function makePens() {
+    const seen = new Map();
+    return (term) => {
+      const k = term.replace(/<[^>]+>/g, "").trim().toLowerCase();
+      if (!seen.has(k)) seen.set(k, TERM_PENS[seen.size % TERM_PENS.length]);
+      return seen.get(k);
+    };
+  }
+  const ANSWER_LINE = /^(so|therefore|hence|thus|answer|result|final answer|the answer)\b/i;
+
   // Safe formatter for model text: escape first, then allow bold, code,
   // bullet lists, code blocks and the "Example / Common traps / Remember this" labels.
-  function formatText(text) {
+  // With { highlighters: true } it colours the notes like a student's highlighters.
+  function formatText(text, opts = {}) {
     const lines = String(text).replace(/\r/g, "").split("\n");
     let html = "";
     let para = [];
     let list = null;
     let code = null;
-    const flushPara = () => { if (para.length) { html += `<p>${para.map(inline).join("<br>")}</p>`; para = []; } };
-    const flushList = () => { if (list) { html += `<ul>${list.map((i) => `<li>${inline(i)}</li>`).join("")}</ul>`; list = null; } };
+    let section = "core";
+    const termPen = opts.highlighters ? makePens() : null;
+    const pen = termPen ? (t) => (section === "traps" ? "hl-orange" : termPen(t)) : null;
+    const fmt = (str) => inline(str, pen);
+    // The worked example's answer gets a green highlight: a "So / Therefore / Answer"
+    // line if there is one, otherwise the example's last line.
+    let exampleAnswered = false;
+    let lastExamplePara = null;
+    const fmtLine = (str) => {
+      if (pen && section === "example" && ANSWER_LINE.test(str)) { exampleAnswered = true; return `<span class="hl-line">${fmt(str)}</span>`; }
+      return fmt(str);
+    };
+    const flushPara = () => {
+      if (!para.length) return;
+      const start = html.length;
+      html += `<p>${para.map(fmtLine).join("<br>")}</p>`;
+      if (section === "example") lastExamplePara = { start, end: html.length, lines: para };
+      para = [];
+    };
+    const leaveExample = () => {
+      const last = lastExamplePara;
+      if (!pen || section !== "example" || exampleAnswered || !last || last.end !== html.length) return;
+      const n = last.lines.length - 1;
+      html = html.slice(0, last.start) + `<p>${last.lines.map((l, i) => (i === n ? `<span class="hl-line">${fmt(l)}</span>` : fmt(l))).join("<br>")}</p>`;
+      exampleAnswered = true;
+    };
+    const flushList = () => {
+      if (list) { html += `<ul${pen && section === "traps" ? ' class="traps"' : ""}>${list.map((i) => `<li>${fmtLine(i)}</li>`).join("")}</ul>`; list = null; }
+    };
 
     for (const raw of lines) {
       if (code !== null) {
@@ -124,12 +165,16 @@
       const remember = line.match(/^\**\s*remember this\s*:?\s*\**\s*:?\s*(.*)$/i);
       if (remember) {
         flushPara();
+        leaveExample();
+        section = "remember";
         html += `<div class="sticky-note remember"><span class="tape" aria-hidden="true"></span><span class="label-small">Remember this</span>${inline(remember[1])}</div>`;
         continue;
       }
       const label = line.match(/^\**\s*(example|common traps?)\s*:?\s*\**\s*:?\s*(.*)$/i);
       if (label) {
         flushPara();
+        leaveExample();
+        section = /^example/i.test(label[1]) ? "example" : "traps";
         html += `<h4 class="label">${escapeHtml(label[1].replace(/^./, (c) => c.toUpperCase()))}</h4>`;
         if (label[2]) para.push(label[2]);
         continue;
@@ -138,6 +183,7 @@
     }
     if (code !== null) html += `<pre><code>${escapeHtml(code.join("\n"))}</code></pre>`;
     flushPara();
+    leaveExample();
     flushList();
     return html;
   }
@@ -179,7 +225,7 @@
   }
 
   // ---------- saved progress (this browser only, no login) ----------
-  const KEY = { stickers: "inkwand.stickers", progress: "inkwand.progress", days: "inkwand.days" };
+  const KEY = { stickers: "inkwand.stickers", progress: "inkwand.progress", days: "inkwand.days", log: "inkwand.log" };
   const store = {
     get(key, fallback) {
       try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
@@ -203,6 +249,30 @@
     }
   }
 
+  // What you did each day, shown when you hover a ticked date on the calendar.
+  // Entries: { kind: notes | paper | cards | chapter | stickers, ref, label, book, score?, n? }
+  function logActivity(entry) {
+    const log = store.get(KEY.log, {});
+    const list = (log[dateKey()] ||= []);
+    if (entry.kind === "stickers") {
+      const e = list.find((x) => x.kind === "stickers");
+      if (e) e.n += entry.n; else list.push(entry);
+    } else if (entry.kind === "paper" || !list.some((x) => x.kind === entry.kind && x.ref === entry.ref)) {
+      list.push(entry);
+    }
+    store.set(KEY.log, log);
+    markStudiedToday();
+    renderCalendar();
+  }
+
+  function about(ctx) {
+    return {
+      ref: `${ctx.book.id}/${ctx.topic ? "ask:" + ctx.topic : ctx.chapter.id}`,
+      label: ctx.topic || ctx.chapter.title,
+      book: ctx.book.short,
+    };
+  }
+
   // stickers
   function stickerCounts() { return store.get(KEY.stickers, {}); }
   function stickerTotal() { return Object.values(stickerCounts()).reduce((a, b) => a + b, 0); }
@@ -211,6 +281,7 @@
     const counts = stickerCounts();
     counts[type] = (counts[type] || 0) + 1;
     store.set(KEY.stickers, counts);
+    logActivity({ kind: "stickers", n: 1 });
     renderBadge(type);
     renderStickerSheet();
   }
@@ -265,6 +336,8 @@
     store.set(KEY.progress, all);
     renderBookProgress(book);
     if (TABS.every((t) => p[t])) {
+      logActivity({ kind: "chapter", ref: key, label: chapter.title, book: book.short });
+      setPageTitle(chapter.title, book, chapter, true);
       toast(`${ICON.greenTick}<span><b>Chapter complete!</b> ${escapeHtml(chapter.title)} gets a green tick.</span>`);
     } else {
       const left = TABS.filter((t) => !p[t]).map((t) => WORDS[t].what);
@@ -292,7 +365,10 @@
       const studied = days.has(key);
       if (studied) studiedThisMonth++;
       const cls = ["cal-day", studied && "studied", key === todayKey && "today", key > todayKey && "future"].filter(Boolean).join(" ");
-      html += `<span class="${cls}" role="gridcell" aria-label="${key}${studied ? ", studied" : ""}"><span class="num">${d}</span>${studied ? ICON.greenTick : ""}</span>`;
+      const col = (first.getDay() + d - 1) % 7;
+      html += studied
+        ? `<span class="${cls}" role="gridcell" tabindex="0" aria-label="${key}, studied"><span class="num">${d}</span>${ICON.greenTick}${dayNote(key, col)}</span>`
+        : `<span class="${cls}" role="gridcell" aria-label="${key}"><span class="num">${d}</span></span>`;
     }
     $("#cal-grid").innerHTML = html;
 
@@ -300,6 +376,32 @@
     $("#cal-streak").innerHTML = current
       ? `<b>${current}-day streak!</b> Best: ${best}. Studied ${studiedThisMonth} day${studiedThisMonth === 1 ? "" : "s"} this month.`
       : `Study a little today to start your streak.${best ? ` Best so far: ${best} days.` : ""}`;
+  }
+
+  function describe(e) {
+    const what = `<i>${escapeHtml(e.label || "")}</i>${e.book ? ` <span class="pop-book">${escapeHtml(e.book)}</span>` : ""}`;
+    switch (e.kind) {
+      case "notes": return `Read the notes on ${what}`;
+      case "paper": return `Practice paper on ${what}, scored <b>${escapeHtml(e.score)}</b>`;
+      case "cards": return `Flipped every flashcard on ${what}`;
+      case "chapter": return `<b>Finished the chapter</b> ${what}`;
+      case "stickers": return `Earned ${e.n} sticker${e.n === 1 ? "" : "s"}`;
+      default: return "Studied";
+    }
+  }
+
+  function dayNote(key, col) {
+    const list = store.get(KEY.log, {})[key] || [];
+    // Chapters first, then papers, then the rest, stickers last.
+    const order = { chapter: 0, paper: 1, notes: 2, cards: 3, stickers: 4 };
+    const sorted = [...list].sort((a, b) => order[a.kind] - order[b.kind]);
+    const shown = sorted.slice(0, 7);
+    const items = shown.length
+      ? shown.map((e) => `<li class="pop-${e.kind}">${describe(e)}</li>`).join("") + (sorted.length > 7 ? `<li>and ${sorted.length - 7} more</li>` : "")
+      : `<li>You studied this day.</li>`;
+    const nice = new Date(key + "T00:00:00").toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+    const side = col < 2 ? " pop-left" : col > 4 ? " pop-right" : "";
+    return `<span class="cal-pop${side}" role="tooltip"><span class="pop-date">${nice}</span><ul>${items}</ul></span>`;
   }
 
   function streaks(days, now) {
@@ -386,6 +488,86 @@
     }).join("");
   }
 
+  // ---------- clicking a book: pull it out, then open it ----------
+  const PULL_MS = 280;   // hover lift is 180ms; the pull is a touch slower
+  const FLY_MS = 380;
+  const OPEN_MS = 520;
+  let opening = false;
+
+  function wireShelfClicks() {
+    $("#shelves").addEventListener("click", (e) => {
+      const spine = e.target.closest(".book-spine");
+      if (!spine || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !Element.prototype.animate) return;
+      e.preventDefault();
+      if (!opening) openBook(spine);
+    });
+  }
+
+  function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  // Run an animation and wait for it, but never longer than its own duration
+  // (some browsers don't settle .finished for hidden or throttled tabs).
+  function play(el, frames, opts) {
+    const anim = el.animate(frames, opts);
+    return Promise.race([anim.finished.catch(() => {}), wait(opts.duration + 60)]);
+  }
+
+  async function openBook(spine) {
+    opening = true;
+    const target = spine.getAttribute("href");
+    const book = state.books[target.split("/")[2]];
+    try {
+      spine.classList.add("pulling");
+      await wait(PULL_MS);
+
+      const overlay = document.createElement("div");
+      overlay.className = "book-open";
+      overlay.style.setProperty("--book", book.color);
+      overlay.innerHTML = `
+        <div class="ob-book">
+          <div class="ob-pages">
+            <span class="ob-title">${escapeHtml(book.title)}</span>
+            <span class="ob-sub">${book.chapters.length} chapters · notes, papers, flashcards</span>
+          </div>
+          <div class="ob-cover${isLight(book.color) ? " light" : ""}">
+            <span class="band"></span>
+            <span class="ob-cover-title">${escapeHtml(book.title)}</span>
+            <span class="band"></span>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      const bookEl = $(".ob-book", overlay);
+      const cover = $(".ob-cover", overlay);
+
+      // Fly from where the spine sits on the shelf to the middle of the screen,
+      // turning from its spine to its front cover on the way.
+      const from = spine.getBoundingClientRect();
+      const to = bookEl.getBoundingClientRect();
+      const dx = from.left + from.width / 2 - (to.left + to.width / 2);
+      const dy = from.top + from.height / 2 - (to.top + to.height / 2);
+      const sy = from.height / to.height;
+      overlay.animate([{ backgroundColor: "rgba(255,254,250,0)" }, { backgroundColor: "rgba(255,254,250,.55)" }], { duration: FLY_MS, fill: "both" });
+      await play(bookEl, [
+        { transform: `translate(${dx}px, ${dy}px) scale(${sy}) rotateY(-80deg)` },
+        { transform: "translate(0, 0) scale(1) rotateY(0deg)" },
+      ], { duration: FLY_MS, easing: "cubic-bezier(.2,.8,.3,1)", fill: "both" });
+
+      // Swing the cover open on its spine.
+      await play(cover, [
+        { transform: "rotateY(0deg)" },
+        { transform: "rotateY(-165deg)" },
+      ], { duration: OPEN_MS, easing: "cubic-bezier(.45,.05,.35,1)", fill: "both" });
+
+      location.hash = target;
+      await play(overlay, [{ opacity: 1 }, { opacity: 0 }], { duration: 260, fill: "both" });
+    } finally {
+      $$(".book-open").forEach((el) => el.remove());
+      spine.classList.remove("pulling");
+      opening = false;
+      if (location.hash !== target) location.hash = target;
+    }
+  }
+
   // ---------- open book ----------
   let shownBook = null;
 
@@ -399,6 +581,13 @@
       a.classList.toggle("done", done);
       $(".tick-slot", a).innerHTML = done ? ICON.greenTick : "";
     });
+  }
+
+  function setPageTitle(title, book, chapter, justDone) {
+    const done = chapter && isChapterDone(book.id, chapter.id);
+    $("#page-title").innerHTML = escapeHtml(title) + (done
+      ? `<span class="title-tick${justDone ? " just-done" : ""}" title="You have covered this chapter">${ICON.greenTick}<span>covered</span></span>`
+      : "");
   }
 
   function renderTabTicks(book, chapter) {
@@ -429,7 +618,7 @@
 
     const title = topic || chapter.title;
     $("#page-kicker").textContent = topic ? `${book.title} · your question` : `${book.title} · chapter ${book.chapters.indexOf(chapter) + 1} of ${book.chapters.length}`;
-    $("#page-title").textContent = title;
+    setPageTitle(title, book, chapter, false);
     document.title = `${title} · ${state.config.site_name}`;
     $(".part-rule").hidden = !!topic;
 
@@ -529,7 +718,7 @@
     const body = $("#page-body");
     const badge = isFresh ? `<span class="fresh-badge">freshly written</span>` : "";
     let html = badge;
-    if (ctx.tab === "notes") html += `<div class="notes">${formatText(value)}</div>`;
+    if (ctx.tab === "notes") html += `<div class="notes">${formatText(value, { highlighters: true })}</div>`;
     else if (ctx.tab === "practice") html += paperHtml(value);
     else html += deckHtml(value);
 
@@ -550,7 +739,7 @@
   // and the student has spent a little time on it.
   const READ_SECONDS = 15;
   function watchNotesRead(ctx, body) {
-    if (!("IntersectionObserver" in window)) { markPart(ctx.book, ctx.chapter, "notes"); return; }
+    if (!("IntersectionObserver" in window)) { logActivity({ kind: "notes", ...about(ctx) }); markPart(ctx.book, ctx.chapter, "notes"); return; }
     const openedAt = Date.now();
     const end = $(".ai-note", body);
     const obs = new IntersectionObserver((entries) => {
@@ -558,7 +747,11 @@
       obs.disconnect();
       const wait = Math.max(0, READ_SECONDS * 1000 - (Date.now() - openedAt));
       setTimeout(() => {
-        if (ctx.token === state.token) { markPart(ctx.book, ctx.chapter, "notes"); renderTabTicks(ctx.book, ctx.chapter); }
+        if (ctx.token === state.token) {
+          logActivity({ kind: "notes", ...about(ctx) });
+          markPart(ctx.book, ctx.chapter, "notes");
+          renderTabTicks(ctx.book, ctx.chapter);
+        }
       }, wait);
     });
     obs.observe(end);
@@ -620,6 +813,7 @@
           : "Every mistake here is one you won't make in the exam. Read the notes and try a fresh paper.";
         $(".score-slot", paper).innerHTML = `
           <div class="score-card"><span class="score-circle">${right}/${questions.length}${ICON.circle}</span><p>${msg}</p></div>`;
+        logActivity({ kind: "paper", ...about(ctx), score: `${right}/${questions.length}` });
         if (full) { slapSticker($(".score-card", paper), "cup"); awardSticker("cup"); }
         if (ctx.chapter) { markPart(ctx.book, ctx.chapter, "practice"); renderTabTicks(ctx.book, ctx.chapter); }
       }
@@ -668,7 +862,10 @@
         flipped.add(order[pos]);
         count();
         markStudiedToday();
-        if (flipped.size === cards.length && ctx.chapter) { markPart(ctx.book, ctx.chapter, "flashcards"); renderTabTicks(ctx.book, ctx.chapter); }
+        if (flipped.size === cards.length) {
+          logActivity({ kind: "cards", ...about(ctx) });
+          if (ctx.chapter) { markPart(ctx.book, ctx.chapter, "flashcards"); renderTabTicks(ctx.book, ctx.chapter); }
+        }
       }
     };
     const step = (d) => { pos = (pos + d + cards.length) % cards.length; show(); };
@@ -713,13 +910,27 @@
     c.books.forEach((b) => (state.books[b.id] = b));
     $$("[data-site-name]").forEach((el) => (el.textContent = c.site_name));
     $("[data-board-title]").textContent = c.site_name;
-    $("[data-board-line]").textContent = c.footer_line;
-    $("[data-link-github]").setAttribute("href", c.github_url);
-    $("[data-link-dev]").setAttribute("href", c.dev_post_url);
+    c.board_lines.forEach((line, i) => { const el = $(`[data-board-line="${i}"]`); if (el) el.textContent = line; });
+    $$("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
+    $$("[data-author]").forEach((el) => (el.textContent = c.author));
+    $$("[data-link-github]").forEach((a) => a.setAttribute("href", c.github_url));
+    $("[data-link-issues]").setAttribute("href", `${c.github_url}/issues/new`);
+    $("[data-link-readme]").setAttribute("href", `${c.github_url}#how-it-works`);
+    const license = $("[data-link-license]");
+    license.textContent = c.license_name;
+    license.setAttribute("href", `${c.github_url}/blob/main/LICENSE`);
+    const dev = $("[data-link-dev]");
+    if (c.dev_post_url) { dev.setAttribute("href", c.dev_post_url); dev.hidden = false; }
+    // A few books to jump into from the footer, plus the whole shelf.
+    const popular = ["algorithms", "os", "dbms", "toc", "cn"].map((id) => state.books[id]).filter(Boolean);
+    $("#footer-books").innerHTML = popular
+      .map((b) => `<li><a href="${href(b.id, b.chapters[0].id, "notes")}">${escapeHtml(b.title)}</a></li>`)
+      .join("") + `<li><a href="#/">All ${c.books.length} subjects</a></li>`;
 
     renderBadge();
     renderStickerSheet();
     wireAskForm();
+    wireShelfClicks();
     $$(".cal-nav").forEach((b) => b.addEventListener("click", () => {
       const d = new Date(state.cal.y, state.cal.m + Number(b.dataset.cal), 1);
       state.cal = { y: d.getFullYear(), m: d.getMonth() };

@@ -7,11 +7,19 @@ writes what is missing).
 
 SITE_NAME = "inkwand"
 TAGLINE = "Free GATE CSE notes, practice papers and flashcards."
-FOOTER_LINE = "Built for every self-taught student"
+AUTHOR = "Archana"
+LICENSE_NAME = "MIT License"
 
-# Footer links. Replace with your real URLs.
+# Chalk lines on the classroom blackboard in the footer.
+BOARD_LINES = [
+    "No coaching? No problem.",
+    "One chapter a day becomes a whole syllabus.",
+    "Built for every self-taught student.",
+]
+
 GITHUB_URL = "https://github.com/pyarchana/inkwand"
-DEV_POST_URL = "https://dev.to/your-username"
+# Leave empty to hide the DEV link in the footer.
+DEV_POST_URL = ""
 
 MCQS_PER_PAPER = 5
 FLASHCARDS_PER_DECK = 8
@@ -212,7 +220,9 @@ def public_config() -> dict:
     return {
         "site_name": SITE_NAME,
         "tagline": TAGLINE,
-        "footer_line": FOOTER_LINE,
+        "author": AUTHOR,
+        "license_name": LICENSE_NAME,
+        "board_lines": BOARD_LINES,
         "github_url": GITHUB_URL,
         "dev_post_url": DEV_POST_URL,
         "stars_per_correct": STARS_PER_CORRECT,

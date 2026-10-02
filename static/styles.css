@@ -68,11 +68,29 @@ button, input, select { font: inherit; color: inherit; }
 
 /* ---------- top bar ---------- */
 .topbar {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  max-width: 1120px; width: 100%; margin: 0 auto; padding: 14px 16px 6px;
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  max-width: 1120px; width: 100%; margin: 0 auto 10px; padding: 20px 16px 16px;
 }
-.logo { display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); font: 700 2rem/1 var(--hand); }
-.logo-pen { width: 40px; height: 40px; fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+/* a faint hand-drawn pen line under the header */
+.topbar::after {
+  content: ""; position: absolute; left: 16px; right: 16px; bottom: 0; height: 8px; opacity: .45;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='8' viewBox='0 0 240 8'%3E%3Cpath d='M0 4 C 30 2.5, 60 5.5, 90 4 S 150 2.8, 180 4.4 S 225 3.2, 240 4' fill='none' stroke='%231f2a44' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+  background-size: 240px 8px;
+}
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); font: 700 2.2rem/1 var(--hand); }
+.logo-pen { width: 44px; height: 44px; fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.top-right { display: flex; align-items: center; gap: 22px; }
+.gh-link { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); text-decoration: none; font: 700 1.2rem/1 var(--hand); }
+.gh-doodle { width: 32px; height: 32px; fill: none; stroke: var(--ink); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; transition: transform .18s ease; }
+.gh-doodle .gh-spark { stroke: #e0a400; }
+.gh-link:hover .gh-doodle { transform: rotate(-10deg) scale(1.06); }
+.gh-link .curly {
+  padding-bottom: 7px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='8' viewBox='0 0 30 8'%3E%3Cpath d='M0 4.5 Q 3.75 0.5 7.5 4 T 15 4 T 22.5 4 T 30 4' fill='none' stroke='%231f4fa3' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left bottom;
+  background-size: 30px 8px;
+}
+.gh-link:hover .curly { color: var(--pen-blue); }
 .logo-pen .spark { stroke: #e0a400; }
 
 .stars-badge {
@@ -162,6 +180,8 @@ input[type="text"] {
   transition: transform .18s ease;
 }
 .book-spine:hover, .book-spine:focus-visible { transform: translateY(-12px) rotate(var(--tilt)); }
+/* clicked: the book slides up off the shelf, a touch slower than the hover lift */
+.book-spine.pulling { transform: translateY(-48px) rotate(0deg); transition: transform .28s ease-out; z-index: 2; }
 .book-spine .band { width: 100%; height: 7px; border-top: 2px solid rgba(31,42,68,.7); border-bottom: 2px solid rgba(31,42,68,.7); }
 .book-spine .spine-title {
   writing-mode: vertical-rl; transform: rotate(180deg);
@@ -244,9 +264,22 @@ input[type="text"] {
 .notes li { margin: .2em 0; }
 .notes li::marker { content: "~  "; color: var(--pen-blue); font-family: var(--hand); }
 .notes strong, .explain strong, .q-text strong {
+  --hl: rgba(255, 236, 92, .8);
   font-weight: 400; font-family: var(--hand); color: var(--pen-blue);
-  background: linear-gradient(transparent 58%, rgba(255, 236, 92, .8) 58%, rgba(255, 236, 92, .8) 92%, transparent 92%);
+  background: linear-gradient(transparent 55%, var(--hl) 55%, var(--hl) 92%, transparent 92%);
+  padding: 0 .12em; border-radius: .2em .4em .3em .15em;
 }
+/* highlighter pens */
+.notes strong.hl-yellow { --hl: rgba(255, 236, 92, .8); }
+.notes strong.hl-pink { --hl: rgba(255, 138, 182, .55); }
+.notes strong.hl-green { --hl: rgba(112, 214, 140, .55); }
+.notes strong.hl-orange { --hl: rgba(255, 165, 72, .6); }
+.notes .hl-line {
+  background: linear-gradient(100deg, transparent .5%, rgba(112, 214, 140, .5) 2%, rgba(140, 225, 160, .42) 97%, transparent 99.5%);
+  padding: 1px .25em; border-radius: .3em .6em .4em .2em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.notes ul.traps li::marker { content: "!  "; color: var(--cross); font-weight: 700; }
 code {
   font-family: ui-monospace, Consolas, monospace; font-size: .86em;
   background: #eef3f9; padding: 1px 5px; border-radius: 4px;
@@ -376,7 +409,7 @@ pre code { background: none; padding: 0; }
 }
 
 /* ---------- margin doodles ---------- */
-.margin-doodles { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.margin-doodles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
 .doodle { position: absolute; fill: none; stroke: var(--pencil); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: .55; }
 .doodle .thin { stroke-width: 1.3; }
 .plane-1 { width: 90px; top: 210px; left: max(10px, calc(50% - 680px)); transform: rotate(-12deg); animation: float 7s ease-in-out infinite; }
@@ -389,16 +422,69 @@ pre code { background: none; padding: 0; }
 .pencil-doodle { width: 130px; top: 380px; right: max(4px, calc(50% - 700px)); transform: rotate(70deg); }
 .ruler-doodle { width: 22px; top: 1180px; right: max(30px, calc(50% - 650px)); transform: rotate(12deg); }
 @keyframes float { 50% { translate: 8px -12px; } }
-.topbar, main, .classroom { position: relative; z-index: 1; }
+.topbar, main, .site-foot { position: relative; z-index: 1; }
 
 /* ---------- classroom footer ---------- */
-.classroom { margin-top: 30px; background: #f4ecdc; line-height: 0; }
+.classroom { margin-top: 10px; background: #f4ecdc; line-height: 0; }
 .torn-edge { display: block; width: 100%; height: 28px; margin-bottom: -2px; fill: var(--paper); position: relative; top: -1px; }
-.classroom-scene { display: block; width: 100%; height: clamp(280px, 34vw, 470px); }
-.classroom .chalk a text { cursor: pointer; }
-.classroom .chalk a:hover text { fill: var(--highlight); }
+.classroom-scene { display: block; width: 100%; height: clamp(280px, 36.7vw, 760px); } /* 36.7vw = 440/1200, the drawing's own ratio, so wide screens never crop the top */
 .clock-hand { transform-origin: 1060px 90px; animation: tick 60s steps(60) infinite; }
 @keyframes tick { to { transform: rotate(360deg); } }
+
+/* the view through the classroom window */
+.classroom-scene .sun-glow { transform-box: fill-box; transform-origin: center; animation: sun-glow 2.8s ease-in-out infinite; opacity: .55; }
+.classroom-scene .sun-rays { transform-box: fill-box; transform-origin: center; animation: rays-spin 24s linear infinite, rays-flicker 1.4s ease-in-out infinite; }
+.classroom-scene .sun-rays-2 { transform-box: fill-box; transform-origin: center; animation: rays-spin 36s linear infinite reverse, rays-flicker 1.9s ease-in-out infinite .5s; }
+.classroom-scene .heat path { animation: heat-rise 2.6s ease-in-out infinite; }
+.classroom-scene .heat path:nth-child(2) { animation-delay: 1.3s; }
+.classroom-scene .cloud-1 { animation: drift 34s linear infinite; }
+.classroom-scene .cloud-2 { animation: drift 52s linear infinite -20s; }
+.classroom-scene .breeze-tree { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 4.2s ease-in-out infinite alternate; }
+.classroom-scene .breeze-plant { transform-box: fill-box; transform-origin: 50% 100%; animation: sway-small 3.4s ease-in-out infinite alternate; }
+
+@keyframes sun-glow { 0%, 100% { transform: scale(.9); opacity: .45; } 50% { transform: scale(1.12); opacity: .75; } }
+@keyframes rays-spin { to { transform: rotate(360deg); } }
+@keyframes rays-flicker { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+@keyframes heat-rise { 0% { transform: translateY(6px); opacity: 0; } 40% { opacity: .9; } 100% { transform: translateY(-10px); opacity: 0; } }
+@keyframes drift { from { transform: translateX(-160px); } to { transform: translateX(200px); } }
+@keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3.5deg); } }
+@keyframes sway-small { from { transform: rotate(-4deg); } to { transform: rotate(5deg); } }
+
+/* ---------- footer notes (on the notebook page) ---------- */
+.footer-notes {
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 28px 36px; align-items: start;
+  max-width: 1120px; margin: 40px auto 0; padding: 26px 16px 34px;
+  border-top: 2.5px dashed var(--ink-soft);
+}
+.fn-logo { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); text-decoration: none; font: 700 1.7rem/1 var(--hand); }
+.fn-logo .logo-pen { width: 34px; height: 34px; }
+.fn-brand p { margin: 12px 0 0; }
+.fn-small { font-size: .95rem; color: var(--pencil); }
+.fn-col h2 { font-size: 1.3rem; margin: 0 0 12px; }
+.fn-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.fn-col a { color: var(--pen-blue); text-decoration: none; }
+.fn-col a:hover { text-decoration: underline wavy; text-underline-offset: 4px; }
+.fn-col a[hidden] { display: none; }
+.fn-note { transform: rotate(1.6deg); }
+.fn-note h2 { font-size: 1.2rem; margin: 0 0 6px; }
+.fn-note p { margin: 0; font-size: 1.05rem; }
+
+.plank-bar {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px;
+  padding: 12px max(16px, calc(50% - 544px)); line-height: 1.4;
+  background: var(--wood);
+  background-image: repeating-linear-gradient(90deg, transparent 0 40px, rgba(0,0,0,.08) 40px 42px, transparent 42px 95px);
+  border-top: 3px solid var(--wood-dark);
+  color: #fff8ec; font: 400 1rem/1.4 var(--hand);
+}
+.plank-bar p { margin: 0; }
+.plank-bar a { color: #fff3a6; }
+
+@media (max-width: 900px) {
+  .footer-notes { grid-template-columns: 1fr 1fr; }
+  .fn-brand, .fn-note { grid-column: 1 / -1; }
+  .fn-note { max-width: 420px; }
+}
 
 @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
@@ -508,6 +594,77 @@ pre code { background: none; padding: 0; }
 .toast .green-tick { flex: 0 0 28px; width: 28px; height: 28px; }
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 16px) rotate(-1deg); } }
 
+/* ---------- opening a book ---------- */
+.book-open {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center;
+  perspective: 1600px; pointer-events: none;
+  background: rgba(255, 254, 250, .55);
+}
+.ob-book { position: relative; width: min(62vw, 280px); aspect-ratio: 3 / 4; transform-style: preserve-3d; }
+.ob-pages {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px;
+  padding: 24px 22px 24px 40px; text-align: center;
+  background-color: #fff;
+  background-image:
+    linear-gradient(90deg, transparent 26px, #f3a5a5 26px, #f3a5a5 28px, transparent 28px),
+    repeating-linear-gradient(transparent 0 27px, #d7e5f4 27px 28px);
+  border: 2.5px solid var(--ink); border-radius: 4px 10px 10px 4px;
+  box-shadow: 8px 10px 0 rgba(31, 42, 68, .16);
+}
+.ob-pages .ob-title { font: 700 1.6rem/1.2 var(--hand); }
+.ob-pages .ob-sub { font: 400 1rem/1.3 var(--hand); color: var(--ink-soft); }
+.ob-cover {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+  padding: 22px 16px; transform-origin: left center; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background-color: var(--book);
+  background-image:
+    repeating-linear-gradient(115deg, rgba(255,255,255,.14) 0 3px, transparent 3px 9px),
+    linear-gradient(90deg, rgba(0,0,0,.22), transparent 12%);
+  border: 2.5px solid var(--ink); border-radius: 4px 10px 10px 4px;
+}
+.ob-cover .band { width: 100%; height: 9px; border-top: 2.5px solid rgba(31,42,68,.7); border-bottom: 2.5px solid rgba(31,42,68,.7); }
+.ob-cover .ob-cover-title {
+  font: 700 1.7rem/1.15 var(--hand); color: #fff; text-align: center; text-shadow: 0 1px 0 rgba(0,0,0,.35);
+  padding: 10px 12px; border: 2px solid rgba(255,255,255,.8); border-radius: var(--sketch);
+}
+.ob-cover.light .ob-cover-title { color: var(--ink); text-shadow: none; border-color: rgba(31,42,68,.6); }
+
+/* ---------- calendar hover notes ---------- */
+.calendar { z-index: 3; }
+.cal-day.studied { cursor: help; }
+.cal-day.studied:hover, .cal-day.studied:focus { outline: none; background: rgba(112, 214, 140, .18); border-radius: 50%; }
+.cal-pop {
+  display: none; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%) rotate(-1deg); z-index: 20;
+  width: 250px; padding: 12px 14px 10px; text-align: left; line-height: 1.35;
+  background: var(--sticky); color: var(--ink); font: 400 .95rem/1.35 var(--body);
+  box-shadow: 3px 6px 14px rgba(0, 0, 0, .18); border-radius: 2px;
+}
+.cal-pop::before {
+  content: ""; position: absolute; top: -9px; left: 50%; margin-left: -9px;
+  border: 9px solid transparent; border-top: 0; border-bottom-color: var(--sticky);
+}
+.cal-pop.pop-left { left: -6px; transform: rotate(-1deg); }
+.cal-pop.pop-left::before { left: 22px; }
+.cal-pop.pop-right { left: auto; right: -6px; transform: rotate(1deg); }
+.cal-pop.pop-right::before { left: auto; right: 13px; }
+.cal-day.studied:hover .cal-pop, .cal-day.studied:focus .cal-pop, .cal-day.studied:focus-within .cal-pop { display: block; animation: fade-in .2s ease; }
+.cal-pop .pop-date { display: block; font: 700 1.05rem var(--hand); margin-bottom: 4px; border-bottom: 2px solid rgba(31, 42, 68, .25); }
+.cal-pop ul { margin: 0; padding-left: 1.1em; }
+.cal-pop li { margin: 3px 0; }
+.cal-pop li::marker { content: "\2713  "; color: #2fa35a; font-weight: 700; }
+.cal-pop li.pop-stickers::marker { content: "\2605  "; color: #d4a017; }
+.cal-pop i { font-style: normal; font-family: var(--hand); color: var(--pen-blue); }
+.cal-pop .pop-book { font-size: .8rem; color: var(--ink-soft); }
+.cal-day .green-tick { pointer-events: none; }
+
+/* ---------- covered tick next to the chapter title ---------- */
+.title-tick {
+  display: inline-flex; align-items: center; gap: 2px; margin-left: 12px; vertical-align: middle;
+  --tilt: -4deg; font: 700 1rem/1 var(--hand); color: #2fa35a; transform: rotate(var(--tilt));
+}
+.title-tick .green-tick { width: 34px; height: 34px; }
+.title-tick.just-done { animation: slap .45s cubic-bezier(.2, 1.6, .4, 1); }
+
 /* ---------- small screens ---------- */
 @media (max-width: 1240px) {
   .margin-doodles { display: none; }
@@ -532,7 +689,10 @@ pre code { background: none; padding: 0; }
 @media (max-width: 520px) {
   body { font-size: 18px; }
   .logo { font-size: 1.6rem; }
+  .logo-pen { width: 36px; height: 36px; }
   .stars-label { display: none; }
+  .top-right { gap: 12px; }
+  .gh-link .curly { display: none; }
   .bookcase { padding: 14px 6px 4px; }
   .shelf-books { padding: 0 8px; min-height: 200px; gap: 4px; }
   .book-spine { --w: 46px !important; }
