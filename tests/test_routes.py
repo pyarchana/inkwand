@@ -137,3 +137,13 @@ def test_missing_api_key_gives_clear_error(monkeypatch):
     r = client.post("/api/generate", json={"book": "os", "chapter": "threads", "kind": "notes"})
     assert r.status_code == 503
     assert "GEMINI_API_KEY" in r.json()["detail"]
+
+
+def test_pages_are_revalidated_not_cached_stale():
+    for path in ("/", "/static/styles.css", "/static/app.js"):
+        r = client.get(path)
+        assert r.status_code == 200
+        assert r.headers["cache-control"] == "no-cache"
+    # unchanged files come back as a cheap 304
+    etag = client.get("/static/styles.css").headers["etag"]
+    assert client.get("/static/styles.css", headers={"If-None-Match": etag}).status_code == 304

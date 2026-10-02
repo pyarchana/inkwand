@@ -22,6 +22,18 @@ app.include_router(api_router)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
+@app.middleware("http")
+async def revalidate_pages(request: Request, call_next):
+    # Make browsers check for a newer page, CSS or JS on every visit. Unchanged
+    # files still come back as a tiny 304, so slow connections don't pay for it,
+    # but a redeploy shows up straight away instead of serving a stale stylesheet.
+    response = await call_next(request)
+    path = request.url.path
+    if path == "/" or path == "/favicon.svg" or path.startswith("/static/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
 @app.exception_handler(RequestValidationError)
 async def friendly_validation_error(request: Request, exc: RequestValidationError):
     return JSONResponse(
