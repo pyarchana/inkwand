@@ -4,7 +4,7 @@ A free study site for GATE CSE. Every subject in the syllabus is a book on a she
 
 I built this for students like I was: self-taught, from a small town, no coaching, no money for paid courses, usually on an old laptop with patchy internet. Studying alone for GATE gets lonely. inkwand tries to feel like your own school notebook, with gold stars for right answers and a calendar that shows you showing up every day.
 
-Live site: (add your Render URL here)
+Live site: https://inkwand.onrender.com
 
 ## Features
 
