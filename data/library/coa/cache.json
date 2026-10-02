@@ -8,6 +8,10 @@
   "flashcards": {
    "model": "gemma-4-26b-a4b-it",
    "written_at": "2026-10-02T11:47:55+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:25:03+00:00"
   }
  },
  "flashcards": [
@@ -42,6 +46,63 @@
   {
    "front": "Why is fully associative mapping more expensive than direct mapping?",
    "back": "It requires **comparators** for every line to check all tags simultaneously. This makes it faster but much more complex!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "In a direct-mapped cache, if a block of main memory is mapped to a specific cache line, what happens if another block with the same index is requested?",
+   "options": [
+    "It is placed in the next available empty cache line.",
+    "It replaces the current block in that specific cache line.",
+    "It is stored in a separate buffer to avoid conflict.",
+    "The cache size is automatically increased."
+   ],
+   "correct_index": 1,
+   "explanation": "In direct mapping, each main memory block has only one possible spot in the cache. If another block wants that same spot, it has to kick the old one out!"
+  },
+  {
+   "question": "A system has a 32-bit main memory address, a cache size of 64 KB, and a block size of 64 bytes. In a direct-mapped cache, how many bits are used for the tag?",
+   "options": [
+    "6",
+    "10",
+    "16",
+    "26"
+   ],
+   "correct_index": 2,
+   "explanation": "First, find the offset (6 bits) and the index (10 bits) using the cache size and block size. Then, just subtract them from the 32-bit total to get the tag bits!"
+  },
+  {
+   "question": "Which of the following mapping techniques provides the highest flexibility in terms of where a block from main memory can be placed in the cache?",
+   "options": [
+    "Direct mapping",
+    "Fully associative mapping",
+    "Set-associative mapping",
+    "None of the above"
+   ],
+   "correct_index": 1,
+   "explanation": "Fully associative mapping is the most flexible because any block can go anywhere in the cache, so you don't have to worry about fixed locations."
+  },
+  {
+   "question": "A 4-way set-associative cache has a total size of 128 KB and a block size of 128 bytes. For a 32-bit address, how many bits are required for the set index?",
+   "options": [
+    "7",
+    "8",
+    "10",
+    "17"
+   ],
+   "correct_index": 1,
+   "explanation": "Divide the total number of blocks (1024) by the associativity (4) to get 256 sets. Since 2^8 = 256, you need 8 bits for the index."
+  },
+  {
+   "question": "Conflict misses are most likely to occur in which type of cache mapping?",
+   "options": [
+    "Direct mapping",
+    "Fully associative mapping",
+    "Set-associative mapping",
+    "All of the above"
+   ],
+   "correct_index": 0,
+   "explanation": "Conflict misses happen when two blocks want the same spot even if the rest of the cache is empty. This is a classic problem with direct mapping."
   }
  ]
 }

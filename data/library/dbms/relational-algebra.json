@@ -1,0 +1,108 @@
+{
+ "notes": "Think of **Relational Algebra (RA)** as a recipe. It is **procedural**, meaning it gives step-by-step instructions to get your data. You use operators like `sigma` (select rows), `pi` (project columns), and `join` to manipulate tables to reach a result.\n\n**Tuple Relational Calculus (TRC)** is more like a menu. It is **non-procedural** (declarative). You just describe *what* you want the result to look like using predicates, without telling the system *how* to fetch it. It uses quantifiers like `exists` and `for all`.\n\nExample:\nTable `Emp(id, name, dept)`. Find names of employees in the 'CS' department.\nRA: `pi name (sigma dept = 'CS' (Emp))`\n- Step 1: `sigma dept = 'CS'` filters the rows to keep only those where the department is 'CS'.\n- Step 2: `pi name` extracts only the 'name' column from those filtered rows.\n\nTRC: `{ t | exists e in Emp (e.dept = 'CS' AND t.name = e.name) }`\n- Step 1: We want a resulting tuple `t`.\n- Step 2: There must exist a tuple `e` in the `Emp` table such that `e.dept` is 'CS'.\n- Step 3: The name in our result `t` must match the name in the found tuple `e`.\n\nCommon traps:\n- Mixing up `sigma` and `pi`: `sigma` filters **rows** (horizontal), while `pi` filters **columns** (vertical).\n- Forgetting **Union Compatibility**: To use `union` or `set difference`, both tables must have the same number of columns and matching data types in the same order.\n\nRemember this: RA tells the system \"how\" to get data, while TRC tells it \"what\" data is needed.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:49:44+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:50:06+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:50:19+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Relation R has the following tuples: (10, 20), (30, 40), (50, 60). What is the result of the relational algebra expression `pi A (sigma B > 25 (R))`?",
+   "options": [
+    "(10), (30), (50)",
+    "(30), (50)",
+    "(40), (60)",
+    "(30, 40), (50, 60)"
+   ],
+   "correct_index": 1,
+   "explanation": "First, the selection operator `sigma` filters the rows where B > 25, leaving (30, 40) and (50, 60). Then, the projection operator `pi` picks only the A column from those remaining rows."
+  },
+  {
+   "question": "In Tuple Relational Calculus (TRC), what does the expression `{ t | t in R and t.salary > 50000 }` represent?",
+   "options": [
+    "Find all tuples in R where salary is exactly 50000.",
+    "Find all attributes of R where salary is greater than 50000.",
+    "Find all tuples in R where the salary attribute is greater than 50000.",
+    "Find the sum of all salaries in R that are greater than 50000."
+   ],
+   "correct_index": 2,
+   "explanation": "In TRC, the expression defines a set of tuples 't' that must satisfy the condition provided after the pipe symbol."
+  },
+  {
+   "question": "Relation R has 3 tuples and Relation S has 4 tuples. How many tuples will be in the result of the Cartesian product `R cross S`?",
+   "options": [
+    "7",
+    "1",
+    "12",
+    "81"
+   ],
+   "correct_index": 2,
+   "explanation": "The Cartesian product combines every tuple of the first relation with every tuple of the second, so the total number of tuples is the product of their sizes (3 * 4 = 12)."
+  },
+  {
+   "question": "Given the sets R = {1, 2, 3, 4} and S = {3, 4, 5, 6}, what is the result of the set difference `R - S`?",
+   "options": [
+    "{1, 2}",
+    "{5, 6}",
+    "{1, 2, 3, 4, 5, 6}",
+    "{3, 4}"
+   ],
+   "correct_index": 0,
+   "explanation": "The set difference `R - S` returns all elements that are present in R but are not present in S."
+  },
+  {
+   "question": "Relation R(A, B) contains (1, 2) and (3, 4). Relation S(B, C) contains (2, 5) and (4, 6). What is the result of the natural join `R join S`?",
+   "options": [
+    "(1, 2, 5), (3, 4, 6)",
+    "(1, 2, 2, 5), (3, 4, 4, 6)",
+    "(1, 2), (3, 4), (2, 5), (4, 6)",
+    "(1, 2, 5), (1, 2, 4, 6), (3, 4, 2, 5), (3, 4, 4, 6)"
+   ],
+   "correct_index": 0,
+   "explanation": "A natural join matches tuples based on common attributes (B in this case) and merges them into a single tuple. Here, B=2 and B=4 match, resulting in (1, 2, 5) and (3, 4, 6)."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What does the **Selection** (`sigma`) operator do?",
+   "back": "It filters **rows** (tuples) that satisfy a specific condition. Think of it as a horizontal slice of your table."
+  },
+  {
+   "front": "What does the **Projection** (`pi`) operator do?",
+   "back": "It selects specific **columns** (attributes) and automatically removes duplicate rows. It is like a vertical slice of the table."
+  },
+  {
+   "front": "How many tuples in `R x S` if R has `n` and S has `m`?",
+   "back": "The result has `n * m` tuples. It pairs every row of R with every row of S."
+  },
+  {
+   "front": "How does a **Natural Join** (`bowtie`) work?",
+   "back": "It joins tables based on **common attributes** with equal values. It also removes redundant duplicate columns automatically."
+  },
+  {
+   "front": "**Relational Algebra** vs **Tuple Relational Calculus**?",
+   "back": "Relational Algebra is **procedural** (tells *how* to get data), while TRC is **declarative** (tells *what* data is needed)."
+  },
+  {
+   "front": "Basic syntax of a **Tuple Relational Calculus** expression?",
+   "back": "`{ t | P(t) }`. Here, `t` is the tuple variable and `P(t)` is the predicate (condition) it must satisfy."
+  },
+  {
+   "front": "Requirement for the **Set Difference** (`-`) operator?",
+   "back": "The relations must be **Union Compatible**: they need the same number of attributes and matching data types in the same order."
+  },
+  {
+   "front": "What makes a TRC expression **Safe**?",
+   "back": "An expression is safe if it produces a **finite** number of tuples. We want to avoid queries that could result in infinite sets!"
+  }
+ ]
+}

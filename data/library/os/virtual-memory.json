@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! I remember how confusing this felt at first. Think of virtual memory as a trick that lets us run huge programs even if our RAM is small by using the hard disk as extra space.\n\n- **Demand Paging**: We only load a \"page\" into RAM when the CPU actually needs it. If the page isn't in RAM, a **page fault** occurs, and the OS fetches it from the disk.\n- **TLB (Translation Lookaside Buffer)**: Translating virtual addresses to physical ones is slow. The **TLB** is a small, fast hardware cache that stores recent translations to speed this up.\n- **Page Replacement**: When RAM is full and we need a new page, we must pick an existing one to kick out. Common algorithms are **FIFO**, **LRU**, and **Optimal**.\n- **Thrashing**: If a process doesn't have enough frames, it keeps faulting. If the system spends more time swapping pages than executing instructions, it's **thrashing**.\n\nExample:\nReference string: 1, 2, 3, 4, 1. Frames: 3. Algorithm: FIFO.\n1. [1, -, -] (Fault)\n2. [1, 2, -] (Fault)\n3. [1, 2, 3] (Fault)\n4. [4, 2, 3] (Fault - 1 was the oldest, so it's replaced)\n5. [4, 1, 3] (Fault - 2 was the next oldest, so it's replaced)\nTotal Page Faults: 5.\n\nCommon traps:\n- Don't confuse **FIFO** (replace the oldest page) with **LRU** (replace the page not used for the longest time).\n- A **TLB hit** is a fast hardware speedup, but a **page fault** is a slow disk operation.\n\nRemember this: Virtual memory uses demand paging to run large programs, but excessive page faults lead to thrashing.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:47:27+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:47:56+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:48:27+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is **demand paging**?",
+   "back": "A technique where pages are loaded into memory only when they are **needed**. This allows us to run processes that are larger than the actual physical RAM."
+  },
+  {
+   "front": "What happens during a **page fault**?",
+   "back": "- OS traps the error\n- Finds the page on disk\n- Swaps it into a free frame\n- Updates the page table\n- Restarts the instruction"
+  },
+  {
+   "front": "What is the purpose of a **TLB**?",
+   "back": "A small, fast hardware cache that stores recent **page-to-frame mappings**. It helps speed up address translation by avoiding extra trips to the main memory."
+  },
+  {
+   "front": "**Effective Access Time (EAT)** formula with TLB?",
+   "back": "`EAT = h * (t + m) + (1 - h) * (t + 2m)`\n- `h`: TLB hit rate\n- `t`: TLB access time\n- `m`: Memory access time"
+  },
+  {
+   "front": "What is **Belady's Anomaly**?",
+   "back": "A phenomenon where increasing the number of **page frames** actually increases the **page fault rate**. This happens with **FIFO**, but not with **LRU** or **Optimal**."
+  },
+  {
+   "front": "**FIFO** vs **LRU** replacement?",
+   "back": "- **FIFO**: Replaces the oldest page brought in.\n- **LRU**: Replaces the page not used for the longest time. (LRU is a **stack algorithm** and is generally better)."
+  },
+  {
+   "front": "What is **thrashing**?",
+   "back": "A state where the system spends more time **swapping pages** in and out than executing instructions. This happens when the total **working set** exceeds available RAM."
+  },
+  {
+   "front": "How does the **Working Set** model prevent thrashing?",
+   "back": "It tracks the set of pages a process is **actively using**. By ensuring each process has enough frames to hold its working set, we prevent excessive page faults."
+  }
+ ],
+ "practice": [
+  {
+   "question": "A system has a TLB hit rate of 90%. The TLB access time is 10 ns and the main memory access time is 100 ns. What is the effective memory access time (EAT)?",
+   "options": [
+    "110 ns",
+    "120 ns",
+    "200 ns",
+    "210 ns"
+   ],
+   "correct_index": 1,
+   "explanation": "A TLB hit takes TLB access + memory access, while a TLB miss requires accessing the TLB, then the page table in memory, and finally the actual data in memory."
+  },
+  {
+   "question": "Consider a system with 3 frames using the LRU (Least Recently Used) page replacement algorithm. The reference string is: 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5. How many page faults occur?",
+   "options": [
+    "7",
+    "8",
+    "10",
+    "12"
+   ],
+   "correct_index": 2,
+   "explanation": "Don't rush the tracing! By keeping track of which page was used least recently, you will find that there are 10 total page faults."
+  },
+  {
+   "question": "Which of the following is a primary cause of **thrashing** in an operating system?",
+   "options": [
+    "The CPU is performing too many calculations.",
+    "The degree of multiprogramming is too low.",
+    "The sum of the working sets of all active processes exceeds the total physical memory.",
+    "The page size is too large for the memory."
+   ],
+   "correct_index": 2,
+   "explanation": "Thrashing happens when the system spends more time swapping pages than executing instructions because there isn't enough RAM to hold everyone's working sets."
+  },
+  {
+   "question": "In a demand paging system, what does the **valid-invalid bit** in the page table entry primarily signify?",
+   "options": [
+    "Whether the page is currently in physical memory.",
+    "Whether the page is read-only or read-write.",
+    "Whether the page is shared between two processes.",
+    "Whether the page is dirty or clean."
+   ],
+   "correct_index": 0,
+   "explanation": "This bit is the hardware's way of knowing if a page is currently sitting in RAM or if it needs to be fetched from the disk."
+  },
+  {
+   "question": "A virtual address is 32 bits long. The page size is 4 KB. How many bits are used for the **page offset**?",
+   "options": [
+    "10",
+    "12",
+    "20",
+    "32"
+   ],
+   "correct_index": 1,
+   "explanation": "Since 4 KB is equal to 2^12 bytes, we need exactly 12 bits to address every individual byte within a single page."
+  }
+ ]
+}

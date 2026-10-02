@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Once the compiler understands the meaning of your code (semantic analysis), it needs a middle-ground representation before jumping to machine code. This is **Intermediate Code Generation (ICG)**. It is machine-independent, which makes it much easier to perform optimizations.\n\nThe most common format is **Three-Address Code (3AC)**. Each instruction has at most three addresses: two for operands and one for the result. It usually looks like `x = y op z`.\n\nTo store 3AC, we use different structures:\n- **Quadruples**: Each record has four fields: `op`, `arg1`, `arg2`, and `result`. This is great for optimization because you can move code around easily.\n- **Triples**: Each record has only three fields: `op`, `arg1`, and `arg2`. Instead of a `result` name, we use the **index** of the instruction to refer to its value.\n\nExample:\nExpression: `a = b + c * d`\n1. 3AC:\n   `t1 = c * d`\n   `t2 = b + t1`\n   `a = t2`\n2. Quadruples:\n   (0) `*`, `c`, `d`, `t1`\n   (1) `+`, `b`, `t1`, `t2`\n   (2) `=`, `t2`, `_`, `a`\n3. Triples:\n   (0) `*`, `c`, `d`\n   (1) `+`, `b`, (0)\n   (2) `=`, `a`, (1)\n\nCommon traps:\n- In **Triples**, don't look for a `result` field. You refer to the \"result\" of an operation by its position index (like `(0)`).\n- In **Quadruples**, the `arg2` field is often left empty (represented as `_`) during simple assignment operations.\n\nRemember this: 3AC is the logic, Quadruples use explicit names for results, and Triples use instruction indices to point to results.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:41:16+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:42:41+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:24+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the purpose of **Three Address Code (3AC)**?",
+   "back": "It's an intermediate form where each instruction has at most **three addresses**: two operands and one result. It's a perfect middle-ground between source code and machine code."
+  },
+  {
+   "front": "What are the components of a **3AC instruction**?",
+   "back": "Typically, an **operator**, up to **two operands**, and a **result** (for example, `x = y + z`)."
+  },
+  {
+   "front": "What are **Quadruples**?",
+   "back": "A record with four fields: `op`, `arg1`, `arg2`, and `result`. It explicitly names every temporary variable used during computation."
+  },
+  {
+   "front": "What are **Triples**?",
+   "back": "They use only three fields: `op`, `arg1`, and `arg2`. Instead of a `result` field, they use the **instruction index** to refer to values."
+  },
+  {
+   "front": "Which is more **space-efficient**: Quadruples or Triples?",
+   "back": "**Triples**! They save memory because they don't need extra space to store names for every temporary result."
+  },
+  {
+   "front": "Why are **Quadruples** better for code optimization?",
+   "back": "Since they use **explicit names** for results, we can move instructions easily. In Triples, changing the order breaks the index-based references. This makes Quadruples much more flexible!"
+  },
+  {
+   "front": "What are **Indirect Triples**?",
+   "back": "They use a **pointer list** to reference triples. This lets us reorder code by just changing the pointers, instead of moving the actual triple records themselves."
+  },
+  {
+   "front": "How do you represent `a = b + c * d` in **3AC**?",
+   "back": "- `t1 = c * d` \n- `t2 = b + t1` \n- `a = t2` \n(Where `t1` and `t2` are temporary variables)"
+  }
+ ],
+ "practice": [
+  {
+   "question": "In Three Address Code (TAC), how many addresses are typically involved in a single instruction like `x = y + z`?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "A standard TAC instruction involves at most three addresses: two for the operands and one for the result."
+  },
+  {
+   "question": "How many quadruples are required to represent the expression `x = y * z` in Three Address Code?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 1,
+   "explanation": "One quadruple is used to perform the multiplication, and a second one is used to assign the result to `x`."
+  },
+  {
+   "question": "What is the primary advantage of using **triples** over **quadruples** in intermediate code representation?",
+   "options": [
+    "Triples are easier to implement in hardware.",
+    "Triples use less space because they do not explicitly store temporary variables.",
+    "Triples allow for faster instruction execution.",
+    "Triples are more suitable for high-level language optimizations."
+   ],
+   "correct_index": 1,
+   "explanation": "Triples avoid the need for explicit temporary variable names by using the index of the instruction itself, which saves memory."
+  },
+  {
+   "question": "Which of the following correctly represents the **triples** for the expression `x = y + z * w`?",
+   "options": [
+    "(0, *, y, w), (1, +, (0), z), (2, =, x, (1))",
+    "(0, +, y, z), (1, *, (0), w), (2, =, x, (1))",
+    "(0, *, z, w), (1, +, y, (0)), (2, =, x, (1))",
+    "(0, *, y, z), (1, +, (0), w), (2, =, x, (1))"
+   ],
+   "correct_index": 2,
+   "explanation": "Following operator precedence, we first calculate `z * w`, then add `y`, and finally assign the result to `x` using the previous instruction indices."
+  },
+  {
+   "question": "In compiler design, what is the main purpose of using **indirect triples**?",
+   "options": [
+    "To reduce the number of operands in an instruction.",
+    "To make code generation faster for assembly.",
+    "To facilitate easier code reordering and optimization using a pointer array.",
+    "To convert TAC directly into machine code."
+   ],
+   "correct_index": 2,
+   "explanation": "Indirect triples use an additional list of pointers to the actual triples, making it much easier to reorder instructions during optimization."
+  }
+ ]
+}

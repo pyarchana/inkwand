@@ -1,0 +1,108 @@
+{
+ "notes": "Think of a process as a house and threads as people living in it. They share the kitchen (data/files) and living room (code), but each person has their own notebook (stack) and current task (program counter).\n\n- **User-level threads (ULT):** Managed by a library in user space. The OS doesn't even know they exist; it just sees one process. They are very fast to create and switch because no kernel intervention is needed, but if one thread performs a blocking I/O call, the entire process is blocked.\n- **Kernel-level threads (KLT):** Managed directly by the OS. The OS knows about every single thread. If one thread blocks, the OS can simply pick another thread from the same process to run. This is more robust for multi-processing but slower due to system call overhead.\n\nExample: A process uses a Many-to-One model (ULT) and has 4 threads. Thread 1 makes a blocking system call for disk I/O. How many threads can the OS schedule to run from this process?\nStep 1: In the Many-to-One model, the OS only sees the process as a single execution unit.\nStep 2: Because the process makes a blocking call, the OS moves the entire process to the 'Waiting' state.\nAnswer: 0 threads can be scheduled.\n\nCommon traps:\n- Don't confuse \"fast\" with \"efficient for I/O.\" ULTs are fast for switching, but they are bad for I/O-heavy tasks because one block stops everyone.\n- Remember: Context switching in KLT requires a mode switch (user to kernel), making it heavier than ULT.\n\nRemember this: User threads are fast but \"invisible\" to the OS, while kernel threads are \"visible\" but carry more overhead.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:43:53+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:09+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:57+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **thread**?",
+   "back": "A thread is the smallest unit of CPU utilization. It shares the process's code and data but has its own **program counter, stack, and registers**."
+  },
+  {
+   "front": "Advantage of **user-level threads**?",
+   "back": "They are super fast! Since management happens in user space via a library, you don't need expensive **kernel system calls**."
+  },
+  {
+   "front": "Disadvantage of **user-level threads**?",
+   "back": "The big catch: if one user thread makes a **blocking system call**, the kernel blocks the *entire* process."
+  },
+  {
+   "front": "Advantage of **kernel-level threads**?",
+   "back": "Great for concurrency! The kernel can schedule threads on different CPUs and won't block the whole process if one thread waits."
+  },
+  {
+   "front": "What is the **Many-to-One** model?",
+   "back": "Many user threads map to one kernel thread. It's efficient but you lose **true parallelism** and face the blocking issue."
+  },
+  {
+   "front": "What is the **One-to-One** model?",
+   "back": "Each user thread maps to its own kernel thread. This allows **true parallelism**, but creating too many can overwhelm the system."
+  },
+  {
+   "front": "What is the **Many-to-Many** model?",
+   "back": "Best of both worlds! It maps many user threads to a smaller or equal number of kernel threads to balance **efficiency and concurrency**."
+  },
+  {
+   "front": "Which is faster: **user** or **kernel** thread switching?",
+   "back": "**User threads** are faster. Switching them stays in user space, while kernel threads require a slow **mode switch** to the kernel."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Why is context switching between user-level threads generally faster than between kernel-level threads?",
+   "options": [
+    "User-level threads do not need to save CPU registers",
+    "User-level threads do not require a mode switch to kernel mode",
+    "Kernel-level threads are always mapped to multiple processes",
+    "User-level threads require more memory"
+   ],
+   "correct_index": 1,
+   "explanation": "Switching user threads happens entirely in user space without the overhead of a mode switch to kernel mode. It is much faster!"
+  },
+  {
+   "question": "In a Many-to-One threading model, what happens if one user-level thread executes a blocking system call?",
+   "options": [
+    "Only the thread making the call is blocked",
+    "All threads in the process are blocked",
+    "The kernel creates a new thread for the remaining threads",
+    "The process is terminated"
+   ],
+   "correct_index": 1,
+   "explanation": "Since the kernel only sees one single execution entity, if that entity blocks, the whole process is stuck waiting. It is a major downside of this model."
+  },
+  {
+   "question": "A system uses a Many-to-One model. A process has 10 user-level threads. How many kernel threads are visible to the OS scheduler for this process?",
+   "options": [
+    "1",
+    "10",
+    "0",
+    "5"
+   ],
+   "correct_index": 0,
+   "explanation": "In the Many-to-One model, the kernel is unaware of the individual user threads and only manages the single process as one unit. So, it only sees one kernel thread."
+  },
+  {
+   "question": "Which of the following is a primary advantage of Kernel-level threads over User-level threads?",
+   "options": [
+    "Faster context switching",
+    "Lower memory consumption per thread",
+    "Ability to run threads of the same process on different processors",
+    "Simpler implementation in user space"
+   ],
+   "correct_index": 2,
+   "explanation": "Since the kernel manages each thread, it can schedule different threads from the same process onto different CPU cores simultaneously. This allows for true parallelism!"
+  },
+  {
+   "question": "In a Many-to-Many model with m user threads and n kernel threads, where m > n, what is the maximum number of user threads that can run in parallel, assuming there are at least n processors available?",
+   "options": [
+    "m",
+    "n",
+    "m + n",
+    "m - n"
+   ],
+   "correct_index": 1,
+   "explanation": "The number of threads running in parallel is limited by the number of kernel threads available to be scheduled, even if we have plenty of processors."
+  }
+ ]
+}

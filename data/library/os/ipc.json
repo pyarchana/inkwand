@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! So, processes usually live in their own little worlds to stay safe. But sometimes, they need to cooperate to finish a task. This is **Inter-Process Communication (IPC)**.\n\nThere are two main ways to do this:\n\n- **Shared Memory**: We set up a specific region of memory that both processes can access directly. It is super fast because once it's set up, the OS doesn't need to interfere with every data transfer. However, you have to be very careful! Since both can write at the same time, you must use **synchronization** (like semaphores) to prevent race conditions.\n\n- **Message Passing**: Processes communicate by sending and receiving messages through the OS. The kernel acts as the middleman. This is much easier to implement for distributed systems (where processes are on different computers), but it is slower because every message requires a **system call** and data copying.\n\nExample:\nSuppose Process A wants to transfer a large block of data to Process B.\n- In **Shared Memory**: After the initial setup, the processes just read/write to the shared area. Data transfer overhead = 0 system calls.\n- In **Message Passing**: Process A calls `send()` (1 system call), the kernel copies data to a kernel buffer, then Process B calls `receive()` (1 system call), and the kernel copies data to B. Data transfer overhead = 2 system calls + 2 data copies.\n\nCommon traps:\n- Thinking shared memory is \"safer.\" It's actually riskier because it's prone to **race conditions** if you forget to use locks.\n- Forgetting that message passing is the standard for **distributed systems** where physical memory isn't shared.\n\nRemember this: Shared memory is faster but requires manual synchronization; message passing is slower due to kernel overhead but works across networks.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:44:29+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:28+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:30+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "In a system using **shared memory** for IPC, which of the following is a primary advantage over **message passing**?",
+   "options": [
+    "Higher overhead due to kernel intervention",
+    "Faster communication after initial setup",
+    "Automatic synchronization between processes",
+    "Easier implementation for distributed systems"
+   ],
+   "correct_index": 1,
+   "explanation": "Shared memory is faster because once the memory region is mapped, processes can exchange data at memory speeds without needing to trap into the kernel for every message."
+  },
+  {
+   "question": "Process P1 sends a message to Process P2 using a **blocking send** operation. What happens to P1?",
+   "options": [
+    "P1 continues execution immediately after the send call",
+    "P1 waits until the message is received by P2",
+    "P1 is terminated if the message queue is full",
+    "P1 only waits if the message is larger than the buffer"
+   ],
+   "correct_index": 1,
+   "explanation": "In blocking (synchronous) communication, the sender is suspended and placed in a waiting state until the receiving process accepts the message."
+  },
+  {
+   "question": "Two processes, A and B, communicate via a **shared memory** region. If they both try to update a counter variable `count = count + 1` simultaneously without any synchronization mechanism, what is the most likely outcome?",
+   "options": [
+    "The final value of `count` will always be exactly 2",
+    "The system will crash due to memory corruption",
+    "A race condition occurs, and the final value may be 1",
+    "The kernel will automatically serialize the updates"
+   ],
+   "correct_index": 2,
+   "explanation": "Without synchronization like semaphores, the read-modify-write cycle can be interleaved, causing one process to overwrite the update made by the other."
+  },
+  {
+   "question": "In a **message passing** system with an **asynchronous** send and a buffer capacity of `n = 2` messages, how many messages can Process P1 send before it is forced to wait for space in the buffer?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "The process can fill the buffer with 2 messages; the 3rd message would require space which is not available, forcing the process to wait."
+  },
+  {
+   "question": "Which of the following statements is **TRUE** regarding the implementation of **message passing** via a **mailbox**?",
+   "options": [
+    "The mailbox is a part of the process's private address space",
+    "The kernel manages the mailbox to facilitate communication",
+    "Mailboxes are only used in shared memory models",
+    "Message passing is always faster than shared memory"
+   ],
+   "correct_index": 1,
+   "explanation": "In message passing, the operating system kernel acts as the intermediary to manage the mailbox and ensure messages are transferred safely between processes."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is the main goal of **Inter-Process Communication (IPC)**?",
+   "back": "It allows processes to **exchange data** and **synchronize** their execution. It's how they work together!"
+  },
+  {
+   "front": "How does **Shared Memory** work?",
+   "back": "Processes map a common memory region into their own address spaces. It's super **fast** because it avoids kernel intervention during data transfer."
+  },
+  {
+   "front": "How does **Message Passing** work?",
+   "back": "Processes communicate by sending and receiving messages through a **communication link** managed by the kernel."
+  },
+  {
+   "front": "Which IPC is faster for **large data transfers**?",
+   "back": "**Shared Memory**. Once set up, processes access memory directly without the overhead of constant system calls."
+  },
+  {
+   "front": "Why is **synchronization** needed in **Shared Memory**?",
+   "back": "To prevent **race conditions**. Since processes access the same memory, we need tools like **semaphores** to keep data consistent."
+  },
+  {
+   "front": "Which IPC is better for **distributed systems**?",
+   "back": "**Message Passing**. It's much easier to send messages over a network than to try and share physical memory across different computers."
+  },
+  {
+   "front": "Which IPC method has higher **overhead**?",
+   "back": "**Message Passing**. Every message requires a **system call** to the kernel, which is slower than direct memory access."
+  },
+  {
+   "front": "**Blocking** vs **Non-blocking** message passing?",
+   "back": "- **Blocking**: The process waits until the message is sent or received.\n- **Non-blocking**: The process continues immediately without waiting."
+  }
+ ]
+}

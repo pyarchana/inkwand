@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! So, you're tackling Divide and Conquer. It's one of the most elegant ways to solve problems.\n\nThe strategy is simple:\n- **Divide**: Split the big problem into smaller, similar sub-problems.\n- **Conquer**: Solve these sub-problems recursively. If they're small enough, solve them directly.\n- **Combine**: Merge the results from the sub-problems to get your final answer.\n\nWe usually express the time complexity using a **recurrence relation**. The **Master Theorem** is a massive time-saver for relations like `T(n) = aT(n/b) + f(n)`. You basically compare the work done in the \"combine\" step, `f(n)`, with the work done by the sub-problems, `n^(log_b a)`.\n\nExample: Solve `T(n) = 8T(n/2) + n^2`.\n- Step 1: Identify `a = 8`, `b = 2`, and `f(n) = n^2`.\n- Step 2: Calculate `n^(log_b a) = n^(log_2 8) = n^3`.\n- Step 3: Compare `f(n) = n^2` with `n^3`.\n- Step 4: Since `n^2` is smaller than `n^3`, the `n^3` term dominates.\n- Result: `T(n) = O(n^3)`.\n\nCommon traps:\n- Trying to use Master Theorem when sub-problems are unequal sizes (like `T(n) = T(n/3) + T(2n/3) + n`). Use a Recursion Tree for those!\n- Miscalculating `log_b a`. Always double-check your powers!\n\nRemember this: Divide the problem, conquer the pieces, and use Master Theorem to quickly find the cost of the merge.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:32:56+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:34:07+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:35:11+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "What is the time complexity of the recurrence relation T(n) = 3T(n/2) + n?",
+   "options": [
+    "O(n)",
+    "O(n log n)",
+    "O(n^(log_2 3))",
+    "O(n^2)"
+   ],
+   "correct_index": 2,
+   "explanation": "Using **Master Theorem**, compare n^1 with n^(log_2 3). Since log_2 3 is about 1.58, the n^(log_2 3) term dominates, so the complexity is O(n^(log_2 3))."
+  },
+  {
+   "question": "Suppose you have a recurrence T(n) = T(n/4) + T(3n/4) + n. What would be its asymptotic complexity?",
+   "options": [
+    "O(n)",
+    "O(n log n)",
+    "O(n^2)",
+    "O(log n)"
+   ],
+   "correct_index": 1,
+   "explanation": "If you draw the **recursion tree**, you'll see that the total work done at each level remains n. Since the tree depth is logarithmic, the total work is O(n log n)."
+  },
+  {
+   "question": "Solve the following recurrence using the Master Theorem: T(n) = 2T(n/2) + n log n.",
+   "options": [
+    "O(n log n)",
+    "O(n log^2 n)",
+    "O(n^2)",
+    "O(n)"
+   ],
+   "correct_index": 1,
+   "explanation": "This is a special case where f(n) is n^(log_b a) multiplied by a log factor. Just increase the exponent of the log by 1 to get O(n log^2 n)."
+  },
+  {
+   "question": "Which of the following is NOT a core characteristic of the Divide and Conquer strategy?",
+   "options": [
+    "Breaking the problem into smaller subproblems",
+    "Solving subproblems independently",
+    "Combining the results of subproblems",
+    "Iterating through all possible solutions to find the best one"
+   ],
+   "correct_index": 3,
+   "explanation": "**Divide and Conquer** is about breaking things down and then merging them. Scanning every single possibility is actually a brute-force approach."
+  },
+  {
+   "question": "Find the time complexity of the recurrence T(n) = 8T(n/2) + n^2.",
+   "options": [
+    "O(n^2)",
+    "O(n^2 log n)",
+    "O(n^3)",
+    "O(n^4)"
+   ],
+   "correct_index": 2,
+   "explanation": "Compare n^2 with n^(log_2 8), which is n^3. Since n^3 grows faster, it dominates the complexity according to **Master Theorem** Case 1."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What are the three steps of **Divide and Conquer**?",
+   "back": "- **Divide**: Split the problem into subproblems.\n- **Conquer**: Solve subproblems recursively.\n- **Combine**: Merge subproblem solutions into the final answer."
+  },
+  {
+   "front": "Standard recurrence form for the **Master Theorem**?",
+   "back": "`T(n) = aT(n/b) + f(n)`\n- `a >= 1`: number of subproblems.\n- `b > 1`: factor by which size is reduced.\n- `f(n)`: work done outside recursion."
+  },
+  {
+   "front": "Master Theorem: If `f(n)` is smaller than `n^(log_b(a))`?",
+   "back": "The subproblems dominate the complexity.\nResult: `T(n) = O(n^(log_b(a)))`."
+  },
+  {
+   "front": "Master Theorem: If `f(n)` is equal to `n^(log_b(a))`?",
+   "back": "The work is distributed across all levels.\nResult: `T(n) = O(n^(log_b(a)) * log n)`."
+  },
+  {
+   "front": "Master Theorem: If `f(n)` is larger than `n^(log_b(a))`?",
+   "back": "The work at the top level dominates.\nResult: `T(n) = O(f(n))` (ensure the regularity condition holds)."
+  },
+  {
+   "front": "Complexity and recurrence of **Binary Search**?",
+   "back": "Complexity: `O(log n)`.\nRecurrence: `T(n) = T(n/2) + O(1)`.\nIt halves the search space at each step."
+  },
+  {
+   "front": "Complexity and recurrence of **Merge Sort**?",
+   "back": "Complexity: `O(n log n)`.\nRecurrence: `T(n) = 2T(n/2) + O(n)`.\nIt splits the array and merges it in linear time."
+  },
+  {
+   "front": "Worst-case complexity and recurrence of **Quick Sort**?",
+   "back": "Complexity: `O(n^2)`.\nRecurrence: `T(n) = T(n-1) + O(n)`.\nThis happens when the pivot is always the smallest or largest element."
+  }
+ ]
+}

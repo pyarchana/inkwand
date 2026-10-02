@@ -1,0 +1,108 @@
+{
+ "notes": "Think of a **System Call** as a \"request form\" you send to the OS kernel. User programs aren't allowed to touch hardware directly for security reasons, so they use system calls to ask the OS to do things like reading a file or allocating memory.\n\nA **Process** is just a program in execution. As it runs, it moves through different **states**:\n- **Ready**: Waiting in line for the CPU.\n- **Running**: Currently executing instructions.\n- **Waiting/Blocked**: Waiting for an event (like I/O or a signal).\n- **Terminated**: Finished execution.\n\nThe `fork()` system call is a classic GATE topic. It creates a new process (the child) by duplicating the calling process (the parent). After `fork()`, both processes continue executing from the very next instruction.\n\nExample: How many total processes exist after this code executes?\n`fork();`\n`fork();`\n`fork();`\n\nStep 1: The first `fork()` creates 1 child. Total processes = 2.\nStep 2: Both existing processes call `fork()` again. Total = 2 * 2 = 4.\nStep 3: All 4 processes call `fork()` again. Total = 4 * 2 = 8.\nRule: `n` consecutive `fork()` calls result in 2^n total processes.\n\nCommon traps:\n- Confusing \"total processes\" with \"newly created processes\". In the example above, 7 *new* processes were created, but there are 8 *total* processes.\n- Forgetting that `fork()` returns `0` to the child and the `child_pid` to the parent, which is how they \"know\" who they are.\n\nRemember this: `fork()` doubles the number of processes, and system calls are the essential bridge between user mode and kernel mode.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:43:08+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:44:42+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:44:47+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "A process is moved from the **Running** state to the **Ready** state when:",
+   "options": [
+    "Its time slice expires",
+    "It requests an I/O operation",
+    "It finishes execution",
+    "It is waiting for a child process to terminate"
+   ],
+   "correct_index": 0,
+   "explanation": "When a process's time slice expires, it is still able to run but must give up the CPU. If it were waiting for I/O, it would move to the **Waiting** state instead."
+  },
+  {
+   "question": "If a program calls `fork();` three times in a row (e.g., `fork(); fork(); fork();`), how many total processes (including the original parent) will exist after the calls?",
+   "options": [
+    "3",
+    "4",
+    "7",
+    "8"
+   ],
+   "correct_index": 3,
+   "explanation": "Each `fork()` call doubles the number of processes. For `n` consecutive calls, the total number of processes is 2^n, so 2^3 = 8."
+  },
+  {
+   "question": "Which system call is primarily used to replace the current process image with a new program?",
+   "options": [
+    "fork()",
+    "exec()",
+    "wait()",
+    "exit()"
+   ],
+   "correct_index": 1,
+   "explanation": "While `fork()` creates a copy of the current process, `exec()` is used to load and run a completely different program in the current process."
+  },
+  {
+   "question": "During a context switch, the operating system saves the state of the current process in its **Process Control Block (PCB)**. Which of the following is typically saved?",
+   "options": [
+    "Program counter and CPU registers",
+    "The entire program code",
+    "The user's password",
+    "The hard drive partition table"
+   ],
+   "correct_index": 0,
+   "explanation": "To resume a process later, the OS must store the **Program Counter** (the next instruction) and the current **register values** in the PCB."
+  },
+  {
+   "question": "Consider the following code snippet:\n`pid = fork();`\n`if (pid == 0) {\n  fork();\n  printf(\"X\");\n} else {\n  printf(\"Y\");\n}`\nHow many times will \"X\" be printed?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 1,
+   "explanation": "The parent enters the `else` block and prints \"Y\" once. The child enters the `if` block, calls `fork()` (creating a second child), and then both the first child and the second child print \"X\"."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is a **system call**?",
+   "back": "An interface that allows a user-level process to request services from the **OS kernel**, such as file access or device management."
+  },
+  {
+   "front": "What happens to the **CPU mode** during a system call?",
+   "back": "The CPU switches from **User Mode** to **Kernel Mode** to allow the OS to execute privileged instructions safely."
+  },
+  {
+   "front": "Name the three primary **process states**.",
+   "back": "- **Ready**: Waiting for CPU.\n- **Running**: Currently executing.\n- **Blocked**: Waiting for an event/IO."
+  },
+  {
+   "front": "When does a process move from **Running** to **Blocked**?",
+   "back": "When it requests a resource or I/O that is not immediately available, forcing it to wait."
+  },
+  {
+   "front": "When does a process move from **Blocked** to **Ready**?",
+   "back": "When the event it was waiting for (like **I/O completion**) finishes. It moves to the **Ready** queue, not directly to Running."
+  },
+  {
+   "front": "What does `fork()` return to the **child process**?",
+   "back": "It returns `0`. This helps the child process distinguish itself from the parent."
+  },
+  {
+   "front": "What does `fork()` return to the **parent process**?",
+   "back": "It returns the **PID** (Process ID) of the newly created child process."
+  },
+  {
+   "front": "Total processes created by `n` consecutive `fork()` calls?",
+   "back": "There will be **2^n** total processes (including the original parent). Each call doubles the number of processes."
+  }
+ ]
+}

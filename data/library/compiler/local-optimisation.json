@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't stress about Compiler Design; once you get the logic, it's actually quite fun. Let's look at **Local Optimisation**.\n\nLocal optimisation happens strictly within a **basic block**. A basic block is a sequence of instructions with one entry point and one exit point, meaning there are no jumps into or out of the middle of the block.\n\nThe main tool we use to perform these optimisations is a **DAG (Directed Acyclic Graph)**. By building a DAG for a block, we can easily spot:\n- **Common Subexpression Elimination (CSE)**: If `x = a + b` and `y = a + b` appear, we only compute `a + b` once.\n- **Dead Code Elimination**: Removing instructions whose results are never used by any subsequent instruction.\n- **Constant Folding**: Replacing `x = 2 + 3` with `x = 5` at compile time.\n\nExample:\n1. `a = b * c`\n2. `d = b * c`\n3. `e = a + d`\n4. `f = 10 / 2`\n\nStep 1: Identify `b * c` is repeated. In a DAG, the node for line 2 will simply point to the existing node from line 1. This is **CSE**.\nStep 2: Line 4 is `10 / 2`. We use **constant folding** to replace it with `f = 5`.\nStep 3: The optimised code effectively becomes: `a = b * c`, `d = a`, `e = a + d`, `f = 5`.\n\nCommon traps:\n- Thinking local optimisation works across jumps or branches. That is **Global Optimisation**. Local only stays inside one block.\n- Forgetting that if a variable (like `b`) changes value between line 1 and line 2, the expressions are no longer \"common.\"\n\nRemember this: Local optimisation uses DAGs to remove redundancies like CSE and constant folding within a single basic block.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:41:33+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:44:07+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:44:22+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **basic block** in a control flow graph?",
+   "back": "Think of it as a sequence where control enters at the start and leaves at the end without any branching, except at the very last instruction."
+  },
+  {
+   "front": "How do we identify the **leaders** of a basic block?",
+   "back": "- The first instruction.\n- Any instruction that is a jump target.\n- Any instruction immediately following a jump."
+  },
+  {
+   "front": "What is the main use of a **DAG** in local optimization?",
+   "back": "It's used to detect **common subexpressions** and redundant computations within a single basic block."
+  },
+  {
+   "front": "What is **constant folding**?",
+   "back": "Basically, it's evaluating expressions with constant operands at **compile-time** (e.g., replacing `x = 3 + 5` with `x = 8`)."
+  },
+  {
+   "front": "What is **constant propagation**?",
+   "back": "Replacing a variable with its known constant value if that value is guaranteed to be the same at that point in the code."
+  },
+  {
+   "front": "What is **strength reduction**?",
+   "back": "It's replacing an expensive operation with a faster one, like changing `x * 2` to `x + x` or `x << 1`."
+  },
+  {
+   "front": "What is **dead code elimination**?",
+   "back": "This means removing instructions that compute values never used, or code that can never be reached during execution."
+  },
+  {
+   "front": "What is **algebraic simplification**?",
+   "back": "Using math identities to simplify things, like replacing `x * 1` or `x + 0` with just `x`."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Consider the following code sequence:\n1: i = 1\n2: j = 1\n3: if i < 5 goto 5\n4: k = 0\n5: i = i + 1\n6: goto 3\n7: print i\n\nHow many basic blocks are there in this sequence?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 2,
+   "explanation": "The leaders are 1 (start), 3 (target of 6), 4 (follows jump 3), 5 (target of 3), and 7 (follows jump 6). This results in 5 blocks: {1,2}, {3}, {4}, {5,6}, and {7}."
+  },
+  {
+   "question": "Given the following code:\na = b + c\nd = b + c\ne = a + d\n\nHow many nodes will be in the resulting Directed Acyclic Graph (DAG)?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 1,
+   "explanation": "The nodes are b, c, the '+' operator (which represents both a and d), and the second '+' operator (which represents e). Total nodes = 4."
+  },
+  {
+   "question": "For the following code, how many internal nodes (operator nodes) are present in its DAG?\nx = a * b\ny = a * b\nz = x + y",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 1,
+   "explanation": "Internal nodes represent operations. Here, the '*' operation is one node and the '+' operation is the second node."
+  },
+  {
+   "question": "Consider the following code snippet:\na = 10 + 20\nb = a * 2\n\nWhich specific optimization is used to replace 'a = 10 + 20' with 'a = 30'?",
+   "options": [
+    "Constant folding",
+    "Constant propagation",
+    "Dead code elimination",
+    "Strength reduction"
+   ],
+   "correct_index": 0,
+   "explanation": "Constant folding is the process of evaluating expressions with constant operands at compile time."
+  },
+  {
+   "question": "In the following code, which instruction is NOT a leader?\n1: x = 1\n2: y = 2\n3: if x < 10 goto 5\n4: z = 0\n5: x = x + 1\n6: goto 3\n7: print x",
+   "options": [
+    "1",
+    "3",
+    "4",
+    "6"
+   ],
+   "correct_index": 3,
+   "explanation": "Leaders are the first instruction, targets of jumps (3 and 5), and instructions following jumps (4 and 7). Instruction 6 is a jump but is not a target or the start, so it is not a leader."
+  }
+ ]
+}

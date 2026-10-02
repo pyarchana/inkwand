@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "Two essential components needed for every recursive function?",
+   "back": "- **Base Case**: The condition that stops the recursion.\n- **Recursive Step**: The part where the function calls itself with a smaller problem."
+  },
+  {
+   "front": "Which data structure manages recursive function calls in memory?",
+   "back": "The **Call Stack**. Every time a function is called, a new **stack frame** is pushed to store local variables and return addresses."
+  },
+  {
+   "front": "How is the space complexity of a recursive function calculated?",
+   "back": "It depends on the **maximum depth** of the recursion. The stack must hold a frame for every active call in the deepest path."
+  },
+  {
+   "front": "What defines a **tail recursive** function?",
+   "back": "A function is tail recursive if the recursive call is the **final action** performed. No work is left to do after the call returns."
+  },
+  {
+   "front": "What causes a `Stack Overflow` error?",
+   "back": "When recursion goes too deep—usually because of a missing or unreachable **base case**—and the system runs out of memory in the **call stack**."
+  },
+  {
+   "front": "How do you find the time complexity of recursion?",
+   "back": "Formulate a **recurrence relation** (like `T(n) = 2T(n/2) + n`) and solve it using the **Master Theorem** or substitution method."
+  },
+  {
+   "front": "Difference between **direct** and **indirect** recursion?",
+   "back": "- **Direct**: A function calls itself.\n- **Indirect**: Function `A` calls `B`, and `B` calls `A`, creating a circular chain."
+  },
+  {
+   "front": "What is the best visual tool for tracing recursion?",
+   "back": "A **Recursion Tree**. It is a lifesaver! It helps you track every call, the input values, and how the return values propagate back up."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:22:59+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:23:34+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:23:43+00:00"
+  }
+ },
+ "notes": "Recursion is a technique where a function calls itself to solve a smaller version of the same problem. It is like a set of nested Russian dolls; to reach the smallest doll, you must open the larger ones first.\n\nEvery recursive function must have:\n- **Base Case**: The condition that stops the recursion. This prevents an infinite loop.\n- **Recursive Step**: The part where the function calls itself with a modified input (usually smaller) to move closer to the base case.\n\nExample:\nTrace the output of `f(3)`:\n`f(n):`\n`  if n == 0: return 1`\n`  else: return n * f(n-1)`\n\nStep 1: `f(3)` calls `3 * f(2)`\nStep 2: `f(2)` calls `2 * f(1)`\nStep 3: `f(1)` calls `1 * f(0)`\nStep 4: `f(0)` hits the base case and returns `1`\nStep 5: Unwinding the stack (returning values):\n`f(1)` becomes `1 * 1 = 1`\n`f(2)` becomes `2 * 1 = 2`\n`f(3)` becomes `3 * 2 = 6`\nResult: `6`\n\nCommon traps:\n- **Missing Base Case**: If you forget the base case, the function calls itself indefinitely, leading to a **Stack Overflow** error.\n- **Incorrect Unwinding**: Many students forget that the function doesn't just \"stop\" at the base case; it must return values back up through every previous call in the stack.\n\nRemember this: Recursion is a two-phase process: going \"down\" through calls and \"up\" through returns.",
+ "practice": [
+  {
+   "question": "Consider the following C function: `int f(int n) { return f(n-1); }`. What happens when `f(5)` is called?",
+   "options": [
+    "It returns 0",
+    "It returns -1",
+    "It causes a stack overflow",
+    "It returns 5"
+   ],
+   "correct_index": 2,
+   "explanation": "Since there is no base case to stop the recursion, the function keeps calling itself until the stack memory is exhausted. This is a classic way to get a stack overflow!"
+  },
+  {
+   "question": "What is the return value of the following recursive function call: `solve(5)`? \n`int solve(int n) { if (n <= 1) return 1; return n + solve(n-2); }`",
+   "options": [
+    "5",
+    "8",
+    "9",
+    "15"
+   ],
+   "correct_index": 2,
+   "explanation": "Try tracing it step-by-step: `solve(5)` is `5 + solve(3)`, and `solve(3)` is `3 + solve(1)`. Since `solve(1)` returns 1, the final answer is 5 + 3 + 1 = 9."
+  },
+  {
+   "question": "What is the output of `f(4)` for the following function? \n`int f(int n) { if (n <= 1) return 1; return f(n-1) * 2; }`",
+   "options": [
+    "4",
+    "8",
+    "16",
+    "32"
+   ],
+   "correct_index": 1,
+   "explanation": "If you trace the calls, you'll see that for n > 1, the function is essentially calculating 2^(n-1). For n=4, that's 2^3 = 8."
+  },
+  {
+   "question": "Which of the following best describes **tail recursion**?",
+   "options": [
+    "The recursive call is the very last action performed by the function",
+    "The function calls itself at least twice in every step",
+    "The function must have no base case",
+    "The function uses more memory than a standard loop"
+   ],
+   "correct_index": 0,
+   "explanation": "In tail recursion, the recursive call is the very last thing the function does before returning. This is helpful because compilers can optimize it to save stack space!"
+  },
+  {
+   "question": "What will be the output of `printN(3)`? \n`void printN(int n) { if (n == 0) return; printN(n-1); printf(\"%d\", n); }`",
+   "options": [
+    "321",
+    "123",
+    "3",
+    "1"
+   ],
+   "correct_index": 1,
+   "explanation": "Since the `printf` comes after the recursive call, the function 'dives' all the way to the base case first. Then, it prints the numbers as it travels back up the recursion stack."
+  }
+ ]
+}

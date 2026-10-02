@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "What is the main goal of **instruction pipelining**?",
+   "back": "To increase **instruction throughput** by overlapping execution. **Note:** It doesn't make a single instruction faster, just more instructions per second!"
+  },
+  {
+   "front": "Formula for **ideal speedup** in a k-stage pipeline?",
+   "back": "`Ideal Speedup = k`.\nIf there are stalls: `Speedup = k / (1 + average_stalls_per_instruction)`."
+  },
+  {
+   "front": "What causes a **structural hazard**?",
+   "back": "When two or more instructions need the **same hardware resource** (like a single memory port or ALU) at the same time. It's a hardware conflict!"
+  },
+  {
+   "front": "What is a **Read After Write (RAW)** hazard?",
+   "back": "A **data hazard** where an instruction needs a value that a previous instruction hasn't written to the register file yet."
+  },
+  {
+   "front": "Difference between **RAW** and **WAR/WAW** hazards?",
+   "back": "**RAW** is a 'true dependency.' **WAR** (Write After Read) and **WAW** (Write After Write) are 'name dependencies' often solved by **register renaming**."
+  },
+  {
+   "front": "What is a **control hazard**?",
+   "back": "Also called a **branch hazard**. It happens when the pipeline doesn't know the next instruction address because a **branch** is still being evaluated."
+  },
+  {
+   "front": "Two common ways to resolve **data hazards**?",
+   "back": "- **Data Forwarding (Bypassing)**: Sending the result directly to the next instruction.\n- **Stalling**: Inserting `bubbles` to wait for the data."
+  },
+  {
+   "front": "Total cycles for `n` instructions in a `k` stage pipeline (no stalls)?",
+   "back": "`Cycles = k + (n - 1)`.\nThe first instruction takes `k` cycles, and every instruction after that adds 1 cycle."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:48:54+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:49:08+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:24:07+00:00"
+  }
+ },
+ "notes": "Think of pipelining like a laundry assembly line. While one load is drying, the next is already washing. You don't wait for everything to finish before starting the next task. This increases **throughput** (tasks completed per second), though the time for a single task (latency) doesn't actually decrease.\n\n**Hazards** are the \"glitches\" that force the pipeline to stall (insert bubbles):\n- **Structural**: Two instructions need the same hardware (like a single memory unit) at the same time.\n- **Data**: An instruction needs a value that hasn't been written yet (e.g., `R1 = R2 + R3` followed by `R4 = R1 + R5`).\n- **Control**: Caused by branches or jumps; we don't know which instruction to fetch next until the branch is decided.\n\nExample:\nA 5-stage pipeline has a clock cycle of 1ns. We want to execute 10 instructions.\n1. Unpipelined time = 10 instructions * 5 stages * 1ns = 50ns.\n2. Pipelined time = (5 + 10 - 1) * 1ns = 14ns.\n3. Speedup = 50 / 14 = 3.57.\n\nCommon traps:\n- Thinking pipelining reduces the latency of a single instruction.\n- Forgetting the total cycles formula: `k + n - 1` (where `k` is stages and `n` is instructions).\n\nRemember this: Pipelining boosts throughput by overlapping execution, but hazards introduce stalls that prevent us from reaching the ideal speedup of `k`.",
+ "practice": [
+  {
+   "question": "A non-pipelined processor takes 10ns to execute one instruction. A 5-stage pipeline is used where each stage takes 2ns. For a very large number of instructions, what is the approximate speedup provided by the pipeline?",
+   "options": [
+    "2",
+    "5",
+    "10",
+    "50"
+   ],
+   "correct_index": 1,
+   "explanation": "Think of it this way: for a huge number of instructions, we basically compare the time per instruction in both cases. So, 10ns / 2ns gives us a speedup of 5."
+  },
+  {
+   "question": "Consider a 5-stage pipeline (IF, ID, EX, MEM, WB). Instruction I1 writes to register R1, and the very next instruction I2 reads from R1. If there is no forwarding and the register file is written in the first half of the clock cycle and read in the second half, how many stall cycles are required?",
+   "options": [
+    "0",
+    "1",
+    "2",
+    "3"
+   ],
+   "correct_index": 2,
+   "explanation": "Since I1 only writes the value in the WB stage (cycle 5), I2 has to wait until then to read it in its ID stage. This results in 2 stall cycles (during cycles 3 and 4)."
+  },
+  {
+   "question": "A processor uses a single unified memory to store both instructions and data. In a standard 5-stage pipeline, which type of hazard is most likely to occur when an instruction is in the MEM stage while another is in the IF stage?",
+   "options": [
+    "Data hazard",
+    "Control hazard",
+    "Structural hazard",
+    "Pipeline stall"
+   ],
+   "correct_index": 2,
+   "explanation": "Since both stages are trying to access the same memory resource at the same time, they'll clash! This is a classic structural hazard."
+  },
+  {
+   "question": "A program consists of 20% branch instructions. In a pipelined processor, every branch instruction causes a penalty of 2 clock cycles due to a misprediction. If the ideal CPI (Cycles Per Instruction) is 1, what is the actual average CPI for this program?",
+   "options": [
+    "1.2",
+    "1.4",
+    "1.6",
+    "2.0"
+   ],
+   "correct_index": 1,
+   "explanation": "You can find the average CPI by adding the penalty to the base CPI. So, 1 + (0.2 * 2) = 1.4. You've got this!"
+  },
+  {
+   "question": "A 4-stage pipeline has stages with the following delays: 10ns, 12ns, 15ns, and 8ns. What is the clock cycle time of this pipeline?",
+   "options": [
+    "10ns",
+    "12ns",
+    "15ns",
+    "45ns"
+   ],
+   "correct_index": 2,
+   "explanation": "The clock has to wait for the slowest stage to finish before it can tick again. So, we just pick the maximum delay, which is 15ns."
+  }
+ ]
+}

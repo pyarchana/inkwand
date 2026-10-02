@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Think of SDT as adding \"meaning\" to your grammar rules. While a CFG tells you the structure of a program, a **Syntax-Directed Definition (SDD)** tells you what to *do* with that structure, like calculating a value or checking a data type.\n\nWe use **attributes** to pass information around the parse tree:\n- **Synthesized attributes**: The value is calculated from the node's children. It flows **up** the tree.\n- **Inherited attributes**: The value is passed from the parent or siblings. It flows **down** or **sideways**.\n\nBased on these, we have two main types you'll see in GATE:\n- **S-attributed**: Uses *only* synthesized attributes. These are easy to implement during bottom-up (LR) parsing.\n- **L-attributed**: Uses both, but with a restriction: an inherited attribute can only depend on the parent or siblings to its **left**. This allows them to be used in top-down (LL) parsing.\n\nExample:\nGrammar:\n1. `E -> E1 + T` { `E.val = E1.val + T.val` }\n2. `T -> id` { `T.val = id.lexval` }\nInput: `id(5) + id(10)`\nStep 1: For the first `id`, `T.val` becomes 5.\nStep 2: For the second `id`, `T.val` becomes 10.\nStep 3: For the `E` production, `E.val = 5 + 10 = 15`.\nSince we only used synthesized attributes (values moving up), this is **S-attributed**.\n\nCommon traps:\n- Forgetting that **S-attributed is a subset of L-attributed**. Every S-attributed definition is also L-attributed.\n- Thinking L-attributed can use any inherited attribute. It can only look at the parent or **left** siblings, never right siblings.\n\nRemember this: S-attributed uses only synthesized attributes (bottom-up), while L-attributed allows inherited attributes as long as they only depend on the left.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:40:08+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:41:11+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:41:46+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **synthesized attribute**?",
+   "back": "An attribute whose value at a node is computed using only the values of its **children**."
+  },
+  {
+   "front": "What is an **inherited attribute**?",
+   "back": "An attribute whose value at a node is computed using values from its **parent** or **siblings**."
+  },
+  {
+   "front": "What is an **S-attributed definition**?",
+   "back": "An SDD that uses **only synthesized attributes**. These are great because they work perfectly with **bottom-up** parsing."
+  },
+  {
+   "front": "What is an **L-attributed definition**?",
+   "back": "An SDD that allows both synthesized and **inherited** attributes, but inherited ones can only depend on **parents** or **left siblings**."
+  },
+  {
+   "front": "Is every **S-attributed** definition also **L-attributed**?",
+   "back": "**Yes!** S-attributed definitions are just a specific, simpler case of L-attributed definitions."
+  },
+  {
+   "front": "How do we find the evaluation order using a **dependency graph**?",
+   "back": "By finding a **topological sort** of the graph."
+  },
+  {
+   "front": "Can an **inherited attribute** in an **L-attributed** SDD depend on a **right sibling**?",
+   "back": "**No**. To keep it 'L-attributed' (left-to-right), it can only depend on the **parent** or **left siblings**."
+  },
+  {
+   "front": "Difference between **SDD** and **SDT**?",
+   "back": "**SDD** is the high-level specification (the 'what'), while **SDT** is the actual implementation (the 'how') with code embedded in the grammar."
+  }
+ ],
+ "practice": [
+  {
+   "question": "In an S-attributed definition, all attributes are ________ attributes.",
+   "options": [
+    "synthesized",
+    "inherited",
+    "both synthesized and inherited",
+    "neither synthesized nor inherited"
+   ],
+   "correct_index": 0,
+   "explanation": "In S-attributed definitions, we only use synthesized attributes, which means values are always passed up from children to parents."
+  },
+  {
+   "question": "Which of the following statements is true regarding L-attributed and S-attributed definitions?",
+   "options": [
+    "Every S-attributed definition is an L-attributed definition",
+    "Every L-attributed definition is an S-attributed definition",
+    "They are mutually exclusive",
+    "L-attributed definitions cannot use synthesized attributes"
+   ],
+   "correct_index": 0,
+   "explanation": "Since S-attributed definitions are just a more restricted type of L-attributed definitions, they are a subset of the L-attributed family."
+  },
+  {
+   "question": "Given the grammar: E -> E + T { E.val = E1.val + T.val }, E -> T { E.val = T.val }, T -> id { T.val = id.lexval }. What is the value of E.val for the input id1 + id2 where id1.lexval = 5 and id2.lexval = 10?",
+   "options": [
+    "5",
+    "10",
+    "15",
+    "50"
+   ],
+   "correct_index": 2,
+   "explanation": "Just trace the values up: id1 (5) becomes E1.val, id2 (10) becomes T.val, and their sum is 15."
+  },
+  {
+   "question": "In an L-attributed definition, an inherited attribute of a non-terminal can depend on:",
+   "options": [
+    "The attributes of its children",
+    "The attributes of its siblings to the right",
+    "The attributes of its siblings to the left or its parent",
+    "Only the attributes of its parent"
+   ],
+   "correct_index": 2,
+   "explanation": "The 'L' in L-attributed stands for 'left-to-right', meaning we can only look at things to our left (siblings) or above us (parent)."
+  },
+  {
+   "question": "Consider the SDD: S -> A B { B.inh = A.val }, A -> id { A.val = id.lexval }, B -> id { B.val = id.lexval + B.inh }. What is the value of B.val for the input id1 id2 where id1.lexval = 3 and id2.lexval = 4?",
+   "options": [
+    "3",
+    "4",
+    "7",
+    "12"
+   ],
+   "correct_index": 2,
+   "explanation": "A.val is 3, which is passed to B as B.inh. Then B.val is calculated as 4 + 3, giving us 7."
+  }
+ ]
+}

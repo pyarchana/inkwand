@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's dive into how machines recognize patterns.\n\n**Finite Automata (FA)** are simple models used to decide if a string belongs to a specific language.\n- **DFA (Deterministic)**: For every state and input symbol, there is exactly one transition. It is very structured and easy to implement in code.\n- **NFA (Non-deterministic)**: You can have multiple transitions for the same input or even move without any input. It is much easier to design for complex patterns.\n- **Regular Expressions (RE)**: A shorthand way to describe these patterns using symbols like `*` (Kleene star) or `|` (union).\n\nThe most important concept to grasp: **DFA, NFA, and RE are all equivalent in power.** They all describe the exact same class of languages called **Regular Languages**.\n\nExample: Design a DFA for strings over {a, b} that contain the substring 'aa'.\n- Start at `q0`. If input is `b`, stay at `q0`. If input is `a`, move to `q1`.\n- At `q1`, if input is `a`, move to `q2` (Accept state!). If input is `b`, go back to `q0`.\n- At `q2`, any input (`a` or `b`) keeps you in `q2` because the substring 'aa' has already been found.\n\nCommon traps:\n- Thinking NFA is more powerful than DFA. It is not; they both recognize the same languages, but NFA is just easier to draw.\n- Trying to minimize an NFA. Always convert an NFA to a DFA first, then apply minimization algorithms to the DFA.\n\nRemember this: DFA, NFA, and Regular Expressions are just different ways to represent the same set of Regular Languages.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:35:34+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:36:58+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:37:15+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "What is the minimum number of states required for a **DFA** to accept all strings over the alphabet {a, b} that end with the pattern `abb`?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 1,
+   "explanation": "We need states to track the progress of the pattern: one for the start, one for `a`, one for `ab`, and one for `abb`. Thus, 4 states are necessary."
+  },
+  {
+   "question": "Which of the following **regular expressions** correctly represents the language of all strings over {0, 1} containing the substring `110`?",
+   "options": [
+    "(0|1)*110(0|1)*",
+    "(0|1)*11(0|1)*0",
+    "110(0|1)*",
+    "(0|1)*110"
+   ],
+   "correct_index": 0,
+   "explanation": "The expression `(0|1)*110(0|1)*` ensures that `110` appears anywhere in the string, with any sequence of 0s and 1s before and after it."
+  },
+  {
+   "question": "If an **NFA** has 3 states, what is the maximum possible number of states in its equivalent **DFA**?",
+   "options": [
+    "3",
+    "6",
+    "8",
+    "9"
+   ],
+   "correct_index": 2,
+   "explanation": "The power set construction shows that an NFA with `n` states can be converted into a DFA with at most `2^n` states. For `n = 3`, this is `2^3 = 8`."
+  },
+  {
+   "question": "A **DFA** is processed using a **minimization algorithm**, and the number of states is reduced from 5 to 3. What does this imply?",
+   "options": [
+    "The original DFA was not minimal.",
+    "The original DFA was already minimal.",
+    "The language is not regular.",
+    "The NFA equivalent has 3 states."
+   ],
+   "correct_index": 0,
+   "explanation": "If the minimization algorithm can reduce the number of states, it means there were redundant or equivalent states in the original machine."
+  },
+  {
+   "question": "What is the minimum number of states in a **DFA** that accepts strings over {a, b} that both start with `a` and end with `b`?",
+   "options": [
+    "2",
+    "3",
+    "4",
+    "5"
+   ],
+   "correct_index": 2,
+   "explanation": "You need a start state, a state for 'started with a', a dead state for 'started with b', and an accepting state for 'ends with b'. This totals 4 states."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "Are **DFA** and **NFA** equivalent in power?",
+   "back": "Yes! Both recognize **Regular Languages**. You can convert any NFA to a DFA using **subset construction**."
+  },
+  {
+   "front": "What is the goal of **DFA minimization**?",
+   "back": "To find the **unique** DFA with the **minimum number of states** for a specific language."
+  },
+  {
+   "front": "What does a **Regular Expression** represent?",
+   "back": "A way to describe a **Regular Language** using **union**, **concatenation**, and **Kleene star**."
+  },
+  {
+   "front": "Are **Regular Languages** closed under **intersection**?",
+   "back": "Yes! They are also closed under **union**, **complement**, **concatenation**, and **Kleene star**."
+  },
+  {
+   "front": "Do **epsilon transitions** increase **NFA** power?",
+   "back": "No. **NFA-epsilon** is equivalent to a standard **NFA** and a **DFA**. It is just a convenience."
+  },
+  {
+   "front": "What is the **Pumping Lemma** used for?",
+   "back": "It is used to prove a language is **NOT regular**. It is a **negative test**."
+  },
+  {
+   "front": "Max **DFA states** for an `n`-state **NFA**?",
+   "back": "The maximum is **2^n** states. This happens because each DFA state represents a subset of NFA states."
+  },
+  {
+   "front": "What are the **5 components** of a DFA?",
+   "back": "`(Q, Sigma, delta, q0, F)`:\n- `Q`: States\n- `Sigma`: Alphabet\n- `delta`: Transition function\n- `q0`: Start state\n- `F`: Final states"
+  }
+ ]
+}

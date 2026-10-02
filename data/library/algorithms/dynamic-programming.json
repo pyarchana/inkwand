@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let the name \"Dynamic Programming\" intimidate you. It's basically just a way to avoid doing the same work twice.\n\nThe core idea is to break a big problem into smaller, overlapping subproblems. Instead of re-calculating the same thing over and over, we store the result in a table (like an array) and reuse it later. This works if you have:\n- **Overlapping Subproblems**: You encounter the same small sub-problems multiple times during recursion.\n- **Optimal Substructure**: The optimal solution to the big problem can be built from the optimal solutions of its smaller parts.\n\nWe usually use **Memoization** (top-down, using recursion + a table) or **Tabulation** (bottom-up, filling a table from the smallest subproblem up to the target).\n\nExample: Find the length of the LCS (Longest Common Subsequence) for `S1 = \"AB\"` and `S2 = \"A\"`.\n1. Compare the last characters: `B` and `A`. They don't match.\n2. We take the maximum of two options: `LCS(\"A\", \"A\")` or `LCS(\"AB\", \"\")`.\n3. For `LCS(\"A\", \"A\")`: The characters match! So, the length is `1 + LCS(\"\", \"\")`.\n4. `LCS(\"\", \"\")` is 0 because the strings are empty.\n5. Total length = `1 + 0 = 1`.\n\nCommon traps:\n- Thinking **Greedy** works for the **0/1 Knapsack** problem. It doesn't! Greedy only works for the **Fractional Knapsack** problem.\n- Confusing DP with **Divide and Conquer**. In Divide and Conquer, subproblems are independent (like Merge Sort); in DP, they overlap.\n\nRemember this: DP is just recursion + a table to save results of overlapping subproblems.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:31:56+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:33:16+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:33:24+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "In the Longest Common Subsequence (LCS) problem, if the last characters of two strings X and Y are different, what is the correct recurrence relation to find the LCS length?",
+   "options": [
+    "1 + LCS(i-1, j-1)",
+    "max(LCS(i-1, j), LCS(i, j-1))",
+    "min(LCS(i-1, j), LCS(i, j-1))",
+    "LCS(i-1, j-1)"
+   ],
+   "correct_index": 1,
+   "explanation": "When the characters don't match, we try skipping one character from either string and take the maximum result of the two possibilities."
+  },
+  {
+   "question": "You have a 0/1 knapsack with a capacity of 6. The available items are: Item A (weight 2, value 10), Item B (weight 3, value 15), and Item C (weight 5, value 40). What is the maximum value you can carry?",
+   "options": [
+    "25",
+    "40",
+    "55",
+    "15"
+   ],
+   "correct_index": 1,
+   "explanation": "Even though we could pick items A and B to get a value of 25, picking only item C gives us a much higher value of 40 while still staying under the weight limit."
+  },
+  {
+   "question": "What is the length of the Longest Common Subsequence (LCS) for the strings \"AGGTAB\" and \"GXTXAYB\"?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 1,
+   "explanation": "The longest common subsequence is \"GTAB\", which has a length of 4."
+  },
+  {
+   "question": "In the Matrix Chain Multiplication problem, what is the time complexity of the standard Dynamic Programming approach to find the minimum number of scalar multiplications for n matrices?",
+   "options": [
+    "O(n)",
+    "O(n^2)",
+    "O(n^3)",
+    "O(2^n)"
+   ],
+   "correct_index": 2,
+   "explanation": "The DP table has n^2 states, and for each state, we iterate through at most n possible split points, resulting in O(n^3) complexity."
+  },
+  {
+   "question": "Which of the following statements correctly distinguishes between the 0/1 Knapsack and the Fractional Knapsack problems?",
+   "options": [
+    "0/1 Knapsack can be solved optimally using a Greedy approach.",
+    "Fractional Knapsack requires Dynamic Programming to find the optimal solution.",
+    "0/1 Knapsack is typically solved using Dynamic Programming, while Fractional Knapsack can be solved using a Greedy approach.",
+    "Both problems require Dynamic Programming for an optimal solution."
+   ],
+   "correct_index": 2,
+   "explanation": "In Fractional Knapsack, we can take parts of an item using a greedy strategy based on value/weight ratio, but 0/1 Knapsack requires DP because we cannot break items."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "Two essential properties for Dynamic Programming?",
+   "back": "- **Optimal Substructure**: An optimal solution contains optimal solutions to its subproblems.\n- **Overlapping Subproblems**: The same subproblems are solved multiple times."
+  },
+  {
+   "front": "Fractional Knapsack vs 0/1 Knapsack?",
+   "back": "- **Fractional Knapsack**: Solved using **Greedy** (O(n log n)).\n- **0/1 Knapsack**: Solved using **Dynamic Programming** (O(n * W))."
+  },
+  {
+   "front": "LCS Time and Space complexity?",
+   "back": "- Time: `O(m * n)`\n- Space: `O(m * n)`\n(where m and n are the lengths of the two strings)."
+  },
+  {
+   "front": "Goal of Matrix Chain Multiplication?",
+   "back": "To find the most efficient way to multiply a sequence of matrices by minimizing the total number of **scalar multiplications**."
+  },
+  {
+   "front": "Matrix Chain Multiplication time complexity?",
+   "back": "`O(n^3)`, where n is the number of matrices in the sequence."
+  },
+  {
+   "front": "Memoization vs Tabulation?",
+   "back": "- **Memoization**: Top-down approach (recursion + storing results).\n- **Tabulation**: Bottom-up approach (iterative + filling a table)."
+  },
+  {
+   "front": "Can 0/1 Knapsack space be optimized?",
+   "back": "Yes! By using a 1D array instead of a 2D table, you can reduce the space complexity to `O(W)`."
+  },
+  {
+   "front": "DP vs Greedy: Which is more exhaustive?",
+   "back": "**Dynamic Programming** is more exhaustive because it considers all subproblems to ensure a global optimum, whereas **Greedy** only makes the best local choice at each step."
+  }
+ ]
+}

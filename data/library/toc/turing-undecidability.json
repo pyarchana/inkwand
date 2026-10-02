@@ -1,0 +1,108 @@
+{
+ "notes": "Think of a **Turing Machine (TM)** as the ultimate model of a computer. It uses an infinite tape to read, write, and move, making it much more powerful than Finite Automata or Pushdown Automata.\n\n- A problem is **decidable** if there is a TM that always halts (either accepts or rejects) for every possible input.\n- A problem is **undecidable** if no such TM can be built. For some inputs, any machine we design might loop forever.\n- **Rice's Theorem** is a huge shortcut: it states that any non-trivial property of the language recognized by a TM is undecidable.\n\nExample: Is the problem \"Is the language recognized by a TM empty?\" decidable?\nStep 1: Check if this is a property of the language. Yes, \"being empty\" describes the set of strings the TM accepts.\nStep 2: Check if it is non-trivial. Yes, some TMs recognize an empty language, while others do not.\nStep 3: Apply **Rice's Theorem**. Since it is a non-trivial property of the language, the problem is undecidable.\n\nCommon traps:\n- Don't confuse \"Decidable\" with \"Recognizable\". A language is **recognizable** if the TM halts on \"Yes\" but might loop forever on \"No\". Decidable requires halting on both.\n- Remember that **Rice's Theorem** only applies to the **language** (what the TM accepts), not the **machine's structure** (like the number of states or tape movements).\n\nRemember this: Decidable means the machine always halts with an answer; undecidable means no algorithm can solve it for all inputs.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:38:15+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:38:28+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:39:24+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **decidable** language?",
+   "back": "A language is decidable if a TM exists that **accepts** strings in the language and **rejects** strings not in the language. It **always halts**."
+  },
+  {
+   "front": "**Decidable** vs. **Turing-recognizable**?",
+   "back": "- **Decidable**: TM always halts.\n- **Recognizable**: TM halts on strings in the language, but may **loop forever** on strings not in the language."
+  },
+  {
+   "front": "Is the **Halting Problem** decidable?",
+   "back": "No, it is **undecidable**. We cannot build a TM that correctly predicts if an arbitrary TM will halt or loop on a given input."
+  },
+  {
+   "front": "What does **Rice's Theorem** state?",
+   "back": "Any **non-trivial** property of the language recognized by a TM is **undecidable**. (Non-trivial means the property applies to some, but not all, RE languages)."
+  },
+  {
+   "front": "If L and its **complement** are both **recognizable**, what is L?",
+   "back": "L is **decidable**. If you run the TM for L and the TM for its complement in parallel, one will eventually halt and give you the answer."
+  },
+  {
+   "front": "What is a **Universal Turing Machine**?",
+   "back": "A TM that can simulate any other TM given its description and input. It represents the concept of a **general-purpose computer**."
+  },
+  {
+   "front": "Is the **Post Correspondence Problem (PCP)** decidable?",
+   "back": "No, PCP is **undecidable**. It is a common tool used to show that certain problems in context-free languages are also undecidable."
+  },
+  {
+   "front": "Relationship between **decidable** and **recognizable** languages?",
+   "back": "**Decidable** languages are a **subset** of **recognizable** languages. Every decidable language is recognizable, but not every recognizable language is decidable."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following properties of a Turing Machine is **decidable**?",
+   "options": [
+    "L(M) is empty",
+    "L(M) is regular",
+    "M has exactly 10 states",
+    "L(M) is infinite"
+   ],
+   "correct_index": 2,
+   "explanation": "Counting the states of a machine is easy. However, properties like emptiness or regularity depend on the language itself, which are undecidable by Rice's Theorem."
+  },
+  {
+   "question": "If a Turing Machine is restricted so that its head **never moves left**, the class of languages it can recognize is:",
+   "options": [
+    "Regular languages",
+    "Context-free languages",
+    "Context-sensitive languages",
+    "Recursive languages"
+   ],
+   "correct_index": 0,
+   "explanation": "If the head can't move left, it can't revisit or use the tape for extra memory. This makes it behave just like a Finite Automaton!"
+  },
+  {
+   "question": "The language `A_TM = {<M, w> | M is a TM and M accepts w}` is:",
+   "options": [
+    "Decidable",
+    "Undecidable but Recursively Enumerable",
+    "Not Recursively Enumerable",
+    "Context-free"
+   ],
+   "correct_index": 1,
+   "explanation": "We can simulate the machine, so if it accepts, we will eventually know. But if it loops, we might never stop, which is why it's RE but not decidable."
+  },
+  {
+   "question": "A Turing Machine has `q` states and `k` tape symbols. If it is restricted to using `n` cells of the tape, the number of possible **configurations** is:",
+   "options": [
+    "q * n * k^n",
+    "q * k^n",
+    "q * n * k",
+    "n * k^n"
+   ],
+   "correct_index": 0,
+   "explanation": "A configuration is defined by the current state, the head position, and the tape content. Multiplying these possibilities gives `q * n * k^n`."
+  },
+  {
+   "question": "Which of the following is **undecidable**?",
+   "options": [
+    "Does M accept the empty string?",
+    "Is L(M) equal to a specific regular language R?",
+    "Is L(M) empty?",
+    "All of the above"
+   ],
+   "correct_index": 3,
+   "explanation": "All these are non-trivial properties of the language recognized by a TM. According to Rice's Theorem, any non-trivial property of the language is undecidable."
+  }
+ ]
+}

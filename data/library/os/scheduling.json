@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "What is the **Convoy Effect** in FCFS?",
+   "back": "When a long process holds the CPU, causing short processes to wait a long time, which increases the **average waiting time**."
+  },
+  {
+   "front": "Which algorithm gives the **minimum average waiting time**?",
+   "back": "**SJF (Shortest Job First)**. It is optimal because it prioritizes shorter tasks to reduce the overall wait."
+  },
+  {
+   "front": "Difference between **SJF** and **SRTF**?",
+   "back": "**SJF** is non-preemptive. **SRTF** is the preemptive version where a newly arrived shorter job can displace the current one."
+  },
+  {
+   "front": "How does **Time Quantum** affect Round Robin?",
+   "back": "- Large quantum: Becomes like **FCFS**.\n- Small quantum: Increases **context switching overhead**, reducing efficiency."
+  },
+  {
+   "front": "What is **Starvation** in Priority scheduling and its fix?",
+   "back": "Low-priority jobs may never run if high-priority jobs keep arriving. We fix this using **Aging** (increasing priority over time)."
+  },
+  {
+   "front": "What is the main goal of **SSTF** disk scheduling?",
+   "back": "To minimize **seek time** by servicing the request closest to the current head position. Warning: It can cause **starvation**."
+  },
+  {
+   "front": "How does the **SCAN** disk scheduling algorithm work?",
+   "back": "Also called the **Elevator algorithm**. The head moves in one direction to the end of the disk, then reverses direction."
+  },
+  {
+   "front": "Formulas for **Turnaround Time** and **Waiting Time**?",
+   "back": "- **TAT** = Completion Time - Arrival Time.\n- **WT** = Turnaround Time - Burst Time."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:46:28+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:46:45+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:50:50+00:00"
+  }
+ },
+ "notes": "CPU scheduling is about deciding which process gets the processor next. We usually want to minimize **Turnaround Time** (Finish - Arrival) and **Waiting Time** (Turnaround - Burst).\n\n- **FCFS**: First come, first served. Simple, but a long process can block everyone (the **convoy effect**).\n- **SJF/SRTF**: SJF is non-preemptive; SRTF is the preemptive version. These are great because they minimize average waiting time!\n- **Round Robin**: Uses a **time quantum**. It's super fair and great for time-sharing.\n- **Priority**: Higher priority goes first, but watch out for **starvation** of low-priority tasks.\n\nDisk scheduling focuses on the disk arm. We want to minimize **seek time** (moving the head). **SSTF** (Shortest Seek Time First) is fast but can starve requests, while **SCAN** (the elevator algorithm) is more predictable.\n\nExample: P1 (Arr: 0, Burst: 5), P2 (Arr: 1, Burst: 2). Use **SRTF**.\n- `t=0`: P1 starts.\n- `t=1`: P2 arrives. P1's remaining time is 4. Since P2's burst (2) < 4, P2 preempts P1.\n- `t=3`: P2 finishes. P1 resumes.\n- `t=7`: P1 finishes.\n- P1 waiting time: 7 - 5 = 2.\n- P2 waiting time: 3 - 1 - 2 = 0.\n- Avg waiting time: (2 + 0) / 2 = 1.\n\nCommon traps:\n- Confusing **Turnaround Time** with **Waiting Time**. Just remember: Turnaround is the total time spent in the system, while Waiting is just the time spent sitting in the ready queue.\n- Forgetting that SRTF is preemptive. Always check if a new, shorter process arrives and \"interrupts\" the current one!\n\nRemember this: SJF/SRTF is the winner for minimum average waiting time, while Round Robin is the best for responsiveness.",
+ "practice": [
+  {
+   "question": "In Round Robin scheduling, if the time quantum is set to be larger than the maximum burst time of any process in the ready queue, which scheduling algorithm does it behave like?",
+   "options": [
+    "FCFS",
+    "SJF",
+    "Priority",
+    "SRTF"
+   ],
+   "correct_index": 0,
+   "explanation": "If the time quantum is very large, every process will finish its entire burst before the next one starts, which is exactly how FCFS works. It's a common concept to keep in mind!"
+  },
+  {
+   "question": "A disk head is currently at position 50. The request queue is: 20, 80, 45, 100. What is the total seek distance using the SSTF (Shortest Seek Time First) algorithm?",
+   "options": [
+    "100",
+    "110",
+    "130",
+    "150"
+   ],
+   "correct_index": 1,
+   "explanation": "SSTF always picks the request closest to the current head position. The path is 50 -> 45 -> 20 -> 80 -> 100, and the distances are 5 + 25 + 60 + 20 = 110."
+  },
+  {
+   "question": "Consider four processes with arrival times and burst times: P1(0, 7), P2(2, 4), P3(4, 1), and P4(5, 4). What is the average waiting time using non-preemptive SJF scheduling?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 1,
+   "explanation": "P1 runs first (0-7). Then P3 is the shortest (7-8), followed by P2 (8-12), and finally P4 (12-16). The wait times are 0, 6, 3, and 7, so the average is 4."
+  },
+  {
+   "question": "Which of the following is a major disadvantage of priority-based scheduling?",
+   "options": [
+    "High overhead",
+    "Starvation",
+    "Low CPU utilization",
+    "High response time"
+   ],
+   "correct_index": 1,
+   "explanation": "Low-priority processes might never get the CPU if high-priority processes keep arriving. We call this 'starvation', and it's a classic problem to watch out for."
+  },
+  {
+   "question": "Three processes P1, P2, and P3 arrive at time 0 with burst times 5, 3, and 2 respectively. If the Round Robin time quantum is 2, what is the average waiting time?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 2,
+   "explanation": "By tracing the execution, the wait times are P1: 5, P2: 6, and P3: 4. The average is (5 + 6 + 4) / 3 = 5. You've got this!"
+  }
+ ]
+}

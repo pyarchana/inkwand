@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let memory management stress you out. It's just the OS's way of deciding where to put your code in the RAM so it runs efficiently.\n\n- **Contiguous Allocation**: The process is kept in one single, unbroken block of memory. It's simple, but it leads to **External Fragmentation** (tiny gaps between processes that are too small to be useful).\n- **Paging**: We break physical memory into fixed-size blocks called `frames` and logical memory into `pages`. Since any page can fit into any available frame, we solve the external fragmentation problem! However, we might waste a little space in the very last page, which is called **Internal Fragmentation**.\n- **Segmentation**: Instead of fixed sizes, we divide memory into logical units like `code`, `data`, or `stack`. This is more \"human-friendly,\" but because segments are variable-sized, it can cause external fragmentation again.\n\nExample:\nA system uses 4 KB pages. A process of size 13 KB is loaded.\n1. Number of pages needed = ceil(13 / 4) = 4 pages.\n2. Total memory allocated = 4 * 4 KB = 16 KB.\n3. Internal fragmentation = 16 KB - 13 KB = 3 KB.\n\nCommon traps:\n- Thinking paging causes external fragmentation. It doesn't! It only causes **Internal Fragmentation** (usually only in the last page).\n- Forgetting that **Segmentation** uses variable-sized blocks, which means it can suffer from external fragmentation just like contiguous allocation.\n\nRemember this: Paging uses fixed-size blocks to eliminate external fragmentation, while segmentation uses variable-sized blocks based on logical divisions.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:46:07+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:47:16+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:47:38+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What's the difference between **Internal** and **External Fragmentation**?",
+   "back": "- **Internal**: Wasted space inside an allocated block.\n- **External**: Enough total free space exists, but it is not contiguous to satisfy a request."
+  },
+  {
+   "front": "How is a **Logical Address** split in paging?",
+   "back": "It is split into two parts:\n- **Page Number (p)**: Used as an index into the page table.\n- **Page Offset (d)**: The specific location within that page."
+  },
+  {
+   "front": "How do we find the **Physical Address**?",
+   "back": "**Physical Address** = (Frame Number * Page Size) + Offset.\nThink of it as taking the frame's starting address and adding the offset."
+  },
+  {
+   "front": "How do we calculate **Page Table Size**?",
+   "back": "**Page Table Size** = (Number of Pages) * (Size of one Page Table Entry).\nTo find the number of pages, use: (Total Logical Address Space) / (Page Size)."
+  },
+  {
+   "front": "Why do we use a **TLB**?",
+   "back": "A **TLB** is a fast hardware cache that stores recent page-to-frame mappings. It makes memory access much faster by reducing the number of times we need to check the main memory."
+  },
+  {
+   "front": "**Paging** vs **Segmentation**: what's the main difference?",
+   "back": "- **Paging**: Uses fixed-size blocks; eliminates external fragmentation.\n- **Segmentation**: Uses variable-size blocks based on logical parts; can lead to external fragmentation."
+  },
+  {
+   "front": "Formula for **Effective Access Time (EAT)** with TLB?",
+   "back": "**EAT** = `h` * (TLB + Mem) + (1 - `h`) * (TLB + 2 * Mem).\n`h` is the hit ratio. The `2 * Mem` accounts for accessing the page table AND the actual data."
+  },
+  {
+   "front": "What's inside a **Segment Table** entry?",
+   "back": "Usually two things:\n- **Base**: The starting physical address of the segment.\n- **Limit**: The length of the segment to ensure the process stays in bounds."
+  }
+ ],
+ "practice": [
+  {
+   "question": "A 32-bit system uses paging with a page size of 4 KB. If each page table entry (PTE) is 4 bytes, what is the total size of the page table?",
+   "options": [
+    "4 KB",
+    "4 MB",
+    "1 MB",
+    "16 MB"
+   ],
+   "correct_index": 1,
+   "explanation": "To find the size, first calculate the number of pages: 2^32 / 2^12 = 2^20 pages. Then, multiply the number of pages by the PTE size: 2^20 * 4 bytes = 4 MB."
+  },
+  {
+   "question": "In memory management, how does segmentation primarily differ from paging?",
+   "options": [
+    "Segmentation uses fixed-size blocks, while paging uses variable-sized blocks.",
+    "Segmentation eliminates external fragmentation, while paging causes it.",
+    "Segmentation is based on the user's logical view, while paging is a physical division.",
+    "Segmentation requires a page table, while paging requires a segment table."
+   ],
+   "correct_index": 2,
+   "explanation": "Think of it this way: segmentation follows the user's logical view of the program (like functions or objects), while paging is a hardware-level division into fixed blocks."
+  },
+  {
+   "question": "Suppose we have three free memory blocks of sizes 50 KB, 200 KB, and 100 KB. If a new process of 70 KB arrives and we use the **Best Fit** allocation strategy, which block will be selected?",
+   "options": [
+    "50 KB",
+    "200 KB",
+    "100 KB",
+    "The process cannot be allocated"
+   ],
+   "correct_index": 2,
+   "explanation": "Best Fit is a smart way to minimize wasted space by picking the smallest hole that is still large enough to hold the process, which in this case is 100 KB."
+  },
+  {
+   "question": "Consider a system with a page size of 1 KB. The page table maps Page 0 to Frame 5, Page 1 to Frame 2, and Page 2 to Frame 8. What is the physical address for the logical address 2500?",
+   "options": [
+    "2048",
+    "8644",
+    "2500",
+    "1024"
+   ],
+   "correct_index": 1,
+   "explanation": "First, find the page number (2500 // 1024 = 2) and the offset (2500 % 1024 = 452). Since Page 2 is in Frame 8, the physical address is (8 * 1024) + 452 = 8644."
+  },
+  {
+   "question": "Which of the following is a true statement about fragmentation?",
+   "options": [
+    "Paging causes external fragmentation.",
+    "Segmentation causes internal fragmentation.",
+    "Paging causes internal fragmentation, while segmentation causes external fragmentation.",
+    "Both paging and segmentation completely avoid all types of fragmentation."
+   ],
+   "correct_index": 2,
+   "explanation": "Since paging uses fixed-size blocks, the leftover space in the last page is internal fragmentation; segmentation uses variable sizes, which can leave gaps between segments (external fragmentation)."
+  }
+ ]
+}

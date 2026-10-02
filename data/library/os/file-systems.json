@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's tackle File Systems. Think of this as how the OS organizes data on a disk so it doesn't become a giant mess.\n\n- **Directory Structure**: This is the organization. A **Tree-structured** directory is what we use most, allowing folders within folders.\n- **Allocation Methods**:\n  - **Contiguous**: Files get a continuous set of blocks. It's very fast but suffers from **external fragmentation** (empty gaps between files that are too small to use).\n  - **Linked**: Each block points to the next. No fragmentation, but you can't jump to the middle of a file easily (no **random access**).\n  - **Indexed**: This uses an **inode**. The inode is a control block that stores an array of pointers to the data blocks. It also holds metadata like file size and permissions. This provides fast **random access**.\n\nExample:\nAn **inode** has 12 direct pointers. Each disk block is 4 KB. What is the maximum file size addressable using only direct pointers?\nStep 1: Identify the number of direct pointers = 12.\nStep 2: Identify the size per block = 4 KB.\nStep 3: Calculate max size = 12 * 4 KB = 48 KB.\n\nCommon traps:\n- Don't confuse **external fragmentation** (wasted space between files) with **internal fragmentation** (wasted space inside a single block).\n- Remember that **Linked Allocation** is great for sequential access but terrible for random access because you must follow the chain from the start.\n\nRemember this: Inodes use indexed allocation to provide fast random access while avoiding the fragmentation issues of contiguous allocation.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:48:23+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:48:46+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:48:46+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Pros and cons of **Contiguous Allocation**?",
+   "back": "Pros: Very fast **sequential access**. Cons: It leads to **external fragmentation** and makes it tricky to grow files later."
+  },
+  {
+   "front": "How does **Linked Allocation** solve fragmentation?",
+   "back": "It links blocks using pointers, so no space is wasted (**no external fragmentation**). But, **random access** becomes quite slow."
+  },
+  {
+   "front": "Main advantage of **Indexed Allocation**?",
+   "back": "It supports efficient **direct access** to any block by using an index block, solving both fragmentation and slow seeking."
+  },
+  {
+   "front": "What metadata is kept in an **inode**?",
+   "back": "It stores **size**, **owner**, and **permissions**. A common trap: the **filename** is NOT in the inode; it's in the directory!"
+  },
+  {
+   "front": "What's the purpose of **indirect pointers**?",
+   "back": "They point to a block that holds more pointers. This allows the file system to support **much larger files** effectively."
+  },
+  {
+   "front": "Biggest issue with a **Single-level Directory**?",
+   "back": "**Naming collisions**. Since everyone shares one list, you can't have two files with the same name, even if they're different."
+  },
+  {
+   "front": "Benefit of a **Tree-structured Directory**?",
+   "back": "It lets you use **subdirectories** to organize files. This makes finding things easier and prevents naming conflicts."
+  },
+  {
+   "front": "Which allocation method is best for **random access**?",
+   "back": "**Indexed Allocation** and **Contiguous Allocation**. Indexed is more flexible for growing files, but both allow jumping to any block quickly."
+  }
+ ],
+ "practice": [
+  {
+   "question": "A file system uses **linked allocation**. The block size is 1 KB and each block contains a 4-byte pointer to the next block. If a file is 10 KB in size, what is the minimum number of blocks required to store this file?",
+   "options": [
+    "10",
+    "11",
+    "12",
+    "10.04"
+   ],
+   "correct_index": 1,
+   "explanation": "Each block has 1024 - 4 = 1020 bytes available for data. To store 10240 bytes, we need ceil(10240 / 1020) = 11 blocks."
+  },
+  {
+   "question": "An inode contains 12 direct pointers, 1 single indirect pointer, and 1 double indirect pointer. If the block size is 4 KB and each pointer takes 4 bytes, how many blocks can be addressed by the **single indirect pointer** alone?",
+   "options": [
+    "1024",
+    "4096",
+    "1",
+    "12"
+   ],
+   "correct_index": 0,
+   "explanation": "The single indirect pointer points to one block filled with pointers. A 4 KB block can hold 4096 / 4 = 1024 pointers, each pointing to a data block."
+  },
+  {
+   "question": "In a **tree-structured directory** system, why is it possible for two different files to have the same name `data.txt`?",
+   "options": [
+    "The system allows duplicate names in the same directory.",
+    "The files are located in different directories, making their full paths unique.",
+    "The file system uses a hash table that permits collisions.",
+    "The directory structure is actually a single-level structure."
+   ],
+   "correct_index": 1,
+   "explanation": "In a tree structure, the identity of a file is determined by its full path. This allows different directories to contain files with identical names."
+  },
+  {
+   "question": "In an **indexed allocation** scheme, the block size is 512 bytes and each disk pointer is 4 bytes. To store a file that requires 100 data blocks, how many total disk blocks are needed, assuming only one index block is used?",
+   "options": [
+    "100",
+    "101",
+    "128",
+    "129"
+   ],
+   "correct_index": 1,
+   "explanation": "We need 100 blocks for the actual data plus 1 extra block to serve as the index block that holds the pointers."
+  },
+  {
+   "question": "A disk has three free contiguous holes of sizes 10 KB, 20 KB, and 15 KB. A process requests to store a file of 30 KB using **contiguous allocation**. What will be the outcome?",
+   "options": [
+    "The file will be stored in the 10 KB and 20 KB holes.",
+    "The file will be stored in the 20 KB and 15 KB holes.",
+    "The file cannot be stored due to **external fragmentation**.",
+    "The file will be stored using a combination of all three holes."
+   ],
+   "correct_index": 2,
+   "explanation": "Contiguous allocation requires one single hole large enough for the entire file. Since the largest available hole is only 20 KB, the 30 KB request cannot be satisfied."
+  }
+ ]
+}

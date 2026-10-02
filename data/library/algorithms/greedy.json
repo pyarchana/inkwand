@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "Core principle of a **Greedy Algorithm**?",
+   "back": "It makes the **locally optimal choice** at each step, hoping it leads to a **globally optimal solution**. It never reconsiders previous decisions."
+  },
+  {
+   "front": "Can **Greedy** solve the **0/1 Knapsack** problem?",
+   "back": "No. Greedy works for **Fractional Knapsack** using profit/weight ratios. For **0/1 Knapsack**, you must use **Dynamic Programming** to find the optimal solution."
+  },
+  {
+   "front": "Optimal strategy for **Fractional Knapsack**?",
+   "back": "- Calculate **profit/weight ratio** for all items. \n- Sort items by ratio in **descending order**. \n- Pick items greedily until the knapsack is full."
+  },
+  {
+   "front": "How to solve **Activity Selection** greedily?",
+   "back": "Sort activities by their **finish times** in ascending order. Always pick the next activity whose **start time** is greater than or equal to the previous activity's **finish time**."
+  },
+  {
+   "front": "Complexity of **Activity Selection** (if already sorted)?",
+   "back": "**O(n)**. If you include the initial sorting step by finish time, the total complexity becomes **O(n log n)**."
+  },
+  {
+   "front": "Purpose of **Huffman Coding**?",
+   "back": "A greedy algorithm for **lossless data compression**. It assigns **shorter codes** to frequent characters and **longer codes** to infrequent ones to minimize total length."
+  },
+  {
+   "front": "Key property of **Huffman Codes**?",
+   "back": "It is a **Prefix Code** (or Prefix-free code). This means no code is a prefix of another, ensuring unique and unambiguous decoding."
+  },
+  {
+   "front": "Two properties required for a **Greedy Algorithm** to work?",
+   "back": "1. **Greedy Choice Property**: Local optimal choices lead to a global optimum. \n2. **Optimal Substructure**: An optimal solution to the problem contains optimal solutions to its subproblems."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:31:54+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:32:16+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:32:17+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Consider a set of activities with the following (start, finish) times: (1,4), (3,5), (0,6), (5,7), (3,8), (5,9), (6,10), (8,11), (8,12), (2,13), (12,14). What is the maximum number of non-overlapping activities that can be performed?",
+   "options": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "correct_index": 1,
+   "explanation": "Sort activities by finish time and greedily pick the next activity that starts after the current one finishes. Here, we pick (1,4), then (5,7), then (8,11), and finally (12,14)."
+  },
+  {
+   "question": "In a fractional knapsack problem, you have a knapsack with capacity 50. You have three items: Item 1 (weight 10, value 60), Item 2 (weight 20, value 100), and Item 3 (weight 30, value 120). What is the maximum total value you can carry?",
+   "options": [
+    "220",
+    "240",
+    "260",
+    "280"
+   ],
+   "correct_index": 1,
+   "explanation": "Calculate the value-to-weight ratio for each item (6, 5, and 4 respectively) and pick items in descending order. You take all of Item 1, all of Item 2, and 20/30 of Item 3 to reach the capacity."
+  },
+  {
+   "question": "A Huffman coding tree is built for the following character frequencies: a:5, b:9, c:12, d:13, e:16, f:45. What is the total number of bits required to represent the entire message using this Huffman coding?",
+   "options": [
+    "210",
+    "224",
+    "236",
+    "250"
+   ],
+   "correct_index": 1,
+   "explanation": "The total bits is the sum of (frequency * depth) for each character. Based on the tree structure, the calculation is (45*1) + (16*3) + (13*3) + (12*3) + (9*4) + (5*4) = 224."
+  },
+  {
+   "question": "Which of the following problems is NOT typically solved using a greedy approach to find the optimal solution?",
+   "options": [
+    "Huffman coding",
+    "Fractional knapsack",
+    "0/1 knapsack",
+    "Activity selection"
+   ],
+   "correct_index": 2,
+   "explanation": "The 0/1 knapsack problem requires dynamic programming because the greedy choice of the highest ratio doesn't guarantee an optimal solution when items cannot be divided."
+  },
+  {
+   "question": "What is the worst-case time complexity of building a Huffman tree for 'n' characters using a min-priority queue?",
+   "options": [
+    "O(n)",
+    "O(n log n)",
+    "O(n^2)",
+    "O(log n)"
+   ],
+   "correct_index": 1,
+   "explanation": "We perform n-1 merges, and each merge involves two extract-min and one insert operation in the priority queue, each taking O(log n) time."
+  }
+ ],
+ "notes": "Think of Greedy like a buffet: you grab the most expensive food first until your plate is full. You don't plan the whole meal; you just pick the best thing available right now.\n\nIn technical terms, a Greedy algorithm makes the **locally optimal choice** at each step. It never reconsiders its decisions. For it to work, the problem must have:\n- **Greedy choice property**: A local choice leads to a global optimum.\n- **Optimal substructure**: An optimal solution contains optimal solutions to its subproblems.\n\nCommon GATE topics: **Activity Selection** (sort by finish time), **Huffman Coding** (build tree from lowest frequencies), and **Fractional Knapsack** (sort by value/weight ratio).\n\nExample:\nFractional Knapsack with items (val=60, wt=10), (val=100, wt=20), (val=120, wt=30) and capacity W=50.\n1. Calculate ratios: 6, 5, 4.\n2. Pick all of Item 1: Value=60, `W_rem`=40.\n3. Pick all of Item 2: Value=160, `W_rem`=20.\n4. Pick 20/30 of Item 3: Value=160 + (20/30 * 120) = 240.\n\nCommon traps:\n- Using Greedy for **0/1 Knapsack**. It fails there! Use Dynamic Programming instead.\n- In **Activity Selection**, sorting by start time instead of finish time.\n\nRemember this: Greedy makes the best immediate choice, but it only works if local best choices lead to the global best."
+}

@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Closure properties might seem like a lot of memorization, but think of them as \"rules of the club.\" If you take two languages from a certain group and combine them using an operation, does the result stay in that same group?\n\n- **Regular Languages** are the \"superstars.\" They are closed under almost every common operation: Union, Intersection, Complement, Concatenation, Kleene Star, and Reversal.\n- **Context-Free Languages (CFLs)** are a bit more restricted. They are closed under Union, Concatenation, and Kleene Star, but they **fail** at Intersection and Complement.\n\nExample:\nIs the intersection of two CFLs always a CFL?\n1. Let L1 = {a^n b^n c^m | n, m >= 0}. This is a CFL.\n2. Let L2 = {a^m b^n c^n | n, m >= 0}. This is also a CFL.\n3. L1 intersection L2 = {a^n b^n c^n | n >= 0}.\n4. We know {a^n b^n c^n} is NOT a CFL (it's Context-Sensitive).\nResult: CFLs are NOT closed under intersection.\n\nCommon traps:\n- Don't assume CFLs are closed under intersection just because Regular languages are.\n- Be careful with \"Deterministic CFLs\" (DCFLs). They are closed under complement, unlike general CFLs!\n\nRemember this: Regular languages are closed under almost everything, but CFLs are not closed under intersection or complement.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:36:14+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:37:53+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:38:25+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Are **Regular Languages** closed under **Union, Intersection, and Complement**?",
+   "back": "**Yes**. Regular languages are extremely robust and are closed under all these operations."
+  },
+  {
+   "front": "Which operations are **Context-Free Languages** (CFLs) closed under?",
+   "back": "They are closed under:\n- **Union**\n- **Concatenation**\n- **Kleene Star**"
+  },
+  {
+   "front": "Are **Context-Free Languages** (CFLs) closed under **Intersection** and **Complement**?",
+   "back": "**No**. This is a common trap! The intersection or complement of two CFLs might not be a CFL."
+  },
+  {
+   "front": "What is the result of intersecting a **Regular Language** and a **CFL**?",
+   "back": "The result is always a **Context-Free Language**. This is a super important property for GATE!"
+  },
+  {
+   "front": "Are **Regular Languages** closed under **Set Difference**?",
+   "back": "**Yes**. Since they are closed under intersection and complement, they are also closed under difference."
+  },
+  {
+   "front": "If a language is **Context-Free**, is its **complement** also Context-Free?",
+   "back": "**No**. CFLs are not closed under complement. If they were, they would also be closed under intersection."
+  },
+  {
+   "front": "Is the **intersection** of two **Context-Free Languages** always a CFL?",
+   "back": "**No**. Example: Intersecting {a^n b^n c^m} and {a^m b^n c^n} results in {a^n b^n c^n}, which is not a CFL."
+  },
+  {
+   "front": "Are **Regular Languages** closed under **Reversal**?",
+   "back": "**Yes**. If you reverse a regular language, the result is still a regular language."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following statements is **true** regarding the closure properties of languages?",
+   "options": [
+    "The intersection of two context-free languages is always context-free.",
+    "The complement of a context-free language is always context-free.",
+    "The union of two context-free languages is always context-free.",
+    "The intersection of a context-free language and a context-sensitive language is always context-free."
+   ],
+   "correct_index": 2,
+   "explanation": "Context-free languages (CFLs) are closed under union, but they are not closed under intersection or complementation."
+  },
+  {
+   "question": "Which of the following operations, when applied to two context-free languages, might **NOT** result in a context-free language?",
+   "options": [
+    "Union",
+    "Concatenation",
+    "Intersection",
+    "Kleene star"
+   ],
+   "correct_index": 2,
+   "explanation": "While CFLs are closed under union, concatenation, and star, the intersection of two CFLs is not necessarily a CFL."
+  },
+  {
+   "question": "Let L1 be a **regular** language and L2 be a **context-free** language. Which of the following is guaranteed to be a **regular** language?",
+   "options": [
+    "L1 complement",
+    "L1 intersection L2",
+    "L1 union L2",
+    "L1 concatenation L2"
+   ],
+   "correct_index": 0,
+   "explanation": "The complement of a regular language is always regular. The other operations can result in a language that is context-free but not regular."
+  },
+  {
+   "question": "Which of the following classes of languages is **NOT** closed under complement?",
+   "options": [
+    "Regular languages",
+    "Context-Sensitive languages",
+    "Context-Free languages",
+    "Recursive languages"
+   ],
+   "correct_index": 2,
+   "explanation": "Regular, Context-Sensitive, and Recursive languages are all closed under complement, but Context-Free languages are not."
+  },
+  {
+   "question": "Let L1 = {a^n b^n | n >= 0} and L2 = {a^n b^2n | n >= 0}. What is the nature of the language `L1 intersection L2`?",
+   "options": [
+    "Regular",
+    "Context-Free but not regular",
+    "Context-Sensitive but not context-free",
+    "Not context-sensitive"
+   ],
+   "correct_index": 0,
+   "explanation": "For a string to be in both, n must equal 2n, which only happens when n=0. The intersection is the finite set {epsilon}, and all finite languages are regular."
+  }
+ ]
+}

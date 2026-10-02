@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's tackle Binary Heaps. Don't let the name intimidate you; it's just a clever way to organize data so we can grab the \"best\" element (the largest or smallest) very quickly.\n\n- A **Binary Heap** is a **Complete Binary Tree**. This means every level is fully filled, except possibly the last level, which is filled from left to right.\n- It follows the **Heap Property**: In a **Max-Heap**, the parent is always greater than or equal to its children. In a **Min-Heap**, the parent is always smaller than or equal to its children.\n- We usually store heaps in an **array** to save space. For a node at index `i` (starting from 0):\n    - Left child: `2i + 1`\n    - Right child: `2i + 2`\n    - Parent: `(i - 1) / 2`\n- **Heapify** is the process of rearranging elements to restore the heap property after an insertion or deletion.\n\nExample: Build a Max-Heap from the array `[3, 10, 5, 1]`.\n1. Start at the last non-leaf node. For `n=4`, index is `(4/2)-1 = 1`.\n2. Node at index 1 is `10`. Its child is at index 3 (value `1`). Since `10 > 1`, it's already correct.\n3. Move to index 0. Node is `3`. Its children are `10` (index 1) and `5` (index 2).\n4. Since `10` is the largest, swap `3` and `10`. Array becomes `[10, 3, 5, 1]`.\n5. Now check `3` at index 1. Its child is `1` (index 3). Since `3 > 1`, it's correct.\nFinal Max-Heap: `[10, 3, 5, 1]`.\n\nCommon traps:\n- Confusing a heap with a **Binary Search Tree (BST)**. In a BST, there is a strict left-to-right order. In a heap, we only care about the parent-child relationship.\n- Forgetting that heaps must be **complete** trees.\n\nRemember this: A binary heap is a complete binary tree stored in an array that maintains a specific order between parents and children.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:27:06+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:27:56+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:28:30+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the property of a **Max-Heap**?",
+   "back": "For every node `i` (except the root), the **parent** value is always **greater than or equal** to the value of `i`."
+  },
+  {
+   "front": "In a 0-indexed array, what are the indices of the **children** of node `i`?",
+   "back": "- Left child: `2i + 1` \n- Right child: `2i + 2`"
+  },
+  {
+   "front": "In a 0-indexed array, what is the index of the **parent** of node `i`?",
+   "back": "`floor((i - 1) / 2)`"
+  },
+  {
+   "front": "What is the worst-case time complexity of the **heapify** operation?",
+   "back": "`O(log n)`. This is because the element might need to travel from the root down to a leaf."
+  },
+  {
+   "front": "What are the worst-case time complexities for **insert** and **extract-max**?",
+   "back": "Both are `O(log n)`. Insertion uses sift-up, and extraction uses sift-down."
+  },
+  {
+   "front": "What is the worst-case time complexity of the **build-heap** operation?",
+   "back": "`O(n)`. Don't get tricked into saying `O(n log n)`! The mathematical sum of work per level converges to `O(n)`."
+  },
+  {
+   "front": "What is the maximum **height** of a binary heap with `n` nodes?",
+   "back": "`floor(log2(n))`"
+  },
+  {
+   "front": "Is a binary heap a **Binary Search Tree (BST)**?",
+   "back": "No. A BST maintains a strict left-to-right order, while a heap only maintains a **parent-child** relationship."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following properties must hold for every node `i` (except the root) in a **max-heap** represented as an array?",
+   "options": [
+    "The value at index `i` is greater than its parent.",
+    "The value at index `i` is less than or equal to its parent.",
+    "The value at index `i` is greater than its children.",
+    "The value at index `i` is less than its children."
+   ],
+   "correct_index": 1,
+   "explanation": "In a max-heap, the parent node must always be greater than or equal to its children. This means every node (except the root) must be less than or equal to its parent."
+  },
+  {
+   "question": "What is the tightest upper bound for the time complexity of the **build-heap** operation on an array of `n` elements?",
+   "options": [
+    "O(n)",
+    "O(n log n)",
+    "O(log n)",
+    "O(n^2)"
+   ],
+   "correct_index": 0,
+   "explanation": "While inserting `n` elements one by one takes O(n log n), the bottom-up approach used in build-heap is more efficient and runs in O(n) time."
+  },
+  {
+   "question": "Consider a **min-heap** represented by the array `[10, 20, 30, 40, 50, 60, 70]`. After performing one **extract-min** operation and the subsequent `heapify` process, what will be the new array?",
+   "options": [
+    "[20, 30, 60, 40, 50, 70]",
+    "[20, 40, 30, 70, 50, 60]",
+    "[20, 40, 30, 50, 70, 60]",
+    "[20, 70, 30, 40, 50, 60]"
+   ],
+   "correct_index": 1,
+   "explanation": "We replace the root (10) with the last element (70) and then sink 70 down. 70 swaps with 20, and then 70 swaps with 40 to restore the min-heap property."
+  },
+  {
+   "question": "You are maintaining a **max-heap** represented by the array `[50, 30, 40, 10, 20]`. If you insert the value `60` into this heap, what will be the resulting array?",
+   "options": [
+    "[60, 30, 50, 10, 20, 40]",
+    "[60, 50, 40, 10, 20, 30]",
+    "[50, 30, 60, 10, 20, 40]",
+    "[60, 30, 40, 10, 20, 50]"
+   ],
+   "correct_index": 0,
+   "explanation": "First, 60 is added to the end of the array. Then, it bubbles up by swapping with its parent 40, and finally swapping with its new parent 50."
+  },
+  {
+   "question": "In a binary heap stored in a 0-indexed array, if a node is located at index `i`, which of the following correctly identifies the index of its **right child**?",
+   "options": [
+    "2*i",
+    "2*i + 1",
+    "2*i + 2",
+    "(i-1)/2"
+   ],
+   "correct_index": 2,
+   "explanation": "In a 0-indexed array representation of a heap, the left child is at `2*i + 1` and the right child is at `2*i + 2`."
+  }
+ ]
+}

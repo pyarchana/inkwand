@@ -1,0 +1,108 @@
+{
+ "notes": "- A **Stack** follows the **LIFO** (Last-In, First-Out) principle. Think of a stack of books: you add to the top (`push`) and remove from the top (`pop`).\n- A **Queue** follows the **FIFO** (First-In, First-Out) principle. Think of a line at a canteen: the first person in is the first person out. We add at the `rear` and remove from the `front`.\n- For **Infix to Postfix** conversion, we use a stack to hold operators. Operands (like `A`, `B`) go directly to the output. If an incoming operator has **lower or equal precedence** than the operator currently on top of the stack, we must `pop` the stack to the output before pushing the new operator.\n\nExample: Convert `A * B + C` to postfix.\n1. Read `A`: Output = `A`\n2. Read `*`: Stack = `[*]`\n3. Read `B`: Output = `A B`\n4. Read `+`: `+` has lower precedence than `*`. Pop `*` to output. Stack = `[+]`. Output = `A B *`\n5. Read `C`: Output = `A B * C`\n6. End of expression: Pop remaining stack. Output = `A B * C +`\n\nCommon traps:\n- Forgetting that when converting infix to postfix, a `(` is pushed onto the stack, but it stays there until a matching `)` is encountered.\n- Confusing the order: in a stack, the last element added is always the first one out.\n\nRemember this: Stacks are LIFO, Queues are FIFO, and the stack is the engine that handles operator precedence during conversion.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:25:19+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:26:05+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:26:38+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "What is the postfix form of the infix expression: `A + B * C / D`?",
+   "options": [
+    "ABC*D/+",
+    "ABC/D*+",
+    "AB+CD/*",
+    "ABCD*/+"
+   ],
+   "correct_index": 0,
+   "explanation": "Always follow the order of operations: multiplication and division are performed before addition."
+  },
+  {
+   "question": "A stack is initially empty. The following operations are performed: `push(5), push(15), pop(), push(25), pop(), push(35), push(45), pop()`. What is the top element of the stack after these operations?",
+   "options": [
+    "5",
+    "15",
+    "25",
+    "35"
+   ],
+   "correct_index": 3,
+   "explanation": "It helps to draw a small box and track the stack elements as you go through each step!"
+  },
+  {
+   "question": "In a circular queue implemented using an array of size `n`, which of the following conditions correctly identifies that the queue is full?",
+   "options": [
+    "rear == front",
+    "(rear + 1) % n == front",
+    "rear == n - 1",
+    "front == 0"
+   ],
+   "correct_index": 1,
+   "explanation": "The modulo operator % is the secret to making the queue wrap around the array indices."
+  },
+  {
+   "question": "What is the postfix form of the infix expression: `(A + B) * (C - D)`?",
+   "options": [
+    "AB+CD-*",
+    "ABCD-+*",
+    "AB+*CD-",
+    "A+BC-D*"
+   ],
+   "correct_index": 0,
+   "explanation": "Treat the parts inside the parentheses as separate problems first, then combine them."
+  },
+  {
+   "question": "A queue is implemented using two stacks, `S1` and `S2`. To `enqueue`, you push onto `S1`. To `dequeue`, if `S2` is empty, you move all elements from `S1` to `S2`, then pop from `S2`. If you `enqueue` 10, 20, and 30, and then perform `dequeue` twice, what is the second element dequeued?",
+   "options": [
+    "10",
+    "20",
+    "30",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "Even though we use two stacks, the transfer step ensures we get the first-in, first-out behavior."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is the fundamental principle of a **Stack**?",
+   "back": "It follows the **LIFO** (Last-In, First-Out) principle. The last element added is the first one removed."
+  },
+  {
+   "front": "What is the fundamental principle of a **Queue**?",
+   "back": "It follows the **FIFO** (First-In, First-Out) principle. The first element added is the first one removed."
+  },
+  {
+   "front": "Time complexity of `push` and `pop` in a stack?",
+   "back": "Both operations take **O(1)** time, assuming we have a pointer to the `top`."
+  },
+  {
+   "front": "How are **operators** handled during infix to postfix conversion?",
+   "back": "While the stack top has **higher or equal** precedence, pop it to the output. Then, **push** the incoming operator."
+  },
+  {
+   "front": "How to evaluate a **postfix expression** using a stack?",
+   "back": "- Scan left to right.\n- If **operand**: push to stack.\n- If **operator**: pop two operands, apply operator, and push the result back."
+  },
+  {
+   "front": "Why use a **Circular Queue** instead of a linear queue?",
+   "back": "To avoid **wasted space**. In linear queues, once the `rear` reaches the end, we can't reuse the empty spaces at the `front`."
+  },
+  {
+   "front": "Complexity of `enqueue` and `dequeue` in a **Queue using two stacks**?",
+   "back": "Using the amortized approach:\n- `enqueue`: **O(1)**\n- `dequeue`: **O(1)**\n(One stack for input, one for output)."
+  },
+  {
+   "front": "Name two common applications of a **Stack**.",
+   "back": "- **Function call management** (recursion).\n- **Expression evaluation** (infix/postfix).\n- **Undo/Redo** mechanisms in software."
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's tackle TCP. It's the backbone of the internet, and GATE loves asking about how it manages traffic. Don't worry, once you see the logic, it's easy.\n\n- **Flow Control**: This protects the **receiver**. The receiver tells the sender how much buffer space it has left using the `window size` field in the TCP header (`rwnd`). This prevents the sender from overwhelming the receiver.\n- **Congestion Control**: This protects the **network** (routers/links). The sender manages a `congestion window` (`cwnd`) to avoid clogging the network. It uses **Slow Start** (exponential growth) to quickly find capacity, and **Congestion Avoidance** (additive increase) once it hits a threshold (`ssthresh`).\n- **Sockets**: Think of a socket as a door. To communicate, you need an `IP address` (the building) and a `Port number` (the specific door). The API uses functions like `socket()`, `bind()`, `listen()`, and `connect()` to manage these connections.\n\nExample:\nSuppose a sender has `ssthresh` = 16 KB and current `cwnd` = 4 KB. What is the `cwnd` after two successful transmissions?\n1. Since `cwnd` (4 KB) < `ssthresh` (16 KB), we are in **Slow Start**.\n2. After the 1st successful transmission, `cwnd` doubles: 4 * 2 = 8 KB.\n3. Since 8 KB < 16 KB, we are still in **Slow Start**.\n4. After the 2nd successful transmission, `cwnd` doubles again: 8 * 2 = 16 KB.\nFinal `cwnd` = 16 KB.\n\nCommon traps:\n- Confusing `rwnd` and `cwnd`. Remember: `rwnd` is for the receiver's buffer; `cwnd` is for the network's capacity. The actual window used is `min(rwnd, cwnd)`.\n- Thinking Slow Start is linear. It is actually **exponential**.\n\nRemember this: Flow control manages the receiver's buffer, while congestion control manages the network's capacity.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:57:29+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:58:37+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:59:40+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the main goal of **TCP Flow Control**?",
+   "back": "To prevent the sender from overwhelming the receiver. It uses the **Receiver Window (rwnd)** to tell the sender how much buffer space is currently available."
+  },
+  {
+   "front": "How does `cwnd` grow during **TCP Slow Start**?",
+   "back": "It grows **exponentially**. For every ACK received, `cwnd` increases by 1 MSS, meaning the window size roughly doubles every RTT."
+  },
+  {
+   "front": "How does `cwnd` grow during **Congestion Avoidance**?",
+   "back": "It grows **linearly**. Once `cwnd` reaches `ssthresh`, it increases by approximately 1 MSS per RTT instead of doubling."
+  },
+  {
+   "front": "What happens to `cwnd` on a **Timeout** (TCP Tahoe)?",
+   "back": "The `cwnd` is reset to **1 MSS**, and `ssthresh` is set to half of the current `cwnd`. The sender then restarts **Slow Start**."
+  },
+  {
+   "front": "**Flow Control** vs **Congestion Control**: What is the difference?",
+   "back": "**Flow Control** prevents the receiver's buffer from overflowing. **Congestion Control** prevents the network (routers and links) from becoming overloaded."
+  },
+  {
+   "front": "List the **TCP Server** socket API calls in order.",
+   "back": "- `socket()`\n- `bind()`\n- `listen()`\n- `accept()`"
+  },
+  {
+   "front": "Which socket call does a **TCP Client** use to start a connection?",
+   "back": "The client uses the `connect()` call. This triggers the **TCP 3-way handshake** with the server."
+  },
+  {
+   "front": "What is the main advantage of **TCP Reno** over **TCP Tahoe**?",
+   "back": "Reno uses **Fast Recovery**. When 3 duplicate ACKs are received, it avoids dropping `cwnd` to 1, performing a **multiplicative decrease** instead."
+  }
+ ],
+ "practice": [
+  {
+   "question": "A TCP receiver has a buffer size of 12,000 bytes. Currently, 3,000 bytes of data are in the buffer waiting to be read by the application. What is the **receive window (rwnd)** value that the receiver will advertise to the sender?",
+   "options": [
+    "4000",
+    "7000",
+    "9000",
+    "12000"
+   ],
+   "correct_index": 2,
+   "explanation": "The **rwnd** is the space available in the receiver's buffer. Since 3,000 bytes are already occupied, the available space is 12,000 - 3,000 = 9,000 bytes."
+  },
+  {
+   "question": "A TCP connection is in the **slow start** phase with an initial `cwnd` of 1 MSS. After receiving exactly 3 ACKs, what will be the new value of `cwnd`?",
+   "options": [
+    "2",
+    "3",
+    "4",
+    "8"
+   ],
+   "correct_index": 2,
+   "explanation": "In the **slow start** phase, the `cwnd` increases by 1 MSS for every ACK received. Starting from 1, after 3 ACKs, it becomes 1 + 3 = 4."
+  },
+  {
+   "question": "In TCP congestion control, if a packet loss is detected due to a **timeout**, and the current `cwnd` was 32 MSS, what will be the new values of `ssthresh` and `cwnd` respectively?",
+   "options": [
+    "ssthresh = 16, cwnd = 1",
+    "ssthresh = 32, cwnd = 1",
+    "ssthresh = 16, cwnd = 16",
+    "ssthresh = 64, cwnd = 1"
+   ],
+   "correct_index": 0,
+   "explanation": "When a **timeout** occurs, TCP is being cautious: it sets `ssthresh` to half of the current `cwnd` and resets `cwnd` to 1."
+  },
+  {
+   "question": "Which of the following is the correct sequence of system calls for a **TCP server** to establish a connection with a client?",
+   "options": [
+    "socket(), bind(), listen(), accept()",
+    "socket(), connect(), listen(), accept()",
+    "socket(), bind(), connect(), accept()",
+    "socket(), listen(), bind(), accept()"
+   ],
+   "correct_index": 0,
+   "explanation": "For a server, the order is key: first create the `socket`, then `bind` it to an address, `listen` for incoming requests, and finally `accept` a client."
+  },
+  {
+   "question": "A TCP connection has a bandwidth of 10 Mbps and a round-trip time (RTT) of 100 ms. What is the minimum receiver window size (in bytes) required to ensure the link is fully utilized?",
+   "options": [
+    "100,000",
+    "125,000",
+    "800,000",
+    "1,000,000"
+   ],
+   "correct_index": 1,
+   "explanation": "To keep the link full, the window must match the **Bandwidth-Delay Product**. Multiply 10,000,000 bits/sec by 0.1 sec to get 1,000,000 bits, then divide by 8 to get 125,000 bytes."
+  }
+ ]
+}

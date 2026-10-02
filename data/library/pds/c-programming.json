@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! C can feel a bit intimidating because it forces you to think about memory, but once you grasp how addresses work, you'll find it's actually very logical.\n\n- **Pointers**: A pointer is just a variable that holds a memory address. Use `*` to declare it (e.g., `int *p`) and `*` to dereference it (access the value at that address).\n- **Arrays**: An array name acts like a constant pointer to its first element. This means `arr[i]` is mathematically the same as `*(arr + i)`.\n- **Parameter Passing**: In **Call by Value**, the function gets a copy of the data, so the original remains unchanged. In **Call by Reference**, you pass the address (using pointers), allowing the function to modify the original variable.\n- **Scope**: Variables declared inside `{}` are local to that block and are destroyed once the block ends.\n\nExample:\n```c\nint main() {\n    int arr[] = {10, 20, 30};\n    int *p = arr;\n    printf(\"%d \", *p++);\n    printf(\"%d\", *p);\n    return 0;\n}\n```\n1. `p` initially points to `arr[0]` (value 10).\n2. In `*p++`, the postfix `++` has higher precedence than `*`. So, `p++` is evaluated first. It returns the current address of `arr[0]` to the `*` operator, then increments `p` to point to `arr[1]`.\n3. The first `printf` outputs `10`.\n4. Now `p` points to `arr[1]`. The second `printf` outputs `20`.\nOutput: `10 20`\n\nCommon traps:\n- Confusing `*p++` (increments the pointer address) with `(*p)++` (increments the value stored at the address).\n- Forgetting that an array name is a constant; you can move a pointer `p = arr + 1`, but you cannot do `arr = arr + 1`.\n\nRemember this: Pointers deal with \"where\" data is, while dereferencing deals with \"what\" the data is.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:49:15+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:24:31+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:25:12+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Difference between `&x` and `*p`?",
+   "back": "`&x` is the **address** of `x`. `*p` is the **value** stored at the address held by `p`. Think of `&` as 'where' and `*` as 'what is inside'."
+  },
+  {
+   "front": "Relationship between `a[i]` and `*(a + i)`?",
+   "back": "They are **equivalent**. In C, `a[i]` is just shorthand for `*(a + i)`. The array name `a` acts as a pointer to the first element."
+  },
+  {
+   "front": "If `p` is an `int` pointer, what is `p + 1`?",
+   "back": "It points to the **next integer** in memory. The address increases by `1 * sizeof(int)`. Pointer arithmetic always scales by the **data type size**."
+  },
+  {
+   "front": "Does C support 'Call by Reference'?",
+   "back": "Strictly speaking, **no**. C is always **Call by Value**. To simulate 'reference' behavior, we pass the **address** of a variable using pointers so the function can modify it."
+  },
+  {
+   "front": "What is special about a `static` local variable?",
+   "back": "It is **initialized only once**. It **retains its value** between function calls, but its **scope** remains local to that function."
+  },
+  {
+   "front": "What is a double pointer `int **pp`?",
+   "back": "It is a **pointer to a pointer**. It stores the **memory address of another pointer**. Dereferencing it once (`*pp`) gives you the address held by the first pointer."
+  },
+  {
+   "front": "`sizeof` on an array vs. a pointer?",
+   "back": "- `sizeof(arr)`: Returns the **total bytes** used by the entire array. - `sizeof(ptr)`: Returns the **size of the pointer** itself, not the data it points to."
+  },
+  {
+   "front": "Difference between `*p++` and `(*p)++`?",
+   "back": "- `*p++`: Increments the **pointer** (moves to next address) after accessing the value. - `(*p)++`: Increments the **value** at the current address. Watch the precedence!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "What is the output of the following C code?\n\nint arr[] = {10, 20, 30, 40, 50};\nint *p = arr;\np++;\nprintf(\"%d\", *(p + 2));",
+   "options": [
+    "20",
+    "30",
+    "40",
+    "50"
+   ],
+   "correct_index": 2,
+   "explanation": "Remember that p++ moves the pointer to the next element first. So p starts pointing at 20, and moving two more steps lands us at 40."
+  },
+  {
+   "question": "What is the output of the following C code?\n\nvoid swap(int x, int *y) {\n    int temp = x;\n    x = *y;\n    *y = temp;\n}\n\nint main() {\n    int a = 5, b = 10;\n    swap(a, &b);\n    printf(\"%d %d\", a, b);\n    return 0;\n}",
+   "options": [
+    "5 10",
+    "5 5",
+    "10 5",
+    "10 10"
+   ],
+   "correct_index": 1,
+   "explanation": "Since a is passed by value, its original value stays safe. But b is passed via its address, so the change inside the function sticks!"
+  },
+  {
+   "question": "What is the output of the following C code?\n\nint func() {\n    static int count = 0;\n    count++;\n    return count;\n}\n\nint main() {\n    int x = func();\n    func();\n    x = func();\n    printf(\"%d\", x);\n    return 0;\n}",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "The static keyword is key here; it keeps the variable count alive across multiple function calls instead of resetting it to 0 every time."
+  },
+  {
+   "question": "What is the output of the following C code?\n\nint a = 10;\nint *p = &a;\nint **q = &p;\n**q = 20;\nprintf(\"%d\", a);",
+   "options": [
+    "10",
+    "20",
+    "30",
+    "Error"
+   ],
+   "correct_index": 1,
+   "explanation": "This is a classic pointer-to-pointer scenario. By dereferencing q twice, you are actually reaching all the way back to the original variable a."
+  },
+  {
+   "question": "What is the output of the following C code?\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *p = arr;\n    printf(\"%d\", *(p + 3) - *(p + 1));\n    return 0;\n}",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 1,
+   "explanation": "Pointer arithmetic is just like array indexing. *(p + 3) is the same as arr[3], which makes the subtraction 4 - 2 very straightforward."
+  }
+ ]
+}

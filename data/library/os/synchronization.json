@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! When multiple processes run at once, they might try to access the same variable simultaneously. This leads to a **Race Condition**, where the final result depends on the unpredictable order of execution.\n\nTo prevent this, we protect the **Critical Section** (the part of the code accessing shared resources). We need to ensure **Mutual Exclusion** (only one process inside at a time), **Progress** (no unnecessary blocking), and **Bounded Waiting** (no process waits forever).\n\nCommon tools:\n- **Mutex**: A \"lock\" mechanism. If you hold the lock, no one else can enter.\n- **Semaphore**: An integer variable used for signaling. `wait(S)` decrements the value (and blocks if it is 0), while `signal(S)` increments it.\n\nExample:\nA counting semaphore `S` is initialized to 1.\n1. Process P1 calls `wait(S)`. `S` becomes 0.\n2. Process P2 calls `wait(S)`. Since `S` is 0, P2 is blocked and enters a waiting state.\n3. Process P1 finishes its work and calls `signal(S)`. `S` becomes 1.\n4. Now, P2 is unblocked and can proceed.\n\nCommon traps:\n- Confusing **Mutex** and **Binary Semaphore**. A Mutex has \"ownership\"—only the process that locked it can unlock it. A semaphore can be signaled by a different process.\n- Forgetting that `wait()` is a blocking operation; if two processes wait for each other's resources, you get a **Deadlock**.\n\nRemember this: Synchronization tools ensure mutual exclusion to prevent race conditions in shared memory environments.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:20+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:45:51+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:47:17+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **critical section**?",
+   "back": "A segment of code where a process accesses **shared resources** (like variables or files). Only one process should be in its critical section at a time to prevent data inconsistency."
+  },
+  {
+   "front": "Three requirements for a **critical section solution**.",
+   "back": "- **Mutual Exclusion**: Only one process inside.\n- **Progress**: If no one is in, the decision to enter cannot be delayed indefinitely.\n- **Bounded Waiting**: There is a limit on how many others can enter before you."
+  },
+  {
+   "front": "Main difference between **Mutex** and **Binary Semaphore**?",
+   "back": "A **mutex** has a concept of **ownership** (only the process that locked it can unlock it). A **binary semaphore** is a signaling mechanism and has no owner."
+  },
+  {
+   "front": "What do `wait()` and `signal()` do to a **semaphore**?",
+   "back": "- `wait(S)`: Decrements `S`. If `S < 0`, the process blocks.\n- `signal(S)`: Increments `S`. If `S <= 0`, one waiting process is woken up."
+  },
+  {
+   "front": "What is a **counting semaphore** used for?",
+   "back": "To manage access to a **set of identical resources**. The semaphore value represents the current number of available resource units. When it reaches 0, processes must wait."
+  },
+  {
+   "front": "In the **Producer-Consumer** problem, what do `empty` and `full` semaphores track?",
+   "back": "- `empty`: The number of available slots in the buffer.\n- `full`: The number of items currently in the buffer.\n- `mutex`: Ensures exclusive access to the buffer itself."
+  },
+  {
+   "front": "What is the main risk in the **Readers-Writers** problem?",
+   "back": "**Starvation**. If readers are prioritized, a continuous stream of new readers can prevent a **writer** from ever getting access to the shared resource."
+  },
+  {
+   "front": "What is **busy waiting** (Spinlock)?",
+   "back": "A technique where a process repeatedly checks a condition in a loop while waiting. It wastes **CPU cycles** but avoids the overhead of **context switching**."
+  }
+ ],
+ "practice": [
+  {
+   "question": "What is the primary difference between a **mutex** and a **binary semaphore**?",
+   "options": [
+    "A mutex can be used for signaling, whereas a binary semaphore cannot.",
+    "A mutex has an ownership property, whereas a binary semaphore does not.",
+    "A binary semaphore can only be used by one process at a time, while a mutex can be used by multiple.",
+    "There is no functional difference between them."
+   ],
+   "correct_index": 1,
+   "explanation": "A mutex is specifically designed for mutual exclusion and carries the concept of ownership, meaning only the process that acquired the mutex can release it."
+  },
+  {
+   "question": "A counting semaphore `S` is initialized to 2. After the following sequence of operations, what is the final value of `S`? `P(S), P(S), P(S), V(S), V(S), V(S)`",
+   "options": [
+    "0",
+    "1",
+    "2",
+    "3"
+   ],
+   "correct_index": 2,
+   "explanation": "Each `P(S)` operation decrements the value and each `V(S)` operation increments it. Starting from 2, the sequence results in 2 - 3 + 3 = 2."
+  },
+  {
+   "question": "Which of the following is NOT one of the three mandatory requirements for a solution to the **critical section** problem?",
+   "options": [
+    "Mutual Exclusion",
+    "Progress",
+    "Bounded Waiting",
+    "Deadlock Prevention"
+   ],
+   "correct_index": 3,
+   "explanation": "The three standard requirements are mutual exclusion, progress, and bounded waiting. While deadlock prevention is important in OS design, it is not one of the three formal requirements for the critical section problem."
+  },
+  {
+   "question": "In the classic producer-consumer problem with a buffer of size `N`, which initial values should be assigned to the `empty` and `full` semaphores?",
+   "options": [
+    "empty = 0, full = N",
+    "empty = N, full = 0",
+    "empty = N, full = N",
+    "empty = 0, full = 0"
+   ],
+   "correct_index": 1,
+   "explanation": "The `empty` semaphore tracks available slots (initially N), and the `full` semaphore tracks items present in the buffer (initially 0)."
+  },
+  {
+   "question": "If a semaphore `S` is currently 0, what happens when a process executes the `P(S)` operation?",
+   "options": [
+    "The process continues execution immediately.",
+    "The process is blocked and added to the semaphore's waiting queue.",
+    "The semaphore value increments to 1.",
+    "The process terminates with an error."
+   ],
+   "correct_index": 1,
+   "explanation": "When a semaphore is 0, the `P(S)` (or wait) operation blocks the calling process until another process performs a `V(S)` operation."
+  }
+ ]
+}

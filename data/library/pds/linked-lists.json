@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "Time complexity to access the i-th element in a singly linked list?",
+   "back": "`O(i)` or `O(n)` in the worst case. Unlike arrays, we can't use random access; we must traverse from the head."
+  },
+  {
+   "front": "Main space overhead in a **doubly linked list** compared to a singly linked list?",
+   "back": "An extra pointer (usually `prev`) for every node. This increases the memory footprint for every element stored."
+  },
+  {
+   "front": "Complexity of inserting a node at the **beginning** of a singly linked list?",
+   "back": "`O(1)`. We just set the new node's `next` to the current head and update the head pointer."
+  },
+  {
+   "front": "Defining property of a **circular linked list**?",
+   "back": "The `next` pointer of the last node points back to the **head** node instead of `NULL`."
+  },
+  {
+   "front": "Complexity to delete a node given only its pointer in a **doubly linked list**?",
+   "back": "`O(1)`. Since we have the `prev` pointer, we can link the predecessor to the successor immediately."
+  },
+  {
+   "front": "When is a **linked list** preferred over an **array**?",
+   "back": "When you need **dynamic sizing** and frequent **insertions/deletions**, as arrays require costly element shifting."
+  },
+  {
+   "front": "Worst-case time complexity to search for an element in a singly linked list?",
+   "back": "`O(n)`. You might have to traverse every node to find the element or reach the end."
+  },
+  {
+   "front": "How do you know when to stop traversing a **circular linked list**?",
+   "back": "Stop when you reach the **head** node again. If you check for `NULL`, you'll loop forever!"
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:26:07+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:27:16+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:27:17+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "In a singly linked list with `n` nodes, what is the worst-case time complexity to search for a specific value?",
+   "options": [
+    "O(1)",
+    "O(log n)",
+    "O(n)",
+    "O(n log n)"
+   ],
+   "correct_index": 2,
+   "explanation": "In the worst case, the element could be at the very end or not in the list at all, so we might have to visit all `n` nodes."
+  },
+  {
+   "question": "A programmer uses the following code to delete a node `curr` in a doubly linked list: `curr->prev->next = curr->next; curr->next->prev = curr->prev; free(curr);`. What is the most likely error if `curr` is the first node?",
+   "options": [
+    "Segmentation fault",
+    "Circular list creation",
+    "Memory leak",
+    "Infinite loop"
+   ],
+   "correct_index": 0,
+   "explanation": "If `curr` is the head, `curr->prev` will be `NULL`. Trying to access `NULL->next` will cause a segmentation fault."
+  },
+  {
+   "question": "In a circular singly linked list containing `n` nodes, how many `next` pointers are used in total across all nodes?",
+   "options": [
+    "n-1",
+    "n",
+    "n+1",
+    "2n"
+   ],
+   "correct_index": 1,
+   "explanation": "In a circular singly linked list, every single node has exactly one `next` pointer, including the last node which points back to the head."
+  },
+  {
+   "question": "To find the middle element of a singly linked list in a single pass, which approach is most efficient?",
+   "options": [
+    "Two pointers (slow and fast)",
+    "Using a stack",
+    "Using recursion",
+    "Using a hash map"
+   ],
+   "correct_index": 0,
+   "explanation": "This is a classic trick! By moving one pointer twice as fast as the other, the slower one will land on the middle when the fast one hits the end."
+  },
+  {
+   "question": "In a circular doubly linked list, what is the time complexity to access the last node if you only have a pointer to the `head` node?",
+   "options": [
+    "O(1)",
+    "O(n)",
+    "O(log n)",
+    "O(n^2)"
+   ],
+   "correct_index": 0,
+   "explanation": "Since it is circular and doubly linked, the `head->prev` pointer points directly to the last node, making it a very quick O(1) operation."
+  }
+ ],
+ "notes": "Hey! Let's dive into Linked Lists. They are dynamic data structures where elements (nodes) are connected using pointers. Unlike arrays, nodes are scattered in memory, so they don't need a contiguous block. This makes growing or shrinking the list much easier!\n\n- **Singly Linked List**: Each node has **data** and a `next` pointer. The last node points to `NULL`.\n- **Doubly Linked List**: Each node has `next` and `prev` pointers, allowing you to move both ways.\n- **Circular Linked List**: The last node points back to the `head`, creating a loop.\n\nExample:\nGiven a singly linked list: `10 -> 20 -> 30 -> NULL`.\nTask: Delete node `20`.\nStep 1: Find the node before `20` (node `10`).\nStep 2: Set `10`'s `next` pointer to `20`'s `next` (which is `30`).\nStep 3: The list is now `10 -> 30 -> NULL`.\n\nCommon traps:\n- **Losing the Head**: If you delete the first node, don't forget to update the `head` pointer to the second node, or you'll lose the whole list!\n- **Null Pointer Errors**: Always check if `head` or `head->next` is `NULL` before accessing their members to avoid those annoying segmentation faults.\n\nRemember this: Linked lists allow O(1) insertion and deletion if you are already at the target position, but searching always takes O(n)."
+}

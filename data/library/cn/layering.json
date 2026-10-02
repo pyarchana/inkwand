@@ -1,0 +1,108 @@
+{
+ "notes": "Layering is all about **abstraction**. Instead of one massive, complex protocol, we break the communication process into smaller, specialized layers. Each layer has a specific job and only cares about the service provided by the layer directly below it.\n\n- **Encapsulation**: As data moves down the stack (from Application to Physical), each layer adds its own control information, called a **header**, to the data received from above.\n- **Decapsulation**: When the data reaches the receiver, it moves up the stack, and each layer strips off its corresponding header.\n- **Logical Communication**: While data physically moves up and down the stack, we say the Network layer on Host A communicates \"logically\" with the Network layer on Host B.\n\nExample:\nA user sends a 500-byte message. The Transport layer adds a 20-byte header, the Network layer adds a 20-byte header, and the Data Link layer adds a 10-byte header. What is the total size of the frame sent over the Physical layer?\nStep 1: Start with 500 bytes.\nStep 2: Add Transport header: 500 + 20 = 520 bytes.\nStep 3: Add Network header: 520 + 20 = 540 bytes.\nStep 4: Add Data Link header: 540 + 10 = 550 bytes.\nFinal size = 550 bytes.\n\nCommon traps:\n- Confusing the **OSI model** (7 layers) with the **TCP/IP model** (usually 4 or 5 layers). Always check which model the question asks about.\n- Forgetting that the Data Link layer often adds both a **header** and a **trailer** (like a CRC), while higher layers typically only add headers.\n\nRemember this: Layering uses encapsulation to wrap data in headers as it moves down the stack and decapsulation to strip them as it moves up.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:53:02+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:53:29+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:53:36+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Name the 7 layers of the **OSI model** in order.",
+   "back": "- Physical\n- Data Link\n- Network\n- Transport\n- Session\n- Presentation\n- Application"
+  },
+  {
+   "front": "What are the 4 layers of the **TCP/IP model**?",
+   "back": "- Application\n- Transport\n- Internet\n- Network Access"
+  },
+  {
+   "front": "Match the **PDU** to its layer: Transport, Network, Data Link, Physical.",
+   "back": "- Transport: **Segment**\n- Network: **Packet**\n- Data Link: **Frame**\n- Physical: **Bits**"
+  },
+  {
+   "front": "What is the main responsibility of the **Transport layer**?",
+   "back": "**Process-to-process** (end-to-end) communication using **port numbers** to identify specific applications on a host."
+  },
+  {
+   "front": "What is the main responsibility of the **Network layer**?",
+   "back": "**Host-to-host** communication using **logical addressing** (like IP) and **routing** to move packets across networks."
+  },
+  {
+   "front": "What is the main responsibility of the **Data Link layer**?",
+   "back": "**Hop-to-hop** (node-to-node) delivery using **physical addressing** (MAC) and error detection on a single link."
+  },
+  {
+   "front": "What is the process of **encapsulation**?",
+   "back": "The process of adding **headers** (and sometimes trailers) to data as it moves **down** the protocol stack."
+  },
+  {
+   "front": "How does the **TCP/IP Application layer** relate to OSI layers?",
+   "back": "The OSI **Application**, **Presentation**, and **Session** layers are combined into a single **Application layer** in TCP/IP."
+  }
+ ],
+ "practice": [
+  {
+   "question": "In the OSI model, which layer is specifically responsible for tasks like data encryption and compression, which are often handled within the Application layer in the TCP/IP suite?",
+   "options": [
+    "Session layer",
+    "Presentation layer",
+    "Transport layer",
+    "Data Link layer"
+   ],
+   "correct_index": 1,
+   "explanation": "The Presentation layer handles how data is formatted and encrypted. In the simpler TCP/IP model, we just bundle these tasks into the Application layer."
+  },
+  {
+   "question": "A host is preparing to send data. The Transport layer has just created a segment. When this segment is passed down to the Network layer, what is the resulting PDU?",
+   "options": [
+    "Frame",
+    "Segment",
+    "Datagram",
+    "Bit"
+   ],
+   "correct_index": 2,
+   "explanation": "Once the segment gets the Network layer header, it becomes a datagram. It is simply the name we use for the unit at that specific layer!"
+  },
+  {
+   "question": "If you switch your internet connection from an Ethernet cable to Wi-Fi, which layers are primarily involved in this change, and which layer remains completely unaffected?",
+   "options": [
+    "Physical and Data Link change, Application stays same",
+    "Application and Transport change, Physical stays same",
+    "Network and Transport change, Data Link stays same",
+    "Every single layer must be updated"
+   ],
+   "correct_index": 0,
+   "explanation": "Layering provides abstraction. Changing your hardware only affects the bottom layers, so your browser (Application layer) does not even need to know!"
+  },
+  {
+   "question": "A network packet is being inspected, and you notice it contains a Source MAC address and a Destination MAC address. At which OSI layer is this header being used?",
+   "options": [
+    "Physical layer",
+    "Network layer",
+    "Data Link layer",
+    "Transport layer"
+   ],
+   "correct_index": 2,
+   "explanation": "MAC addresses are used for communication between devices on the same local link. That is the core job of the Data Link layer."
+  },
+  {
+   "question": "Which of the following correctly distinguishes the service provided by the Network layer from the service provided by the Transport layer?",
+   "options": [
+    "Transport provides reliable end-to-end delivery, while Network provides best-effort routing",
+    "Network provides reliable end-to-end delivery, while Transport provides best-effort routing",
+    "Transport handles MAC addressing, while Network handles IP addressing",
+    "Both layers work together to ensure every single bit is error-free"
+   ],
+   "correct_index": 0,
+   "explanation": "Think of the Network layer as a post office that tries its best to deliver a letter, while the Transport layer (like TCP) is like a registered mail service that confirms it actually arrived."
+  }
+ ]
+}

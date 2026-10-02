@@ -1,0 +1,108 @@
+{
+ "notes": "Think of the Pumping Lemma as a \"test for failure.\" We don't use it to prove a language is regular; we use it to prove a language **is not** regular. It is a proof by contradiction.\n\n- For **Regular Languages**: If a language is regular, any sufficiently long string must have a middle section (let's call it `y`) that can be repeated (pumped) any number of times, and the resulting string must still belong to the language.\n- For **Context-Free Languages**: It is similar, but instead of one section, we pump two sections (`v` and `x`) simultaneously to maintain the language's structure.\n\nExample: Prove `L = {a^n b^n | n >= 0}` is not regular.\n1. Assume `L` is regular. Let `p` be the pumping length.\n2. Pick a string `s = a^p b^p`. This string is in `L` and its length is at least `p`.\n3. According to the lemma, `s` can be split into `xyz` where `|xy| <= p` and `|y| > 0`.\n4. Because `|xy| <= p`, the part `y` must consist only of `a`'s.\n5. If we \"pump\" `y` (let's say we take `i = 2`), the new string `xy^2z` will have more `a`'s than `b`'s.\n6. This new string is not in `L`. This contradicts our assumption, so `L` is not regular.\n\nCommon traps:\n- Trying to use the Pumping Lemma to prove a language **is** regular. It only works for proving a language is **not**.\n- Forgetting the constraint `|xy| <= p` for regular languages. This constraint is what helps you \"force\" `y` to be only one type of symbol.\n\nRemember this: Pumping Lemma is a tool for contradiction used to prove a language is not regular or not context-free.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:36:52+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:39:11+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:39:24+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the primary purpose of the Pumping Lemma?",
+   "back": "To prove that a language is **NOT** regular or **NOT** context-free. It cannot be used to prove a language **is** regular or context-free."
+  },
+  {
+   "front": "For regular languages, how is a string `s` split?",
+   "back": "`s = xyz` where:\n- `|xy| <= p` (p is pumping length)\n- `|y| > 0`\n- `xy^i z` must be in the language for all `i >= 0`."
+  },
+  {
+   "front": "If `xy^i z` is not in the language for some `i`, what is the conclusion?",
+   "back": "The language is **not regular**. You only need to find one single value of `i` that fails to prove it."
+  },
+  {
+   "front": "For context-free languages, how is a string `s` split?",
+   "back": "`s = uvxyz` where:\n- `|vxy| <= p`\n- `|vx| > 0` (at least one of v or x is non-empty)\n- `uv^i xy^i z` must be in the language for all `i >= 0`."
+  },
+  {
+   "front": "In the CFL pumping lemma, which parts are pumped simultaneously?",
+   "back": "The substrings `v` and `x` are pumped together, resulting in the string `uv^i xy^i z`."
+  },
+  {
+   "front": "If a language fails the regular pumping lemma, is it definitely not context-free?",
+   "back": "No. It just means it is **not regular**. It could still be context-free (for example, `a^n b^n`)."
+  },
+  {
+   "front": "If a language fails the CFL pumping lemma, what can we conclude?",
+   "back": "The language is **not context-free**. Since all regular languages are context-free, it is also **not regular**."
+  },
+  {
+   "front": "Can the Pumping Lemma prove a language is regular?",
+   "back": "**No.** The lemma is a necessary condition, not a sufficient one. If a language satisfies the lemma, it might still be non-regular."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following is NOT a requirement of the Pumping Lemma for regular languages?",
+   "options": [
+    "|xy| <= p",
+    "|y| > 0",
+    "xy^iz is in L for all i >= 0",
+    "y must be the longest possible substring of s"
+   ],
+   "correct_index": 3,
+   "explanation": "The lemma states that there exists a decomposition, but it does not require y to be the longest possible substring."
+  },
+  {
+   "question": "For the language L = {a^n b^n | n >= 0}, if we use the Pumping Lemma and pick s = a^p b^p where p is the pumping length, what happens if y consists only of a's and we pump it to i = 2?",
+   "options": [
+    "The number of a's will be greater than the number of b's",
+    "The number of b's will be greater than the number of a's",
+    "The number of a's and b's will remain equal",
+    "The string will become empty"
+   ],
+   "correct_index": 0,
+   "explanation": "If y only contains a's, then xy^2z will have more a's than b's, which breaks the n = m condition."
+  },
+  {
+   "question": "Why does the language L = {a^n b^n c^n | n >= 0} fail the Pumping Lemma for context-free languages?",
+   "options": [
+    "Pumping v and x cannot maintain the same count for all three symbols",
+    "The condition |vwx| <= p is always violated",
+    "The condition |vx| >= 1 can never be satisfied",
+    "The language is actually a regular language"
+   ],
+   "correct_index": 0,
+   "explanation": "Since |vwx| <= p, the substring vwx can contain at most two different symbols. Therefore, pumping v and x cannot keep the counts of a, b, and c equal."
+  },
+  {
+   "question": "Suppose we are proving L = {a^n b^n | n >= 0} is not regular. If we pick a decomposition s = xyz where y contains both a's and b's, what is the consequence of pumping y (e.g., xy^2z)?",
+   "options": [
+    "The number of a's and b's will stay equal",
+    "The string will no longer follow the pattern of all a's followed by all b's",
+    "The length of the string will decrease",
+    "The string will belong to the language"
+   ],
+   "correct_index": 1,
+   "explanation": "If y contains both a's and b's, then repeating y will result in b's appearing before a's, which violates the a*b* structure."
+  },
+  {
+   "question": "Which of the following statements is correct regarding the Pumping Lemma?",
+   "options": [
+    "If a language satisfies the Pumping Lemma, it is definitely regular",
+    "If a language fails the Pumping Lemma for CFLs, it is definitely regular",
+    "If a language fails the Pumping Lemma for regular languages, it is definitely not regular",
+    "The Pumping Lemma is a sufficient condition for regularity"
+   ],
+   "correct_index": 2,
+   "explanation": "The Pumping Lemma is a necessary condition, not a sufficient one. If a language fails it, we can be sure the language is not regular."
+  }
+ ]
+}

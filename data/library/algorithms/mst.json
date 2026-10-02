@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't sweat MSTs. They are just about finding the cheapest way to connect all nodes in a graph without creating any loops (cycles).\n\n**Kruskal's Algorithm** is edge-focused. You sort all edges from smallest to largest weight. You pick the smallest edge, and if it doesn't create a cycle, you add it to your MST. You keep doing this until you have `V-1` edges. It's like building several small trees and merging them. It works best for sparse graphs. Complexity: `O(E log E)` or `O(E log V)`.\n\n**Prim's Algorithm** is vertex-focused. You start with a single node and \"grow\" your tree one step at a time. At each step, you look at all edges connecting your current tree to nodes not yet in the tree, and you pick the cheapest one. It's great for dense graphs. Complexity: `O(E log V)` using a priority queue.\n\nExample:\nGraph edges: (A,B)=5, (B,C)=1, (A,C)=2.\nKruskal:\n1. Sort edges: (B,C,1), (A,C,2), (A,B,5).\n2. Pick (B,C) weight 1.\n3. Pick (A,C) weight 2.\n4. (A,B) would form a cycle (A-C-B-A), so skip it.\nTotal weight = 1 + 2 = 3.\n\nCommon traps:\n- Thinking Kruskal's always forms a single connected tree during the process; it actually forms a \"forest\" of separate components that eventually merge.\n- In Prim's, picking the smallest edge in the whole graph instead of the smallest edge connected to your *current* growing tree.\n\nRemember this: Kruskal's picks the smallest edges globally, while Prim's grows a single tree locally.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:33:33+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:34:12+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:35:29+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **Minimum Spanning Tree (MST)**?",
+   "back": "A subset of edges that connects all vertices in a graph without any cycles and with the **minimum possible total weight**."
+  },
+  {
+   "front": "Core logic of **Kruskal's algorithm**?",
+   "back": "- Sort all edges by weight.\n- Add the smallest edge if it **does not form a cycle**.\n- Uses **Disjoint Set Union (DSU)** to detect cycles."
+  },
+  {
+   "front": "Core logic of **Prim's algorithm**?",
+   "back": "- Start from any single vertex.\n- Repeatedly add the **minimum weight edge** that connects a vertex inside the tree to a vertex outside the tree."
+  },
+  {
+   "front": "Time complexity of **Kruskal's algorithm**?",
+   "back": "`O(E log E)` or `O(E log V)`. The complexity is dominated by the time taken to **sort the edges**."
+  },
+  {
+   "front": "Time complexity of **Prim's algorithm** (using **Binary Heap**)?",
+   "back": "`O(E log V)`. If you use a **Fibonacci Heap**, it can be optimized to `O(E + V log V)`."
+  },
+  {
+   "front": "When is the **MST unique**?",
+   "back": "If every edge in the graph has a **distinct weight** (no two edges are equal), then the MST is guaranteed to be unique."
+  },
+  {
+   "front": "Which algorithm is better for **dense graphs**?",
+   "back": "**Prim's algorithm** is generally better for **dense graphs** (where `E` is large). **Kruskal's** is often preferred for **sparse graphs**."
+  },
+  {
+   "front": "Does the **starting vertex** affect Prim's result?",
+   "back": "No! Prim's algorithm will always find an MST regardless of which vertex you choose to start with. Keep going, you're doing great!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "If a connected graph has multiple Minimum Spanning Trees, which of the following is **NOT** necessarily true?",
+   "options": [
+    "All MSTs have the same total weight.",
+    "All MSTs have the same number of edges.",
+    "All MSTs contain the same set of edges.",
+    "All MSTs are trees."
+   ],
+   "correct_index": 2,
+   "explanation": "It's a common trap! While the weight and number of edges are fixed for all MSTs, different edges can form different trees if there are ties in weights."
+  },
+  {
+   "question": "Consider a graph with vertices {A, B, C, D} and edges: (A,B) weight 4, (A,C) weight 1, (B,C) weight 2, (B,D) weight 5, (C,D) weight 8. What is the weight of the MST?",
+   "options": [
+    "7",
+    "8",
+    "10",
+    "13"
+   ],
+   "correct_index": 1,
+   "explanation": "Try tracing it step-by-step: pick (A,C) weight 1, then (B,C) weight 2, and finally (B,D) weight 5. Adding (A,B) would form a cycle, so we skip it!"
+  },
+  {
+   "question": "What is the time complexity of Kruskal's algorithm if the edges are already sorted, using a Disjoint Set Union (DSU) with path compression and union by rank?",
+   "options": [
+    "O(V log V)",
+    "O(E log V)",
+    "O(E alpha(V))",
+    "O(E + V)"
+   ],
+   "correct_index": 2,
+   "explanation": "Since the sorting step is already done, the complexity is dominated by the DSU operations, which are incredibly fast and nearly constant per edge."
+  },
+  {
+   "question": "Prim's algorithm is a greedy algorithm. Which property does it use to grow the MST?",
+   "options": [
+    "It always picks the edge with the smallest weight in the entire graph.",
+    "It always picks the smallest weight edge that connects a vertex in the current tree to a vertex outside the tree.",
+    "It always picks the edge that connects two vertices with the highest degree.",
+    "It always picks the edge that forms the largest cycle."
+   ],
+   "correct_index": 1,
+   "explanation": "Just remember: Prim's grows a single connected component by always looking for the cheapest way to grab a new, unconnected vertex."
+  },
+  {
+   "question": "Suppose we have a complete graph with 5 vertices where every edge has a weight of 10. How many edges will be in the Minimum Spanning Tree?",
+   "options": [
+    "4",
+    "5",
+    "10",
+    "20"
+   ],
+   "correct_index": 0,
+   "explanation": "A simple rule to keep in your pocket: any spanning tree for a connected graph with V vertices will always have exactly V - 1 edges."
+  }
+ ]
+}

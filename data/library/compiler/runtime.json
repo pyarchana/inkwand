@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! So, when your code is actually running, the compiler needs a way to keep track of function calls and their data. This is what **Runtime Environments** handle.\n\nThink of the **Stack** as a pile of trays. Every time a function is called, we push a new tray called an **Activation Record** (or stack frame) onto the stack. This record holds everything that function needs to exist:\n- **Local variables** declared inside the function.\n- **Parameters** (the arguments passed in).\n- **Return address** (where the CPU should jump back to after the function ends).\n- **Links**: The **Dynamic Link** points to the caller's frame, while the **Static Link** points to the frame of the lexical parent (used for nested functions).\n\nWhen passing data, we mostly use two methods:\n- **Call by Value**: You pass a copy of the data. The original variable remains untouched.\n- **Call by Reference**: You pass the memory address. Any change inside the function directly affects the original variable.\n\nExample:\nSuppose `main` has a variable `x = 10` and calls `modify(x)`.\n1. If **Call by Value**: The activation record for `modify` gets a new slot with a copy `x = 10`. If `modify` sets `x = 20`, the `x` in `main` stays `10`.\n2. If **Call by Reference**: The activation record for `modify` gets the address of `main`'s `x`. If `modify` sets `x = 20`, the `x` in `main` becomes `20`.\n\nCommon traps:\n- Don't confuse the **Dynamic Link** (who called me?) with the **Static Link** (where am I defined in the code?).\n- In **Call by Value**, the parameter is a local copy, so it lives and dies within that specific activation record.\n\nRemember this: The stack manages function life cycles using activation records to store local data, parameters, and return addresses.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:40:02+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:41:01+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:42:12+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What does an **activation record** contain?",
+   "back": "- **Local variables**\n- **Parameters**\n- **Return address**\n- **Control link**\n- **Static link**"
+  },
+  {
+   "front": "When is **stack allocation** used?",
+   "back": "When procedure lifetimes follow a `LIFO` order, making it perfect for managing **recursive calls**."
+  },
+  {
+   "front": "What is a **Control Link**?",
+   "back": "A pointer in the activation record that points to the **activation record of the caller**."
+  },
+  {
+   "front": "What is a **Static Link**?",
+   "back": "A pointer used in **static scoping** to access variables in the **lexically enclosing** procedure's record."
+  },
+  {
+   "front": "How does **Call by Value** behave?",
+   "back": "The **value** is copied. Any changes made to the parameter **do not affect** the original argument."
+  },
+  {
+   "front": "How does **Call by Reference** behave?",
+   "back": "The **address** is passed. The parameter acts as an **alias**, so changes **directly affect** the original argument."
+  },
+  {
+   "front": "How does **Call by Value-Result** work?",
+   "back": "The value is **copied in** at the start and **copied back** to the caller when the procedure finishes."
+  },
+  {
+   "front": "What is the core idea of **Call by Name**?",
+   "back": "The argument is **re-evaluated** every time it is accessed, behaving like a **textual substitution**."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following is NOT typically stored within a single activation record on the stack?",
+   "options": [
+    "Return address",
+    "Local variables",
+    "Heap-allocated objects",
+    "Formal parameters"
+   ],
+   "correct_index": 2,
+   "explanation": "Don't get confused! Heap-allocated objects live in the heap area, whereas the activation record stores data specific to the current procedure on the stack."
+  },
+  {
+   "question": "Consider a language that uses **call by value**. If a function proc(int a, int b) swaps the values of a and b internally, what will be the values of the original variables in the caller function after the call?",
+   "options": [
+    "The values will be swapped",
+    "The values will remain unchanged",
+    "The values will both become zero",
+    "The program will crash"
+   ],
+   "correct_index": 1,
+   "explanation": "Since call by value only passes a copy, the original variables in the caller remain untouched."
+  },
+  {
+   "question": "A procedure foo has 2 integer parameters, 3 integer local variables, and 1 return address. If an integer takes 4 bytes and the return address takes 8 bytes, what is the total size of the activation record for foo?",
+   "options": [
+    "20 bytes",
+    "28 bytes",
+    "32 bytes",
+    "36 bytes"
+   ],
+   "correct_index": 1,
+   "explanation": "Just sum them up: (2 * 4) for parameters + (3 * 4) for locals + 8 for the return address = 28 bytes."
+  },
+  {
+   "question": "In a language that supports **call by reference**, what happens to the original variable when a function modifies its formal parameter?",
+   "options": [
+    "A copy is updated, but the original stays the same",
+    "The original variable is directly modified",
+    "The original variable is deleted",
+    "The original variable is moved to the heap"
+   ],
+   "correct_index": 1,
+   "explanation": "In call by reference, the function gets the actual address, so it works directly on the original variable."
+  },
+  {
+   "question": "What is the main difference between a **dynamic link** and a **static link** in an activation record?",
+   "options": [
+    "Dynamic link is for heap, static link is for stack",
+    "Dynamic link points to the caller, static link points to the lexically enclosing scope",
+    "Dynamic link stores local variables, static link stores parameters",
+    "There is no difference; they are two names for the same thing"
+   ],
+   "correct_index": 1,
+   "explanation": "The dynamic link helps us return to the caller, while the static link lets us access variables in outer lexical scopes."
+  }
+ ]
+}

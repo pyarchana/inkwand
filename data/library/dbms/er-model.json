@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "Difference between a strong entity and a weak entity?",
+   "back": "A **strong entity** has its own primary key. A **weak entity** lacks a primary key and depends on an **identifying relationship** with an owner entity."
+  },
+  {
+   "front": "What are the four types of cardinality ratios?",
+   "back": "- One-to-One (1:1)\n- One-to-Many (1:N)\n- Many-to-One (N:1)\n- Many-to-Many (M:N)"
+  },
+  {
+   "front": "How to map an M:N relationship to relational tables?",
+   "back": "Create a **separate table** for the relationship. Its primary key is the combination of the primary keys from both participating entities."
+  },
+  {
+   "front": "How to map a 1:N relationship to relational tables?",
+   "back": "Add the primary key of the '1' side as a **foreign key** in the table of the 'N' side entity."
+  },
+  {
+   "front": "Difference between composite and multivalued attributes?",
+   "back": "**Composite attributes** can be broken into sub-parts (e.g., Address). **Multivalued attributes** can have multiple values for one entity (e.g., Skills)."
+  },
+  {
+   "front": "Total vs Partial participation constraints?",
+   "back": "**Total participation** (double line) means every entity must participate. **Partial participation** (single line) means some entities may not participate in the relationship."
+  },
+  {
+   "front": "How to represent a weak entity in a relational schema?",
+   "back": "Create a table including the **owner's primary key** and the weak entity's **discriminator**. Together, they form the primary key."
+  },
+  {
+   "front": "What is the 'degree' of a relationship?",
+   "back": "The **degree** is the number of entity sets involved in a relationship. Common degrees are Unary (1), Binary (2), and Ternary (3)."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:49:11+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:49:26+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:50:17+00:00"
+  }
+ },
+ "notes": "The **ER (Entity-Relationship) Model** is like a blueprint for your database. Before writing SQL, we use ER diagrams to visualize how data \"things\" connect.\n\n- **Entities**: Real-world objects (e.g., `Student`). An **Entity Set** is a collection of similar entities.\n- **Attributes**: Properties that describe an entity (e.g., `Roll_No`).\n- **Relationships**: How entities interact (e.g., `Student` *enrolls in* `Course`).\n- **Cardinality**: The numerical constraints of a relationship: **One-to-One (1:1)**, **One-to-Many (1:N)**, or **Many-to-Many (M:N)**.\n\n**Mapping ER to Relational Tables** (Crucial for GATE):\n- An **Entity** becomes a **Table**.\n- An **M:N Relationship** must become a **New Table** containing the primary keys of both entities.\n- A **1:N Relationship** is handled by taking the primary key from the \"1\" side and adding it as a **Foreign Key** in the \"N\" side table.\n\nExample:\nA `Department` (1) has many `Employees` (N).\n1. Create `Dept` table: `Dept(Dept_ID, Dept_Name)`.\n2. Create `Emp` table: `Emp(Emp_ID, Emp_Name)`.\n3. Since it is 1:N, we move the \"1\" side's key to the \"N\" side.\n4. Result: `Emp(Emp_ID, Emp_Name, Dept_ID)`.\n\nCommon traps:\n- Trying to map an **M:N relationship** by just adding a foreign key to one of the original tables. This fails because a single cell cannot hold multiple values! You must create a separate table.\n- Putting the foreign key on the \"1\" side in a 1:N relationship. Always put it on the \"Many\" side.\n\nRemember this: 1:N relationships use a foreign key on the \"N\" side, while M:N relationships always require a separate table.",
+ "practice": [
+  {
+   "question": "In an ER model, if every instance of entity set A must be associated with exactly one instance of entity set B, and an instance of B can be associated with many instances of A, the relationship is:",
+   "options": [
+    "Many-to-one, Total participation for A",
+    "One-to-many, Total participation for A",
+    "Many-to-one, Partial participation for A",
+    "One-to-one, Total participation for A"
+   ],
+   "correct_index": 0,
+   "explanation": "Since every A is linked to exactly one B, but B can have many A's, it's a many-to-one relationship. Because every A must participate, it's total participation."
+  },
+  {
+   "question": "Consider a weak entity set Dependent which has attributes Name and Age. It depends on a strong entity set Employee with primary key Emp_ID. When mapping this to a relational schema, what will be the primary key of the Dependent relation?",
+   "options": [
+    "Name",
+    "Emp_ID",
+    "Emp_ID and Name",
+    "Emp_ID, Name, and Age"
+   ],
+   "correct_index": 2,
+   "explanation": "For a weak entity, we always take the primary key of the owner and combine it with the weak entity's partial key to form a new primary key."
+  },
+  {
+   "question": "In ER modeling, when a relationship set needs to participate in another relationship, we use which of the following concepts?",
+   "options": [
+    "Specialization",
+    "Generalization",
+    "Aggregation",
+    "Multivalued dependency"
+   ],
+   "correct_index": 2,
+   "explanation": "Aggregation is a cool trick where we treat a whole relationship as a single entity so it can join other relationships!"
+  },
+  {
+   "question": "A database has two entity sets, Student and Course. There is a many-to-many relationship Enrolls between them, which also has an attribute Grade. To represent this in a relational schema, what is the minimum number of tables required?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "In an N:M relationship, you need one table for each entity and one extra table to link them together and store relationship attributes."
+  },
+  {
+   "question": "In a university database, each Section of a course is taught by exactly one Instructor. Each Instructor can teach multiple Sections. Every Section must have an Instructor. Which statement is true regarding the participation of Section in the Teaches relationship?",
+   "options": [
+    "Partial participation",
+    "Total participation",
+    "One-to-one cardinality",
+    "Many-to-many cardinality"
+   ],
+   "correct_index": 1,
+   "explanation": "Since the problem says 'Every Section must have an Instructor', that's a clear hint that the participation of Section is total."
+  }
+ ]
+}

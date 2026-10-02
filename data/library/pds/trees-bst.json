@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't worry if trees feel a bit abstract at first. I used to get my traversals mixed up all the time, but once you see the pattern, it clicks!\n\nA **Binary Tree** is a structure where each node has at most two children: a left and a right. We visit these nodes using **Traversals**:\n- **Pre-order**: Root, then Left, then Right.\n- **In-order**: Left, then Root, then Right.\n- **Post-order**: Left, then Right, then Root.\n\nA **Binary Search Tree (BST)** is a special binary tree. For every node, all values in its **left subtree** are smaller, and all values in its **right subtree** are larger. This property allows for fast searching, typically O(log n) in a balanced tree.\n\nExample:\nGiven a BST with root 50, left child 30, and right child 70. Find the In-order traversal.\nStep 1: Go to the leftmost node. That is 30.\nStep 2: Visit the root, which is 50.\nStep 3: Visit the right child, which is 70.\nResult: 30, 50, 70.\n\nCommon traps:\n- Forgetting that a \"skewed\" tree (where every node only has one child) behaves like a linked list, making search time O(n) instead of O(log n).\n- Confusing the order of Pre-order (Root first) and Post-order (Root last).\n\nRemember this: An In-order traversal of a BST always results in the elements being visited in sorted ascending order.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:26:35+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:26:40+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:27:00+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Which traversal of a **BST** always results in a **sorted** sequence?",
+   "back": "The **Inorder** traversal. It visits nodes in non-decreasing order."
+  },
+  {
+   "front": "What two traversals are needed to uniquely reconstruct a **binary tree**?",
+   "back": "**Inorder** combined with either **Preorder** or **Postorder**. Note: Preorder and Postorder alone are not enough!"
+  },
+  {
+   "front": "Worst-case time complexity for searching in a **BST** with `n` nodes?",
+   "back": "`O(n)`. This occurs when the tree is **skewed** (looks like a linked list)."
+  },
+  {
+   "front": "Average-case time complexity for operations in a **balanced** BST?",
+   "back": "`O(log n)`. This is the ideal case where the tree is well-distributed."
+  },
+  {
+   "front": "Maximum number of nodes in a **binary tree** of height `h` (root at `h=0`)?",
+   "back": "`2^(h+1) - 1`."
+  },
+  {
+   "front": "How many unique **binary trees** can be formed with `n` nodes?",
+   "back": "The **nth Catalan Number**: `(1 / (n + 1)) * (2n choose n)`."
+  },
+  {
+   "front": "What is the definition of a **Full Binary Tree**?",
+   "back": "A tree where every node has either **0 or 2** children. No node has exactly 1 child."
+  },
+  {
+   "front": "What is the definition of a **Complete Binary Tree**?",
+   "back": "A tree where all levels are filled except possibly the last, which is filled **left-to-right**."
+  }
+ ],
+ "practice": [
+  {
+   "question": "A full binary tree (where every node has either 0 or 2 children) has 15 leaf nodes. How many total nodes are in this tree?",
+   "options": [
+    "15",
+    "29",
+    "30",
+    "31"
+   ],
+   "correct_index": 1,
+   "explanation": "Remember the rule: in a full binary tree, the number of leaf nodes is always one more than the number of internal nodes. So, 15 leaves means 14 internal nodes, making 29 total nodes."
+  },
+  {
+   "question": "The preorder traversal of a binary tree is `A, B, D, E, C, F` and the inorder traversal is `D, B, E, A, C, F`. What is the postorder traversal?",
+   "options": [
+    "D, E, B, F, C, A",
+    "D, E, B, C, F, A",
+    "B, D, E, C, F, A",
+    "A, B, C, D, E, F"
+   ],
+   "correct_index": 0,
+   "explanation": "A good trick is to use the preorder to find the root and the inorder to see what goes left and right. If you follow that step-by-step, you'll find the postorder is D, E, B, F, C, A."
+  },
+  {
+   "question": "In a Binary Search Tree (BST), if we perform an inorder traversal, what property will the resulting sequence always satisfy?",
+   "options": [
+    "The elements will be in descending order",
+    "The elements will be in ascending order",
+    "The elements will be in random order",
+    "The elements will be in a level-order sequence"
+   ],
+   "correct_index": 1,
+   "explanation": "This is a fundamental property you'll use a lot! Since the BST property ensures left < root < right, the inorder traversal always gives a sorted, ascending list."
+  },
+  {
+   "question": "A Binary Search Tree is constructed by inserting the following sequence of keys into an initially empty tree: `10, 20, 30, 40, 50`. What is the height of the resulting tree (assuming height of a single node tree is 0)?",
+   "options": [
+    "0",
+    "1",
+    "4",
+    "5"
+   ],
+   "correct_index": 2,
+   "explanation": "Since the keys are coming in increasing order, each new node just becomes the right child of the previous one. This creates a 'skewed' tree with 4 edges, so the height is 4."
+  },
+  {
+   "question": "In a Binary Search Tree, if a node has a right child, how do you find its in-order successor?",
+   "options": [
+    "The leftmost node in its right subtree",
+    "The rightmost node in its left subtree",
+    "The parent of the node",
+    "The root of the tree"
+   ],
+   "correct_index": 0,
+   "explanation": "Think of it this way: the next larger value is the smallest one in the right subtree. You find it by going to the right child once, and then as far left as you can go."
+  }
+ ]
+}

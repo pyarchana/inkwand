@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Arrays might look simple, but GATE loves to test how computers actually find elements in memory. Since physical memory is a single long line, a 2D grid must be \"flattened\" to fit.\n\nThere are two main ways to flatten an array:\n- **Row-Major Order (RMO)**: We store elements row by row. To find an element, we skip the full rows that came before it.\n- **Column-Major Order (CMO)**: We store elements column by column. To find an element, we skip the full columns that came before it.\n\nExample:\nConsider an array `A[10...20][5...8]` stored in **Row-Major Order**.\nBase address = 1000, size of each element = 4 bytes.\nFind address of `A[15][7]`.\n- Total columns = `8 - 5 + 1 = 4`.\n- Rows skipped before row 15 = `15 - 10 = 5`.\n- Columns skipped in row 15 = `7 - 5 = 2`.\n- Total elements skipped = `(5 * 4) + 2 = 22`.\n- Address = `1000 + (22 * 4) = 1088`.\n\nCommon traps:\n- Forgetting to subtract the lower bound. If an array starts at index 10, the offset is `index - 10`, not just `index`.\n- Mixing up the multiplier. In RMO, you multiply the row offset by the **number of columns**, not the number of rows.\n\nRemember this: RMO skips full rows (uses column count), while CMO skips full columns (uses row count).",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:24:29+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:25:08+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:25:17+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What defines an **array** in memory?",
+   "back": "A collection of elements of the **same type** stored in **contiguous** (side-by-side) memory locations."
+  },
+  {
+   "front": "Address of `A[i]` in a **1D array**?",
+   "back": "`Base + W * (i - L)` where `Base` is the starting address, `W` is element size, and `L` is the lower bound index."
+  },
+  {
+   "front": "Address of `A[i][j]` in **Row-Major Order**?",
+   "back": "`Base + W * ((i - L_i) * cols + (j - L_j))` where `cols` is the total number of columns."
+  },
+  {
+   "front": "Address of `A[i][j]` in **Column-Major Order**?",
+   "back": "`Base + W * ((j - L_j) * rows + (i - L_i))` where `rows` is the total number of rows."
+  },
+  {
+   "front": "What is **Row-Major Order** (RMO)?",
+   "back": "Storing elements **row by row**. All elements of the first row are stored in memory before the second row starts."
+  },
+  {
+   "front": "What is **Column-Major Order** (CMO)?",
+   "back": "Storing elements **column by column**. All elements of the first column are stored in memory before the second column starts."
+  },
+  {
+   "front": "What is the **time complexity** for array access?",
+   "back": "**O(1)**. Because we use a direct mathematical formula to calculate the address, it's super fast!"
+  },
+  {
+   "front": "Why does **access order** matter for performance?",
+   "back": "Matching your access pattern to the storage order (like row-wise for RMO) improves **cache locality**, making your code run much faster!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "An array `A[10][20]` is stored in Row Major Order. The base address is 1000 and each element takes 4 bytes. What is the address of `A[5][10]` (assuming 0-based indexing)?",
+   "options": [
+    "1440",
+    "1400",
+    "1480",
+    "1520"
+   ],
+   "correct_index": 0,
+   "explanation": "In Row Major Order, you skip the full rows first. Here, we skip 5 rows of 20 elements each, plus 10 more elements in the current row, then multiply by the element size."
+  },
+  {
+   "question": "An array `B[5][10]` is stored in Column Major Order. The base address is 500 and each element takes 2 bytes. What is the address of `B[3][4]` (assuming 0-based indexing)?",
+   "options": [
+    "536",
+    "540",
+    "546",
+    "550"
+   ],
+   "correct_index": 2,
+   "explanation": "Since it is Column Major, we skip full columns. We skip 4 columns of 5 elements each, plus 3 more elements in the current column, then multiply by the element size."
+  },
+  {
+   "question": "In a standard 1D array of size `n`, what is the time complexity to access the element at a specific index `k`?",
+   "options": [
+    "O(n)",
+    "O(log n)",
+    "O(1)",
+    "O(n log n)"
+   ],
+   "correct_index": 2,
+   "explanation": "Arrays allow direct access because the computer can calculate the exact memory location using a simple formula in constant time."
+  },
+  {
+   "question": "A 2D array `C[1...10, 1...15]` is stored in Row Major Order. The base address is 2000 and each element takes 8 bytes. Find the address of `C[5][5]`.",
+   "options": [
+    "2488",
+    "2504",
+    "2512",
+    "2520"
+   ],
+   "correct_index": 2,
+   "explanation": "When indices don't start at 0, subtract the lower bound from your index first. Here, we skip (5-1) rows and (5-1) elements within the row."
+  },
+  {
+   "question": "Consider an array `A[M][N]` where `M` is the number of rows and `N` is the number of columns. Which expression correctly gives the offset of element `A[i][j]` in Row Major Order (0-based indexing)?",
+   "options": [
+    "i * M + j",
+    "j * N + i",
+    "i * N + j",
+    "j * M + i"
+   ],
+   "correct_index": 2,
+   "explanation": "To reach row `i`, you must pass `i` complete rows, and each row contains `N` elements. Then, you just add `j` to move within that row."
+  }
+ ]
+}

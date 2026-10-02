@@ -8,6 +8,10 @@
   "practice": {
    "model": "gemma-4-26b-a4b-it",
    "written_at": "2026-10-02T11:47:52+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:48:59+00:00"
   }
  },
  "practice": [
@@ -65,6 +69,40 @@
    ],
    "correct_index": 1,
    "explanation": "The old AMAT is 1 + (0.1 * 100) = 11, and the new AMAT is 1 + (0.01 * 100) = 2. Dividing the old by the new gives 11 / 2 = 5.5."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is the main goal of a **memory hierarchy**?",
+   "back": "To balance **speed, cost, and capacity**. We want the speed of expensive registers with the huge capacity of cheap disks."
+  },
+  {
+   "front": "Formula for **Average Access Time (AAT)** using hit ratio `h`?",
+   "back": "`AAT = (h * T_cache) + ((1 - h) * T_main_memory)`"
+  },
+  {
+   "front": "Difference between **Temporal** and **Spatial Locality**?",
+   "back": "- **Temporal**: Accessing the same data/address again soon.\n- **Spatial**: Accessing data located near recently accessed addresses."
+  },
+  {
+   "front": "What is **Hit Ratio (h)**?",
+   "back": "The fraction of total memory accesses found in the faster level. `h = Hits / Total Accesses`."
+  },
+  {
+   "front": "If **Hit Ratio** increases, what happens to **Average Access Time**?",
+   "back": "**Average Access Time** decreases. A higher hit ratio means the processor spends less time waiting!"
+  },
+  {
+   "front": "What is **Miss Penalty**?",
+   "back": "The **extra** time required to fetch a block from a lower memory level after a **cache miss** occurs."
+  },
+  {
+   "front": "Moving **down** the hierarchy (e.g., Cache to Disk), what happens to **speed** and **capacity**?",
+   "back": "- **Speed** decreases.\n- **Capacity** increases.\n- **Cost per bit** decreases."
+  },
+  {
+   "front": "Formula for **Effective Access Time (EAT)** using **Miss Penalty**?",
+   "back": "`EAT = Hit_Time + (Miss_Rate * Miss_Penalty)`. Note that `Miss_Rate = 1 - Hit_Ratio`."
   }
  ]
 }

@@ -1,0 +1,108 @@
+{
+ "notes": "- **Distance Vector (DV)** uses the **Bellman-Ford algorithm**. Routers only know the distance to destinations and which neighbor to use. They share their *entire* routing table, but only with their *immediate neighbors*. It is often called \"routing by rumor.\"\n- **Link State (LS)** uses **Dijkstra's algorithm**. Every router learns the complete topology (map) of the network. Each router shares only the status of its *own* direct links with *all* routers in the network via flooding.\n- **Count to infinity** is a major drawback of DV. When a link fails, routers might update each other with outdated information, creating a loop where the distance metric increments slowly towards infinity.\n\nExample: Nodes A, B, C in a line. A-B cost 2, B-C cost 3.\n1. A's table: `Dest C, Cost 5, Next B`.\n2. Link B-C fails. B's cost to C becomes `infinity`.\n3. If A sends an update to B saying `C is cost 5` before B processes the failure, B thinks: `I can reach C via A with cost 5 + 2 = 7`.\n4. B updates its table and tells A. They keep incrementing the cost (7, 9, 11...) until they reach a predefined maximum.\n\nCommon traps:\n- Confusing the scope: DV shares the *table* with *neighbors*; LS shares *link status* with *everyone*.\n- Thinking LS is always \"better\": While LS converges faster, it requires more CPU and memory to store the full topology map.\n\nRemember this: DV is \"routing by rumor\" (Bellman-Ford), while LS is \"routing by map\" (Dijkstra).",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:56:25+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:57:05+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:57:23+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Which algorithm is used in Distance Vector routing?",
+   "back": "It uses the **Bellman-Ford** algorithm. Routers share their full routing tables only with their direct neighbors."
+  },
+  {
+   "front": "Which algorithm is used in Link State routing?",
+   "back": "It uses **Dijkstra's algorithm**. Routers build a complete topology map of the entire network before calculating the shortest path."
+  },
+  {
+   "front": "What information is shared in Distance Vector routing?",
+   "back": "A router sends its **entire routing table** (distances to all known destinations) to its **immediate neighbors** only."
+  },
+  {
+   "front": "What information is shared in Link State routing?",
+   "back": "A router sends **Link State Packets (LSPs)** containing its local link status to **all routers** in the network via flooding."
+  },
+  {
+   "front": "What is the \"count to infinity\" problem?",
+   "back": "A routing loop where routers increment hop counts indefinitely after a link failure because they rely on **stale or outdated information** from neighbors."
+  },
+  {
+   "front": "How do Split Horizon and Poison Reverse help?",
+   "back": "They prevent loops. **Split Horizon** stops advertising a route back to its source, while **Poison Reverse** advertises it back with an **infinite cost**."
+  },
+  {
+   "front": "Which protocol has faster convergence: DV or LS?",
+   "back": "**Link State** is much faster. LS uses flooding to update everyone almost instantly, whereas DV updates propagate slowly neighbor-by-neighbor."
+  },
+  {
+   "front": "Does Distance Vector routing require a full topology map?",
+   "back": "No. Routers only know the **distance and direction** (next hop). Only **Link State** routers maintain a complete map of the network."
+  }
+ ],
+ "practice": [
+  {
+   "question": "In Link State routing, what specific information does each router maintain to compute its routing table?",
+   "options": [
+    "The distance to the destination only",
+    "The routing tables of all other routers in the network",
+    "A complete map of the entire network topology",
+    "Only the distance to its immediate neighbors"
+   ],
+   "correct_index": 2,
+   "explanation": "In Link State routing, every router learns the full topology, which allows them to calculate paths independently."
+  },
+  {
+   "question": "The 'count-to-infinity' problem in Distance Vector routing is most likely to occur when:",
+   "options": [
+    "A new link is added to the network",
+    "The routing table becomes too large to store",
+    "A link fails and updates propagate slowly through the network",
+    "The network uses Dijkstra's algorithm instead of Bellman-Ford"
+   ],
+   "correct_index": 2,
+   "explanation": "When a link fails, routers might mistakenly use outdated information from neighbors, causing the distance to increase step-by-step."
+  },
+  {
+   "question": "Consider a network with three nodes X, Y, and Z. The cost of link (X, Y) is 4, the cost of link (Y, Z) is 6, and the direct cost of link (X, Z) is 15. What is the shortest path cost from X to Z using Distance Vector routing?",
+   "options": [
+    "6",
+    "15",
+    "10",
+    "25"
+   ],
+   "correct_index": 2,
+   "explanation": "The shortest path from X to Z is through Y (4 + 6 = 10), which is cheaper than the direct link cost of 15."
+  },
+  {
+   "question": "How does a router in a Link State routing protocol determine the shortest path to all other nodes?",
+   "options": [
+    "By running Dijkstra's algorithm on its local copy of the network topology",
+    "By using the Bellman-Ford algorithm on neighbor updates",
+    "By asking its neighbors for their best known paths",
+    "By sending a broadcast to all nodes to find the shortest path"
+   ],
+   "correct_index": 0,
+   "explanation": "Once a router has the complete topology map via Link State Advertisements, it uses Dijkstra's algorithm to find the shortest paths."
+  },
+  {
+   "question": "The 'Split Horizon' technique is used in Distance Vector routing to prevent loops by:",
+   "options": [
+    "Increasing the maximum number of allowed hops",
+    "Forcing all routers to update their tables at the exact same time",
+    "Using a central server to validate all routes",
+    "Not advertising a route back to the neighbor from which it was learned"
+   ],
+   "correct_index": 3,
+   "explanation": "Split Horizon prevents loops by ensuring a router does not tell a neighbor about a path that actually goes through that same neighbor."
+  }
+ ]
+}

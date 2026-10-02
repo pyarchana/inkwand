@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Data Flow Analysis (DFA) might seem intimidating, but it's just the compiler \"tracking\" what happens to variables as they move through a Control Flow Graph (CFG). We use this info to make the code faster and leaner.\n\n- **Constant Propagation**: If a variable is assigned a constant (like `x = 5`), the compiler replaces future uses of `x` with `5` as long as `x` isn't changed in between.\n- **Liveness Analysis**: A variable is **live** if its current value will be used later before it gets overwritten. This tells the compiler which variables actually need to stay in registers.\n- **Common Subexpression Elimination (CSE)**: If we compute `a + b` twice and neither `a` nor `b` changed in between, we just reuse the first result instead of calculating it again.\n\nExample:\nPerform **Liveness Analysis** (working backwards) on:\n1: `x = 5`\n2: `y = x + 1`\n3: `x = 10`\n4: `z = y + x`\n\nStep-by-step:\n- At line 4: `y` and `x` are used to compute `z`. So, `y` and `x` are **live** at line 3.\n- At line 3: `x` is redefined. This \"kills\" the previous value of `x`.\n- At line 2: `x` is used to compute `y`. So, `x` is **live** at line 1.\n- Result: `x` is live from line 1 to line 2, but becomes \"dead\" once line 3 executes because the old value is no longer needed.\n\nCommon traps:\n- Thinking Liveness is a forward analysis; it is actually a **backward analysis** (information flows from the exit to the entry).\n- In CSE, assuming an expression can be reused even if one of its operands was modified in between.\n\nRemember this: Data Flow Analysis uses the CFG to track variable properties to optimize code for speed and memory.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:42:16+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:43:10+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:43:48+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What does it mean for a variable to be **live**?",
+   "back": "A variable is **live** if its current value will be used in the future before it is redefined."
+  },
+  {
+   "front": "Is **liveness analysis** a forward or backward analysis?",
+   "back": "It is a **backward** analysis. We work from the end of the program back towards the beginning."
+  },
+  {
+   "front": "Formula for `IN[b]` in **liveness analysis**?",
+   "back": "`IN[b] = USE[b] U (OUT[b] - KILL[b])`. Where `USE[b]` are variables used in block `b` and `KILL[b]` are variables redefined in `b`."
+  },
+  {
+   "front": "Is **constant propagation** a forward or backward analysis?",
+   "back": "It is a **forward** analysis. We track constant values from the program entry towards the exit."
+  },
+  {
+   "front": "What is the main goal of **constant propagation**?",
+   "back": "To replace variables with their known constant values at compile time, which helps simplify the code."
+  },
+  {
+   "front": "What is **Common Subexpression Elimination (CSE)**?",
+   "back": "It identifies expressions that compute the same value multiple times and replaces them with a single variable to avoid redundant work."
+  },
+  {
+   "front": "Which analysis is used for **Common Subexpression Elimination**?",
+   "back": "**Available Expressions** analysis. We check if an expression's value is already computed and its operands haven't changed."
+  },
+  {
+   "front": "What is the **join operator** used in liveness analysis?",
+   "back": "The **union** operator. A variable is live at the start of a block if it is live at the start of any of its successors."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Consider the following code snippet:\n`1: x = 10`\n`2: y = 20`\n`3: z = x + y`\n`4: x = 5`\n`5: w = x + y`\n\nAt the end of line 3, which variables are live?",
+   "options": [
+    "{x, y}",
+    "{y}",
+    "{x}",
+    "{z}"
+   ],
+   "correct_index": 1,
+   "explanation": "At the end of line 3, `x` is not live because it is redefined at line 4 before being used again. However, `y` is still needed for the calculation at line 5, so it remains live."
+  },
+  {
+   "question": "Apply **constant propagation** and **constant folding** to the following code:\n`a = 5`\n`b = a + 10`\n`a = 2`\n`c = a + b`\n\nWhat is the final value of `c`?",
+   "options": [
+    "15",
+    "17",
+    "25",
+    "7"
+   ],
+   "correct_index": 1,
+   "explanation": "First, `a` is replaced by 5 to compute `b = 15`. Then, `a` is updated to 2, so `c` becomes `2 + 15`, which is 17."
+  },
+  {
+   "question": "In the following code, which instruction can be optimized using **common subexpression elimination**?\n`1: x = a + b`\n`2: y = c - d`\n`3: z = a + b`\n`4: w = z + y`",
+   "options": [
+    "Instruction 1",
+    "Instruction 2",
+    "Instruction 3",
+    "Instruction 4"
+   ],
+   "correct_index": 2,
+   "explanation": "Since the expression `a + b` was already computed in instruction 1 and its operands have not changed, instruction 3 is redundant."
+  },
+  {
+   "question": "In **liveness analysis**, a variable is said to be live at a specific program point if:",
+   "options": [
+    "It is used in the current statement",
+    "Its current value will be used in the future before being redefined",
+    "It was defined in the current statement",
+    "It is used inside a loop"
+   ],
+   "correct_index": 1,
+   "explanation": "Liveness is all about whether the current value of a variable is actually needed for any future computations."
+  },
+  {
+   "question": "Which of the following is a **backward** data-flow analysis?",
+   "options": [
+    "Reaching definitions",
+    "Available expressions",
+    "Constant propagation",
+    "Liveness analysis"
+   ],
+   "correct_index": 3,
+   "explanation": "Liveness analysis is backward because to know if a variable is live, you have to look ahead at its future uses."
+  }
+ ]
+}

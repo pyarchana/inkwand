@@ -1,0 +1,108 @@
+{
+ "notes": "Hashing is a way to store data so we can find it almost instantly. Instead of searching through a list one by one, we use a **hash function** `h(k)` to jump directly to the index where a key `k` should be.\n\n- **Load Factor (alpha)**: This is `n / m` (number of elements / table size). It tells us how \"full\" the table is.\n- **Collision**: This happens when two different keys map to the same index.\n- **Collision Resolution**:\n    - **Chaining**: Each slot in the table holds a linked list of all keys that map to that index.\n    - **Open Addressing**: If a slot is full, we look for another empty slot using methods like **Linear Probing** (checking the next slot) or **Double Hashing**.\n\nExample:\nTable size `m = 5`. Hash function `h(k) = k mod 5`.\nInsert keys: 5, 10, 7.\n1. `h(5) = 5 mod 5 = 0`. Index 0: [5]\n2. `h(10) = 10 mod 5 = 0`. Collision at index 0! Using **Linear Probing**, we check index 1. Index 1 is empty, so 10 goes there.\n3. `h(7) = 7 mod 5 = 2`. Index 2: [7]\n\nCommon traps:\n- In **Open Addressing**, the load factor `alpha` must be less than 1 because you cannot have more elements than available slots. In **Chaining**, `alpha` can be greater than 1.\n- Linear Probing can lead to **primary clustering**, where long runs of occupied slots build up, making searches slower.\n\nRemember this: Hashing aims for `O(1)` average time complexity, but performance depends heavily on a good hash function and a low load factor.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:29:56+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:31:31+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:31:42+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Formula for the **load factor** `alpha`?",
+   "back": "`alpha` = n / m. Here, n is the number of elements and m is the table size. Keep `alpha` low!"
+  },
+  {
+   "front": "How does **Chaining** resolve collisions?",
+   "back": "It stores multiple elements in a **linked list** at the same hash index. It's very easy to implement!"
+  },
+  {
+   "front": "What is the main idea of **Open Addressing**?",
+   "back": "All elements are stored directly in the table. If a collision occurs, we probe for the next **available slot**."
+  },
+  {
+   "front": "What is **Linear Probing** and its main drawback?",
+   "back": "It probes slots sequentially: `(h(x) + i) mod m`. This leads to **Primary Clustering**, where occupied slots group together."
+  },
+  {
+   "front": "What is **Quadratic Probing** and its main drawback?",
+   "back": "It uses a quadratic step: `(h(x) + i^2) mod m`. This avoids primary clustering but can cause **Secondary Clustering**."
+  },
+  {
+   "front": "Why is **Double Hashing** often preferred?",
+   "back": "It uses a second hash function to determine the step size. This helps avoid **both** primary and secondary clustering!"
+  },
+  {
+   "front": "Average-case time complexity for searching?",
+   "back": "**O(1)**. With a good hash function and low load factor, searching is super fast!"
+  },
+  {
+   "front": "Worst-case time complexity for searching?",
+   "back": "**O(n)**. This happens if all elements hash to the same slot. A good hash function prevents this!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "A hash table has a size of 10 and currently contains 7 elements. What is the current load factor?",
+   "options": [
+    "0.7",
+    "7",
+    "1.4",
+    "0.3"
+   ],
+   "correct_index": 0,
+   "explanation": "Keep it simple: load factor is just the number of elements divided by the table size. Here, 7 / 10 = 0.7."
+  },
+  {
+   "question": "A hash table has size 7 and uses the hash function h(k) = k mod 7. If you insert the keys 15, 22, and 29 in that order using linear probing, at which index will the key 29 be placed?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "Let's trace it: 15 goes to index 1. 22 also wants index 1, so it moves to index 2. 29 wants index 1, hits 2, and finally lands in index 3."
+  },
+  {
+   "question": "In a hash table using separate chaining, what is the worst-case time complexity for a search operation?",
+   "options": [
+    "O(1)",
+    "O(log n)",
+    "O(n)",
+    "O(n log n)"
+   ],
+   "correct_index": 2,
+   "explanation": "If every single key hashes to the same spot, your hash table effectively becomes a single linked list, making search O(n)."
+  },
+  {
+   "question": "In double hashing, which of the following formulas correctly represents the probe sequence for the i-th probe (where i = 0, 1, 2, ...)?",
+   "options": [
+    "(h1(k) + i) mod m",
+    "(h1(k) + i * h2(k)) mod m",
+    "(h1(k) * i) mod m",
+    "(h1(k) + h2(k)^i) mod m"
+   ],
+   "correct_index": 1,
+   "explanation": "Double hashing is clever because it uses a second hash function to provide the 'step size' for each probe, which is (h1(k) + i * h2(k)) mod m."
+  },
+  {
+   "question": "In open addressing, as the load factor alpha approaches 1, what happens to the average number of probes required for a successful search?",
+   "options": [
+    "It remains constant",
+    "It decreases",
+    "It increases significantly",
+    "It becomes zero"
+   ],
+   "correct_index": 2,
+   "explanation": "As the table gets crowded and the load factor gets close to 1, you'll find yourself skipping many occupied slots, which increases the probe count."
+  }
+ ]
+}

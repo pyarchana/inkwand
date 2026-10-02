@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! SQL can feel like a lot of syntax, but just think of it as a way to \"filter and combine\" data. You use `SELECT` to pick columns and `FROM` to pick tables. To combine tables, we use **Joins**. An `INNER JOIN` only keeps rows where there's a match in both tables, while a `LEFT JOIN` keeps everything from the left table even if there's no match.\n\n**Aggregation** functions like `COUNT()` or `SUM()` summarize data. If you use these, you usually need a `GROUP BY` clause to bucket the data. If you want to filter these buckets (e.g., \"only cities with total sales > 100\"), you must use `HAVING`, not `WHERE`.\n\n**Nested queries** (subqueries) are just queries inside another query. You can use them in a `WHERE` clause to filter data based on the results of a subquery, like `WHERE id IN (SELECT id FROM ...)`.\n\nExample:\nTable `Sales`: `id`, `amt`, `city`.\nQuery: `SELECT city, SUM(amt) FROM Sales GROUP BY city HAVING SUM(amt) > 100;`\n\nStep 1: `FROM Sales` gets the raw data.\nStep 2: `GROUP BY city` puts rows into buckets based on their city.\nStep 3: `SUM(amt)` calculates the total for each bucket.\nStep 4: `HAVING` filters out buckets where the sum is <= 100.\nStep 5: `SELECT` displays the final city and its sum.\n\nCommon traps:\n- Using `WHERE` to filter aggregate results (like `WHERE SUM(amt) > 100`). This is a syntax error; use `HAVING`.\n- `COUNT(*)` counts every row, but `COUNT(column_name)` skips `NULL` values.\n\nRemember this: The logical execution order is `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `SELECT` -> `ORDER BY`.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:50:19+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:51:12+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:51:25+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Consider the following two tables:\n**Students**(id, name)\n**Grades**(id, score)\n\nData:\n**Students**: (1, 'Alice'), (2, 'Bob')\n**Grades**: (1, 85), (1, 90), (2, 70)\n\nWhat is the result of the following query?\n`SELECT count(*) FROM Students S JOIN Grades G ON S.id = G.id WHERE G.score > 80;`",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "The join produces three rows, but the `WHERE` clause only keeps rows where the score is greater than 80, which are the two rows for student 1."
+  },
+  {
+   "question": "A table `T` has a single column `val` containing the values: 5, 10, and `NULL`. What is the output of the following query?\n`SELECT count(*) FROM T WHERE val <> 5;`",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "0"
+   ],
+   "correct_index": 0,
+   "explanation": "In SQL, any comparison with `NULL` results in `UNKNOWN`. The `WHERE` clause only includes rows where the condition is `TRUE`, so only the value 10 is counted."
+  },
+  {
+   "question": "Consider a table **Products**(category, price) with the following data:\n('Elec', 100), ('Elec', 200), ('Home', 50), ('Home', 50)\n\nWhat is the result of the following query?\n`SELECT category FROM Products GROUP BY category HAVING AVG(price) > 75;`",
+   "options": [
+    "'Elec'",
+    "'Home'",
+    "'Elec' and 'Home'",
+    "None"
+   ],
+   "correct_index": 0,
+   "explanation": "The average price for 'Elec' is 150 and for 'Home' is 50. Only 'Elec' satisfies the `HAVING` condition of being greater than 75."
+  },
+  {
+   "question": "Given two tables:\n**A**(id) with values {1, 2}\n**B**(id) with values {2, 3}\n\nWhat is the output of the following query?\n`SELECT id FROM A WHERE id IN (SELECT id FROM B);`",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "1 and 2"
+   ],
+   "correct_index": 1,
+   "explanation": "The subquery returns {2, 3}. The outer query checks which IDs in table A (1 and 2) exist in that set, which is only 2."
+  },
+  {
+   "question": "Table `X` has 3 rows and table `Y` has 3 rows. What is the number of rows in the result of the following query?\n`SELECT count(*) FROM X CROSS JOIN Y;`",
+   "options": [
+    "3",
+    "6",
+    "9",
+    "1"
+   ],
+   "correct_index": 2,
+   "explanation": "A `CROSS JOIN` produces a Cartesian product, so the total number of rows is the product of the number of rows in both tables (3 * 3 = 9)."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "`INNER JOIN` vs `LEFT OUTER JOIN`?",
+   "back": "`INNER JOIN` only keeps rows with matches in both tables. `LEFT OUTER JOIN` keeps all rows from the left table, filling the right side with `NULL` if no match exists."
+  },
+  {
+   "front": "Difference between `WHERE` and `HAVING`?",
+   "back": "Use `WHERE` to filter rows **before** grouping. Use `HAVING` to filter groups **after** the `GROUP BY`. Just remember: you can't use aggregate functions in `WHERE`!"
+  },
+  {
+   "front": "How do aggregate functions like `AVG()` handle `NULL`?",
+   "back": "Most aggregate functions like `AVG()` or `SUM()` simply **ignore** `NULL` values. They only calculate based on the rows that actually contain data."
+  },
+  {
+   "front": "`COUNT(*)` vs `COUNT(column_name)`?",
+   "back": "`COUNT(*)` counts every single row, even if it's all `NULL`s. `COUNT(column_name)` is smarter—it only counts rows where that specific column is **not** `NULL`."
+  },
+  {
+   "front": "Result size of a `CROSS JOIN` (Table A: n rows, Table B: m rows)?",
+   "back": "It creates a **Cartesian Product** with exactly `n * m` rows. Every row from the first table gets paired with every row from the second!"
+  },
+  {
+   "front": "How to check for `NULL` values in a `WHERE` clause?",
+   "back": "Avoid using `= NULL` because comparisons with `NULL` result in `UNKNOWN`. To find those missing values, always use the `IS NULL` or `IS NOT NULL` operators."
+  },
+  {
+   "front": "Rule for non-aggregated columns in `SELECT`?",
+   "back": "If you're using `GROUP BY`, any column in your `SELECT` list must either be wrapped in an aggregate function (like `MAX()`) or be included in the `GROUP BY` clause."
+  },
+  {
+   "front": "What is the logical order of SQL execution?",
+   "back": "The engine follows this order:\n- `FROM` / `JOIN`\n- `WHERE`\n- `GROUP BY`\n- `HAVING`\n- `SELECT`\n- `ORDER BY`"
+  }
+ ]
+}

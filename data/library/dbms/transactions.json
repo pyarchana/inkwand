@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "What are the four **ACID** properties?",
+   "back": "- **Atomicity**: All or nothing.\n- **Consistency**: Maintains database rules.\n- **Isolation**: No interference between transactions.\n- **Durability**: Changes are permanent after commit."
+  },
+  {
+   "front": "How do you check for **conflict serializability**?",
+   "back": "Draw a **precedence graph**. Nodes are transactions; edges represent conflicting operations (different T, same data, at least one write). If there are **no cycles**, it is conflict serializable."
+  },
+  {
+   "front": "Relationship between **Conflict** and **View** serializability?",
+   "back": "**Conflict serializability** is a subset of **view serializability**. Every conflict serializable schedule is view serializable, but not every view serializable schedule is conflict serializable."
+  },
+  {
+   "front": "What are the two phases of **2PL**?",
+   "back": "- **Growing Phase**: Transaction acquires locks but cannot release any.\n- **Shrinking Phase**: Transaction releases locks but cannot acquire any new ones."
+  },
+  {
+   "front": "What is the main advantage of **Strict 2PL**?",
+   "back": "It holds all **exclusive (write) locks** until the transaction commits or aborts. This prevents **cascading rollbacks**, making recovery much simpler."
+  },
+  {
+   "front": "How does the **Timestamp Ordering** protocol work?",
+   "back": "It uses `TS(T)` to order operations. If an operation arrives out of timestamp order, the transaction is **rolled back** and restarted with a new timestamp."
+  },
+  {
+   "front": "What makes a schedule **recoverable**?",
+   "back": "If transaction `T2` reads data written by `T1`, then `T1` must **commit** before `T2` commits. This ensures we can recover from failures safely."
+  },
+  {
+   "front": "Does **2PL** prevent deadlocks?",
+   "back": "No. While **2PL** guarantees serializability, it can still lead to **deadlocks**. You need extra mechanisms like Wait-Die or Wound-Wait to handle them."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:52:45+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:53:02+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:56:40+00:00"
+  }
+ },
+ "notes": "Hey! Let's dive into Transactions. Think of a transaction as a single \"job\" (like a bank transfer). To keep the database safe, we need **ACID** properties. **Atomicity** ensures it's all-or-nothing, and **Isolation** ensures multiple jobs don't interfere with each other.\n\nWhen we run multiple transactions at once, we get a **Schedule**. We want our schedule to be **Serializable**, meaning it produces the same result as if the transactions were run one after another (sequentially).\n\nTo check for **Conflict Serializability**, we use a **Precedence Graph**. If the graph has a cycle, the schedule is not serializable. Other ways to manage order include **Timestamp Ordering** (using transaction ages) and **Two-Phase Locking (2PL)**.\n\nExample:\nT1: `R(x)`, `W(x)`\nT2: `R(x)`, `W(x)`\nSchedule S: `R1(x)`, `R2(x)`, `W1(x)`, `W2(x)`\n1. Identify conflicting operations (same data, different transaction, at least one is a Write):\n- `R2(x)` and `W1(x)` conflict. Since `R2(x)` is before `W1(x)`, we draw T2 -> T1.\n- `R1(x)` and `W2(x)` conflict. Since `R1(x)` is before `W2(x)`, we draw T1 -> T2.\n2. Check for cycles:\n- We have T1 -> T2 and T2 -> T1. This is a cycle!\nConclusion: S is not conflict serializable.\n\nCommon traps:\n- Thinking **Two-Phase Locking (2PL)** prevents deadlocks. It actually can cause deadlocks; it only guarantees serializability.\n- Assuming all **View Serializable** schedules are also **Conflict Serializable**. (It's actually the other way around!)\n\nRemember this: Serializability is our gold standard for ensuring concurrent transactions behave correctly.",
+ "practice": [
+  {
+   "question": "A database system crashes immediately after a transaction has successfully committed, but before the updated data is physically written from the volatile buffer to the non-volatile disk. Which property of the ACID model ensures that the updates from this committed transaction are not lost?",
+   "options": [
+    "Atomicity",
+    "Consistency",
+    "Isolation",
+    "Durability"
+   ],
+   "correct_index": 3,
+   "explanation": "Durability guarantees that once a transaction is committed, its changes are permanent and will survive any subsequent system failures."
+  },
+  {
+   "question": "Consider the following schedule S involving two transactions T1 and T2: T1: read(A), T2: read(A), T1: write(A), T2: write(A). Which of the following statements is true regarding this schedule?",
+   "options": [
+    "It is conflict serializable",
+    "It is view serializable but not conflict serializable",
+    "It is neither conflict nor view serializable",
+    "It is both conflict and view serializable"
+   ],
+   "correct_index": 2,
+   "explanation": "The schedule has a cycle in its precedence graph (T1 < T2 and T2 < T1) and the read-from relationship cannot be satisfied by any serial execution, making it neither."
+  },
+  {
+   "question": "In the **Strict Two-Phase Locking (Strict 2PL)** protocol, when are the exclusive (X) locks held by a transaction released?",
+   "options": [
+    "As soon as the transaction enters the shrinking phase",
+    "Immediately after the transaction performs its last write operation",
+    "After the transaction either commits or aborts",
+    "Only when another transaction requests a shared lock on the same item"
+   ],
+   "correct_index": 2,
+   "explanation": "Strict 2PL requires that all exclusive locks be held until the transaction completes (commits or aborts) to avoid cascading rollbacks."
+  },
+  {
+   "question": "In the **Basic Timestamp Ordering** protocol, a transaction T_i with timestamp TS(T_i) attempts to perform a `write(X)` operation. If the current write-timestamp of X, denoted as `W-TS(X)`, is greater than TS(T_i), what is the most likely action taken by the scheduler?",
+   "options": [
+    "The write operation is executed and `W-TS(X)` is updated",
+    "The write operation is ignored and the transaction continues",
+    "The transaction T_i is aborted and rolled back",
+    "The transaction T_i is delayed until the newer transaction completes"
+   ],
+   "correct_index": 2,
+   "explanation": "If a transaction tries to write a value that has already been overwritten by a younger transaction, the protocol aborts the older transaction to maintain serializability."
+  },
+  {
+   "question": "While **Two-Phase Locking (2PL)** ensures that a schedule is conflict serializable, what is one significant drawback that developers must handle?",
+   "options": [
+    "It does not guarantee serializability",
+    "It can lead to deadlocks",
+    "It prevents any form of concurrency",
+    "It always results in cascading rollbacks"
+   ],
+   "correct_index": 1,
+   "explanation": "Even though 2PL ensures serializability, it can cause transactions to wait for each other in a cycle, which results in a deadlock."
+  }
+ ]
+}

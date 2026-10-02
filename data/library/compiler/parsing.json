@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "What does the **FIRST(alpha)** set represent in parsing?",
+   "back": "It is the set of **terminals** that can appear as the first symbol in any string derived from **alpha**. If **alpha** can derive **epsilon**, then **epsilon** is also in the set."
+  },
+  {
+   "front": "How do you find **FOLLOW(A)** if **A** is the start symbol?",
+   "back": "Always include the end-of-input marker **$** in **FOLLOW(A)**. For any production **B -> alpha A beta**, everything in **FIRST(beta)** (except epsilon) goes into **FOLLOW(A)**."
+  },
+  {
+   "front": "What is the main condition for a grammar to be **LL(1)**?",
+   "back": "For any **A -> alpha | beta**, **FIRST(alpha)** and **FIRST(beta)** must be **disjoint**. If **alpha** can derive **epsilon**, then **FIRST(beta)** and **FOLLOW(A)** must also be **disjoint**."
+  },
+  {
+   "front": "Rank these parsers from **least powerful** to **most powerful**: SLR, CLR, LR(0).",
+   "back": "**LR(0) < SLR < LALR < CLR**. CLR is the most powerful because it uses specific lookahead information, while LR(0) is the simplest."
+  },
+  {
+   "front": "How does **SLR(1)** improve upon **LR(0)**?",
+   "back": "**LR(0)** makes decisions based only on the current state. **SLR(1)** uses the **FOLLOW** set of the non-terminal to decide when to perform a **reduce** action, resolving many conflicts."
+  },
+  {
+   "front": "What is the key difference between **LALR** and **CLR** states?",
+   "back": "**LALR** is created by merging **CLR** states that have the same **LR(0) core** but different lookaheads. This makes **LALR** much smaller (fewer states) than **CLR**."
+  },
+  {
+   "front": "Can an **ambiguous grammar** ever be **LL(1)** or **LR(1)**?",
+   "back": "**No**. Ambiguity means there is more than one way to parse a string. Since LL and LR parsers must make a single deterministic choice, they cannot handle **ambiguous grammars**."
+  },
+  {
+   "front": "What two transformations are usually needed to make a grammar **LL(1)**?",
+   "back": "You must eliminate **Left Recursion** and perform **Left Factoring**. LL(1) parsers are top-down and would otherwise get stuck in infinite loops or face multiple choice conflicts."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:39:20+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:39:49+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:40:42+00:00"
+  }
+ },
+ "notes": "Parsing is the process of checking if a string of tokens follows the rules of a grammar. Think of it as verifying if a sentence follows the rules of a language.\n\nThere are two main approaches:\n- **Top-Down (LL)**: You start from the Start symbol and try to expand it to match the input. `LL(1)` uses one lookahead token.\n- **Bottom-Up (LR)**: You start from the input tokens and try to \"reduce\" them back to the Start symbol.\n\nThe power of Bottom-Up parsers follows this hierarchy: `LR(0) < SLR < LALR < CLR`. `CLR` is the strongest but uses the most memory.\n\nExample:\nGrammar:\nS -> AB\nA -> a | epsilon\nB -> b\n\nFind `FIRST(S)` and `FOLLOW(A)`:\n- `FIRST(A)` is `{a, epsilon}`.\n- `FIRST(B)` is `{b}`.\n- For `FIRST(S)`, we take `FIRST(A)`. Since `A` can be `epsilon`, we also include `FIRST(B)`. So, `FIRST(S) = {a, b}`.\n- For `FOLLOW(A)`, we look at what follows `A` in the production `S -> AB`. That is `FIRST(B)`. So, `FOLLOW(A) = {b}`.\n\nCommon traps:\n- Forgetting that `FOLLOW` sets never contain `epsilon`.\n- When calculating `FOLLOW(A)`, if the next symbol can be `epsilon`, you must also include `FOLLOW(S)`.\n\nRemember this: LL parsers are top-down (expansion), while LR parsers are bottom-up (reduction), and CLR is the most powerful of the LR family.",
+ "practice": [
+  {
+   "question": "Consider the grammar: S -> AB, A -> a | epsilon, B -> b. What is the set FOLLOW(A)?",
+   "options": [
+    "{b}",
+    "{a}",
+    "{$}",
+    "{a, b}"
+   ],
+   "correct_index": 0,
+   "explanation": "Since A is immediately followed by B in the production S -> AB, FOLLOW(A) must contain FIRST(B). Because B only derives 'b' and not epsilon, FOLLOW(A) is simply {b}."
+  },
+  {
+   "question": "For the grammar S -> aA | aB, A -> b, B -> c, what is the primary reason it is not LL(1)?",
+   "options": [
+    "It has left recursion",
+    "It is ambiguous",
+    "It requires left factoring",
+    "It is not an LR grammar"
+   ],
+   "correct_index": 2,
+   "explanation": "Both productions for S start with the same terminal 'a', so the parser cannot decide which production to choose using only one lookahead symbol. This is a classic left-factoring issue."
+  },
+  {
+   "question": "In SLR(1) parsing, a reduction A -> alpha is performed in a state when the current lookahead symbol is in:",
+   "options": [
+    "FIRST(A)",
+    "FOLLOW(A)",
+    "The set of all terminals",
+    "The stack top"
+   ],
+   "correct_index": 1,
+   "explanation": "SLR(1) parsers use the FOLLOW set of a non-terminal to resolve reduce actions, checking if the lookahead symbol is a valid follower of that non-terminal."
+  },
+  {
+   "question": "What is the main difference between a CLR(1) parser and an LALR(1) parser?",
+   "options": [
+    "LALR uses more states than CLR",
+    "LALR merges states with the same LR(0) items",
+    "LALR is easier to implement manually",
+    "LALR can handle more grammars than CLR"
+   ],
+   "correct_index": 1,
+   "explanation": "LALR is a more compact version of CLR that reduces the total number of states by merging those that have identical LR(0) items but different lookahead sets."
+  },
+  {
+   "question": "The grammar S -> E, E -> E + T | T, T -> id is not LL(1) because:",
+   "options": [
+    "It is ambiguous",
+    "It has left recursion",
+    "It has left factoring issues",
+    "It is not an LR grammar"
+   ],
+   "correct_index": 1,
+   "explanation": "Top-down parsers like LL(1) will enter an infinite loop when they encounter left-recursive productions, as they try to expand the same non-terminal repeatedly without consuming any input."
+  }
+ ]
+}

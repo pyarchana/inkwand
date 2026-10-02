@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't worry if this feels a bit dry; once you get the logic, it's actually quite intuitive. We're basically talking about how devices \"take turns\" on a shared wire so they don't talk over each other.\n\n- **Pure ALOHA**: The \"wild west\" approach. Send data whenever you want. If a collision happens, wait and try again. Max efficiency is 18.4% (1/2e).\n- **Slotted ALOHA**: A bit more organized. Time is split into slots, and you can only start sending at the start of a slot. This doubles efficiency to 36.8% (1/e).\n- **CSMA/CD**: Used in **Ethernet**. It's \"listen before talk.\" If you detect a collision while transmitting, stop immediately, send a jam signal, and wait using **Binary Exponential Backoff**.\n\nExample:\nA network uses CSMA/CD. The propagation delay (Tp) between the two furthest nodes is 25 microseconds. What is the minimum frame transmission time (Tt) required?\nStep 1: To detect a collision, the sender must still be transmitting when the collision signal returns from the far end.\nStep 2: This requires Tt >= 2 * Tp.\nStep 3: Tt >= 2 * 25 microseconds = 50 microseconds.\n\nCommon traps:\n- Forgetting that CSMA/CD is for wired Ethernet. Wireless uses **CSMA/CA** because it is physically difficult to \"listen\" while \"talking\" on a wireless medium.\n- Mixing up the efficiencies: Pure ALOHA is 1/2e, while Slotted ALOHA is 1/e.\n\nRemember this: In CSMA/CD, the transmission time must be at least twice the propagation delay to ensure collisions are detected.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:54:57+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:56:04+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:57:39+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "If the maximum throughput of Pure ALOHA is approximately 18.4%, what is the maximum theoretical throughput of Slotted ALOHA?",
+   "options": [
+    "18.4%",
+    "36.8%",
+    "50%",
+    "100%"
+   ],
+   "correct_index": 1,
+   "explanation": "Slotted ALOHA is twice as efficient as Pure ALOHA because it reduces the vulnerable period. Since Pure ALOHA's max is 1/2e, Slotted ALOHA's max is 1/e, which is about 36.8%."
+  },
+  {
+   "question": "A station in a CSMA/CD network has experienced 3 consecutive collisions while trying to transmit a frame. According to the binary exponential backoff algorithm, what is the range of the contention window (number of slots) from which the station will choose its backoff time?",
+   "options": [
+    "0 to 1",
+    "0 to 3",
+    "0 to 7",
+    "0 to 15"
+   ],
+   "correct_index": 2,
+   "explanation": "The rule is to pick a random number in the range 0 to 2^k - 1 after k collisions. For 3 collisions, the range is 0 to 2^3 - 1, which is 0 to 7."
+  },
+  {
+   "question": "In an Ethernet network, the propagation delay between the two farthest nodes is 25 microseconds. To ensure that a collision can be detected by the transmitting station, what is the minimum frame transmission time required?",
+   "options": [
+    "25 microseconds",
+    "50 microseconds",
+    "75 microseconds",
+    "100 microseconds"
+   ],
+   "correct_index": 1,
+   "explanation": "To detect a collision, the transmission time must be at least twice the propagation delay. So, 2 * 25 microseconds gives us 50 microseconds."
+  },
+  {
+   "question": "Which of the following statements is true regarding CSMA/CD?",
+   "options": [
+    "It is used in wireless networks because collision detection is easy.",
+    "It stops transmission as soon as a collision is detected.",
+    "It requires a central controller to manage access.",
+    "It is more efficient than CSMA/CA in high-interference environments."
+   ],
+   "correct_index": 1,
+   "explanation": "In CSMA/CD, once a station detects a collision, it immediately stops transmitting to save time and bandwidth. This is a key reason why wireless networks use CSMA/CA instead."
+  },
+  {
+   "question": "In a Slotted ALOHA system, if the average number of new frames generated per slot (G) is 1, what is the expected throughput (S)?",
+   "options": [
+    "0.368",
+    "0.5",
+    "0.184",
+    "0.632"
+   ],
+   "correct_index": 0,
+   "explanation": "The throughput formula for Slotted ALOHA is S = G * e^(-G). Plugging in G = 1 gives us 1 * e^(-1), which is approximately 0.368."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "Maximum throughput of **Pure ALOHA**?",
+   "back": "The maximum throughput is `S = G * e^(-2G)`. The maximum value is about **18.4%** (or `1/(2e)`), which occurs when `G = 0.5`."
+  },
+  {
+   "front": "Maximum throughput of **Slotted ALOHA**?",
+   "back": "The maximum throughput is `S = G * e^(-G)`. The maximum value is about **36.8%** (or `1/e`), which occurs when `G = 1`."
+  },
+  {
+   "front": "The **CSMA/CD** condition for successful collision detection?",
+   "back": "The transmission time (`T_t`) must be at least twice the maximum propagation delay (`T_p`). Formula: `T_t >= 2 * T_p`."
+  },
+  {
+   "front": "Why does Ethernet require a **minimum frame size**?",
+   "back": "To ensure the sender is still transmitting when a collision signal returns. It must satisfy `L/R >= 2 * T_p`, where `L` is frame length and `R` is bandwidth."
+  },
+  {
+   "front": "What is **Binary Exponential Backoff**?",
+   "back": "After a collision, stations wait for a random time. The range of this time doubles with each consecutive collision to reduce the chance of repeated collisions."
+  },
+  {
+   "front": "Difference between **Pure ALOHA** and **Slotted ALOHA**?",
+   "back": "In Pure ALOHA, stations can transmit anytime. In Slotted ALOHA, time is divided into slots, and stations can only start transmitting at the beginning of a slot."
+  },
+  {
+   "front": "What is a **late collision** in CSMA/CD?",
+   "back": "A collision that occurs after the sender finishes transmitting (when `T_t < 2 * T_p`). The sender won't detect it, leading to undetected data loss."
+  },
+  {
+   "front": "How does **CSMA/CD** improve efficiency over **ALOHA**?",
+   "back": "It uses **Carrier Sensing** (listening before sending) and **Collision Detection** (stopping early), which minimizes the time wasted on failed transmissions."
+  }
+ ]
+}

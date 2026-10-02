@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let sorting overwhelm you. In GATE, we mostly focus on **comparison-based sorts**, where we decide the order by comparing two elements at a time.\n\nTwo things you must track for every algorithm:\n- **Complexity**: Look at the best, average, and worst-case time (like `O(n log n)` or `O(n^2)`).\n- **Stability**: If two elements are equal, does the algorithm keep them in their original relative order? This is vital when sorting objects with multiple keys.\n\nQuick summary:\n- **Bubble, Selection, Insertion**: Usually `O(n^2)`. Insertion is `O(n)` for nearly sorted data.\n- **Merge Sort**: Always `O(n log n)` and **stable**.\n- **Quick Sort**: `O(n log n)` average, but `O(n^2)` worst case. Usually **unstable**.\n- **Heap Sort**: Always `O(n log n)` but **unstable**.\n\nExample:\nIs **Merge Sort** stable for `[5a, 2, 5b]`? (where `5a` and `5b` are equal values).\nStep 1: Divide into `[5a]` and `[2, 5b]`.\nStep 2: Divide further into `[5a]`, `[2]`, and `[5b]`.\nStep 3: Merge `[2]` and `[5b]` to get `[2, 5b]`.\nStep 4: Merge `[5a]` with `[2, 5b]`. First, `2` is smaller than `5a`, so `2` goes first. Next, `5a` is compared to `5b`. Since they are equal, a stable merge picks the element from the left sub-array first.\nResult: `[2, 5a, 5b]`. Stability is preserved.\n\nCommon traps:\n- Thinking **Quick Sort** is always `O(n log n)`. If the pivot is always the smallest or largest element, it hits `O(n^2)`.\n- Confusing **stability** with **in-place**. An algorithm can be in-place (uses little extra memory) but still be unstable, like Heap Sort.\n\nRemember this: The mathematical lower bound for any comparison-based sorting algorithm is Omega(n log n).",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:28:58+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:29:29+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:29:43+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Which of the following is true regarding the worst-case time complexity of **Merge Sort** and **Quick Sort**?",
+   "options": [
+    "Merge Sort is O(n log n) and Quick Sort is O(n^2)",
+    "Merge Sort is O(n^2) and Quick Sort is O(n log n)",
+    "Both are O(n log n)",
+    "Both are O(n^2)"
+   ],
+   "correct_index": 0,
+   "explanation": "Merge Sort always divides the array into halves, while Quick Sort can end up with very unbalanced partitions in the worst case, leading to O(n^2)."
+  },
+  {
+   "question": "A sorting algorithm is called **stable** if it preserves the relative order of records with equal keys. Which of the following is a **stable** sorting algorithm?",
+   "options": [
+    "Quick Sort",
+    "Heap Sort",
+    "Merge Sort",
+    "Selection Sort"
+   ],
+   "correct_index": 2,
+   "explanation": "Merge Sort is stable because it only swaps elements during the merge step if they are strictly greater or smaller, keeping equal elements in their original order."
+  },
+  {
+   "question": "What is the lower bound for the worst-case time complexity of any comparison-based sorting algorithm for `n` elements?",
+   "options": [
+    "O(n)",
+    "O(n log n)",
+    "O(n^2)",
+    "O(log n)"
+   ],
+   "correct_index": 1,
+   "explanation": "Based on the decision tree model, any algorithm that sorts by comparing elements must perform at least log(n!) comparisons, which simplifies to O(n log n)."
+  },
+  {
+   "question": "Consider the array `[5, 2, 4, 6, 1, 3]`. What will the array look like after the first two passes of **Insertion Sort**? (Note: The first pass considers the second element, and the second pass considers the third element).",
+   "options": [
+    "[2, 4, 5, 6, 1, 3]",
+    "[2, 5, 4, 6, 1, 3]",
+    "[4, 2, 5, 6, 1, 3]",
+    "[5, 2, 4, 6, 1, 3]"
+   ],
+   "correct_index": 0,
+   "explanation": "In the first pass, 2 is moved before 5 to get `[2, 5, 4, 6, 1, 3]`, and in the second pass, 4 is inserted between 2 and 5."
+  },
+  {
+   "question": "Which of the following sorting algorithms is **not** an in-place sorting algorithm in its standard implementation?",
+   "options": [
+    "Bubble Sort",
+    "Selection Sort",
+    "Merge Sort",
+    "Heap Sort"
+   ],
+   "correct_index": 2,
+   "explanation": "Standard Merge Sort requires an auxiliary array of size `n` to merge the sub-arrays, so it is not considered in-place."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What does it mean for a sorting algorithm to be **stable**?",
+   "back": "A sort is **stable** if it preserves the relative order of duplicate elements. If two elements have the same value, the one that appeared first in the input stays first in the output."
+  },
+  {
+   "front": "Time and space complexity of **Merge Sort**?",
+   "back": "- Time: `O(n log n)` in all cases (best, average, worst).\n- Space: `O(n)` due to the auxiliary array used during the merge process."
+  },
+  {
+   "front": "When does **Quick Sort** hit its worst-case time complexity?",
+   "back": "`O(n^2)`. This happens when the pivot is consistently the smallest or largest element, such as when the input array is already sorted or reverse-sorted."
+  },
+  {
+   "front": "Time and space complexity of **Heap Sort**?",
+   "back": "- Time: `O(n log n)` for all cases.\n- Space: `O(1)` (it is an in-place sort).\n- Note: It is **not stable**."
+  },
+  {
+   "front": "Worst-case time complexity of **Bubble**, **Insertion**, and **Selection** sort?",
+   "back": "All three have a worst-case time complexity of `O(n^2)`. Remember, **Insertion Sort** is very efficient (`O(n)`) if the array is already nearly sorted!"
+  },
+  {
+   "front": "What is the theoretical lower bound for **comparison-based** sorting?",
+   "back": "`Omega(n log n)`. This means no comparison-based algorithm can ever perform better than this in the worst case."
+  },
+  {
+   "front": "Identify the **stable** algorithms: Merge Sort, Quick Sort, Heap Sort, Insertion Sort.",
+   "back": "- **Stable**: Merge Sort, Insertion Sort.\n- **Unstable**: Quick Sort, Heap Sort."
+  },
+  {
+   "front": "What defines an **in-place** sorting algorithm?",
+   "back": "An algorithm is **in-place** if it requires only a constant amount of extra space, `O(1)`, beyond the original input array."
+  }
+ ]
+}

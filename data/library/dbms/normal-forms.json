@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's simplify Normalization. Think of it as a way to organize your data to avoid redundancy and those annoying update bugs.\n\n- **Integrity Constraints** are the rules. **Keys** (Candidate, Primary, Super) ensure every row is unique and reachable.\n- **Functional Dependency (FD)** `X -> Y` means if you know the value of `X`, you can uniquely determine `Y`.\n- **Normal Forms** are levels of \"cleanliness\":\n    - **1NF**: All values are atomic (no lists or sets in a single cell).\n    - **2NF**: 1NF + No **Partial Dependency**. This means a non-prime attribute (one not in a key) cannot depend on just a *part* of a candidate key.\n    - **3NF**: 2NF + No **Transitive Dependency**. A non-prime attribute shouldn't depend on another non-prime attribute.\n    - **BCNF**: A stricter version of 3NF. For every non-trivial FD `X -> Y`, `X` **must** be a superkey.\n\nExample:\nRelation R(A, B, C) with FDs: `A -> B` and `B -> C`.\n1. Find the key: `A` is the candidate key (the closure of `A` is `{A, B, C}`).\n2. Check 2NF: Since the key `A` is a single attribute, no partial dependency is possible. It is in 2NF.\n3. Check 3NF: Look at `B -> C`. `B` is not a superkey, and `C` is not a prime attribute (it's not part of the key `A`). This is a transitive dependency.\nResult: It is in 2NF but NOT in 3NF.\n\nCommon traps:\n- Confusing 3NF and BCNF. Remember: 3NF allows `X -> Y` if `Y` is a prime attribute; BCNF does not care about `Y`, it only cares if `X` is a superkey.\n- Forgetting to find *all* candidate keys before checking dependencies.\n\nRemember this: Normalization uses FDs to ensure every non-key attribute depends on \"the key, the whole key, and nothing but the key.\"",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:50:33+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:51:41+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:55:30+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is a **Candidate Key**?",
+   "back": "A **minimal superkey**. It uniquely identifies a tuple, and no proper subset of it can uniquely identify a tuple."
+  },
+  {
+   "front": "Define the Functional Dependency `X -> Y`.",
+   "back": "If two tuples agree on `X`, they **must** also agree on `Y`. This means `X` uniquely determines `Y`."
+  },
+  {
+   "front": "What is the main requirement for **1NF**?",
+   "back": "All attributes must contain only **atomic** (indivisible) values. No multi-valued or composite attributes allowed."
+  },
+  {
+   "front": "How to satisfy **2NF** from 1NF?",
+   "back": "Ensure there are **no partial dependencies**. Every non-prime attribute must depend on the *entire* candidate key, not just a part of it."
+  },
+  {
+   "front": "Condition for **3NF** in `X -> A`?",
+   "back": "For every non-trivial FD `X -> A`, either:\n- `X` is a **superkey**,\n- `A` is a **prime attribute**."
+  },
+  {
+   "front": "What is the rule for **BCNF**?",
+   "back": "For every non-trivial FD `X -> A`, `X` **must be a superkey**. It is stricter than 3NF because it removes the 'A is prime' exception."
+  },
+  {
+   "front": "Condition for **Lossless Join Decomposition**?",
+   "back": "When decomposing `R` into `R1` and `R2`, their intersection `(R1 ∩ R2)` must be a **superkey** for either `R1` or `R2`."
+  },
+  {
+   "front": "What is **Dependency Preservation**?",
+   "back": "A decomposition is preserving if all original functional dependencies can be checked within the decomposed relations without needing to `join` them back together."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Find the candidate key for relation R(A, B, C, D) given the functional dependencies {A -> B, B -> C, C -> B}.",
+   "options": [
+    "{A}",
+    "{D}",
+    "{A, D}",
+    "{B, D}"
+   ],
+   "correct_index": 2,
+   "explanation": "To cover all attributes, we need A (which gives B and C) and D. Since neither A nor D alone can derive the other, {A, D} is the minimal candidate key."
+  },
+  {
+   "question": "A relation R(A, B, C) has the functional dependencies {A -> B, B -> C}. What is the highest normal form this relation satisfies?",
+   "options": [
+    "1NF",
+    "2NF",
+    "3NF",
+    "BCNF"
+   ],
+   "correct_index": 1,
+   "explanation": "The key is A. It is in 2NF because there are no partial dependencies, but it fails 3NF because B -> C is a transitive dependency (B is not a superkey and C is not prime)."
+  },
+  {
+   "question": "Consider R(A, B, C, D) with FDs {A -> B, B -> C, C -> D}. If we decompose R into R1(A, B, C) and R2(C, D), the decomposition is:",
+   "options": [
+    "Lossless and dependency preserving",
+    "Lossy and dependency preserving",
+    "Lossless but not dependency preserving",
+    "Lossy but not dependency preserving"
+   ],
+   "correct_index": 0,
+   "explanation": "The intersection R1 ∩ R2 is {C}, which is a key for R2, making it lossless. All original FDs are present in the decomposed relations, so it is dependency preserving."
+  },
+  {
+   "question": "Which of the following statements is always true regarding BCNF and 3NF?",
+   "options": [
+    "Every BCNF relation is in 3NF",
+    "Every 3NF relation is in BCNF",
+    "BCNF always preserves all dependencies",
+    "BCNF is a weaker form than 3NF"
+   ],
+   "correct_index": 0,
+   "explanation": "BCNF is a stricter version of 3NF. Therefore, every relation that satisfies BCNF automatically satisfies the requirements for 3NF."
+  },
+  {
+   "question": "Find the candidate key for relation R(A, B, C, D) given the functional dependencies {A -> B, C -> D, D -> A}.",
+   "options": [
+    "{A}",
+    "{B}",
+    "{C}",
+    "{D}"
+   ],
+   "correct_index": 2,
+   "explanation": "Calculating closures: A+ = {A, B}, B+ = {B}, C+ = {C, D, A, B}, and D+ = {D, A, B}. Only C can derive all attributes, making it the candidate key."
+  }
+ ]
+}

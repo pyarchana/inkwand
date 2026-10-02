@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let graphs intimidate you. They are just collections of nodes (vertices) and connections (edges). To process them in a program, we need to store them efficiently.\n\n- **Adjacency Matrix**: This is a 2D array of size V x V. If there is an edge from vertex `i` to vertex `j`, we set `matrix[i][j] = 1`. It is great for quickly checking if an edge exists, but it takes `O(V^2)` space, which is heavy if you have many vertices but few edges.\n- **Adjacency List**: This is an array of lists. Each index `i` in the array represents a vertex, and the list at that index contains all its neighbors. This is much better for \"sparse\" graphs (graphs with few edges) because it only uses `O(V + E)` space.\n\nExample:\nA directed graph has 3 vertices (0, 1, 2) and edges (0,1) and (1,2).\n1. **Adjacency Matrix**:\n- Row 0: [0, 1, 0]\n- Row 1: [0, 0, 1]\n- Row 2: [0, 0, 0]\n2. **Adjacency List**:\n- 0: [1]\n- 1: [2]\n- 2: []\n\nCommon traps:\n- Forgetting that in a **directed** graph, the matrix is not necessarily symmetric. `matrix[i][j]` might be 1 while `matrix[j][i]` is 0.\n- Mixing up the space complexity: An Adjacency Matrix always uses `O(V^2)` space, even if there are zero edges.\n\nRemember this: Use an Adjacency Matrix for dense graphs and an Adjacency List for sparse graphs.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:27:21+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:28:44+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:28:55+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Space complexity of an **adjacency matrix** for V vertices?",
+   "back": "**O(V^2)**. We need a 2D array of size V x V, even if there are very few edges."
+  },
+  {
+   "front": "Space complexity of an **adjacency list** for V vertices and E edges?",
+   "back": "**O(V + E)**. We store V list heads and E total nodes across all lists."
+  },
+  {
+   "front": "Edge lookup time in an **adjacency matrix** for vertices u and v?",
+   "back": "**O(1)**. We can directly access `matrix[u][v]` in constant time."
+  },
+  {
+   "front": "Edge lookup time in an **adjacency list** for vertices u and v?",
+   "back": "**O(degree(u))**. In the worst case, we must traverse the entire list of neighbors for vertex u."
+  },
+  {
+   "front": "Time complexity to find all neighbors of a vertex in an **adjacency matrix**?",
+   "back": "**O(V)**. We must scan the entire row of size V to find non-zero entries."
+  },
+  {
+   "front": "Time complexity to find all neighbors of a vertex in an **adjacency list**?",
+   "back": "**O(degree(u))**. We only traverse the specific list associated with that vertex."
+  },
+  {
+   "front": "Which representation is best for a **dense graph** (where E is close to V^2)?",
+   "back": "**Adjacency Matrix**. It's more efficient for dense graphs and offers faster edge lookups."
+  },
+  {
+   "front": "Which representation is best for a **sparse graph** (where E is much smaller than V^2)?",
+   "back": "**Adjacency List**. It saves space by only storing existing edges, avoiding V^2 overhead."
+  }
+ ],
+ "practice": [
+  {
+   "question": "For a graph with `V` vertices and `E` edges, what are the asymptotic space complexities for an **adjacency matrix** and an **adjacency list** respectively?",
+   "options": [
+    "O(V^2) and O(V + E)",
+    "O(V + E) and O(V^2)",
+    "O(V^2) and O(V^2)",
+    "O(V) and O(E)"
+   ],
+   "correct_index": 0,
+   "explanation": "The matrix needs a slot for every possible pair of vertices, whereas the list only stores actual existing edges and the vertex head pointers."
+  },
+  {
+   "question": "Consider a directed graph with 3 vertices {1, 2, 3} and edges (1, 2), (2, 3), and (3, 1). Which of the following represents its **adjacency matrix**?",
+   "options": [
+    "[[0, 1, 0], [0, 0, 1], [1, 0, 0]]",
+    "[[1, 0, 0], [0, 1, 0], [0, 0, 1]]",
+    "[[0, 1, 1], [1, 0, 0], [0, 1, 0]]",
+    "[[0, 0, 1], [1, 0, 0], [0, 1, 0]]"
+   ],
+   "correct_index": 0,
+   "explanation": "In a directed graph, a 1 at row `i` and column `j` means there is a directed edge from vertex `i` to vertex `j`."
+  },
+  {
+   "question": "You need to frequently check if a specific edge `(u, v)` exists in a very **sparse** graph. Which representation would allow you to perform this check in O(1) constant time?",
+   "options": [
+    "Adjacency List",
+    "Adjacency Matrix",
+    "Edge List",
+    "Incidence Matrix"
+   ],
+   "correct_index": 1,
+   "explanation": "An adjacency matrix allows you to check for an edge using direct array indexing `matrix[u][v]`, which is always O(1)."
+  },
+  {
+   "question": "An undirected graph has 4 vertices and 5 edges. If we represent this graph using an **adjacency list**, what is the total number of nodes stored in the list structure (counting both the initial array of vertex pointers and the nodes representing the edges)?",
+   "options": [
+    "4",
+    "5",
+    "9",
+    "14"
+   ],
+   "correct_index": 3,
+   "explanation": "In an undirected graph, each edge is stored twice (once for each endpoint), so we have `V` head pointers and `2E` edge nodes."
+  },
+  {
+   "question": "If an undirected graph is represented using an **adjacency matrix**, and the sum of all entries in the matrix is 20, how many edges does the graph have?",
+   "options": [
+    "5",
+    "10",
+    "20",
+    "40"
+   ],
+   "correct_index": 1,
+   "explanation": "In an undirected graph, each edge is recorded twice in the matrix (once as `[u][v]` and once as `[v][u]`), so the total sum is `2E`."
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't worry if this feels a bit math-heavy at first. Error detection is just about adding extra bits so the receiver can double-check if the data got corrupted during transit.\n\n- **Parity**: We add a single bit to make the total number of 1s either even (even parity) or odd (odd parity). It's simple but can't detect if an even number of bits (like 2 or 4) flip at the same time.\n- **Checksum**: The sender treats data as segments, sums them up, and sends the 1's complement of that sum. The receiver sums everything (including the checksum); if the result is all 1s, the data is likely fine.\n- **CRC (Cyclic Redundancy Check)**: The most powerful one. We treat the data as a polynomial and divide it by a fixed \"generator polynomial\" using XOR division. The remainder is what we attach to the data.\n\nExample:\nData: `1011`, Generator: `101` (degree 2).\n1. Append two 0s (the degree) to the data: `101100`.\n2. Perform XOR division:\n`101100` / `101`\n- `101` XOR `101` = `000`\n- Bring down `1` -> `001` (cannot divide, so `0`)\n- Bring down `0` -> `010` (cannot divide, so `0`)\n- Bring down `0` -> `100`\n- `100` XOR `101` = `001`\nRemainder is `01`.\nTransmitted codeword: `101101`.\n\nCommon traps:\n- Forgetting that the number of appended bits is the **degree** of the polynomial, not the number of bits in the generator. (e.g., `101` has degree 2).\n- Parity fails to detect an even number of bit errors.\n\nRemember this: CRC is the most robust method for detecting burst errors using polynomial division.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:54:21+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:56:00+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:56:37+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "A sender uses even parity to transmit the 7-bit data 1011010. The receiver receives 1011110. Has an error been detected?",
+   "options": [
+    "No error detected",
+    "An error is detected",
+    "An error is detected and corrected",
+    "Two errors are detected"
+   ],
+   "correct_index": 1,
+   "explanation": "Even parity means the total count of 1s must be even. Since the received 1011110 has five 1s, the receiver detects an error."
+  },
+  {
+   "question": "In a checksum-based error detection, the sender adds two 8-bit integers: 15 and 20. What is the checksum (1's complement of the sum) sent by the sender?",
+   "options": [
+    "35",
+    "220",
+    "255",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "The checksum is the 1's complement of the sum. For 15 + 20 = 35, we take the 8-bit 1's complement, which is 255 - 35 = 220."
+  },
+  {
+   "question": "A bit stream 1101 is to be transmitted using a CRC generator polynomial x^3 + x + 1. What will be the transmitted bit stream?",
+   "options": [
+    "1101000",
+    "1101101",
+    "1101001",
+    "1101111"
+   ],
+   "correct_index": 2,
+   "explanation": "We append three 0s (the degree of the polynomial) to the data and perform modulo-2 division. The remainder 001 is then appended to the original data."
+  },
+  {
+   "question": "A CRC generator polynomial has a degree of 4. Which of the following error patterns is guaranteed to be detected?",
+   "options": [
+    "A burst error of length 5",
+    "A burst error of length 4",
+    "An error pattern that is a multiple of the generator polynomial",
+    "Any error pattern with an even number of bits"
+   ],
+   "correct_index": 1,
+   "explanation": "A CRC with a polynomial of degree k is guaranteed to detect any burst error with a length less than or equal to k."
+  },
+  {
+   "question": "A system uses a single parity bit (even parity) for error detection. If two bits in the transmitted message are flipped during transmission, what is the most likely outcome at the receiver?",
+   "options": [
+    "An error is detected",
+    "An error is not detected",
+    "The error is corrected automatically",
+    "The receiver knows exactly which bits were flipped"
+   ],
+   "correct_index": 1,
+   "explanation": "A single parity bit only catches an odd number of bit flips. If an even number of bits are flipped, the parity remains the same and the error goes undetected."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is the main goal of a **parity bit**?",
+   "back": "To detect **single-bit errors** by adding one extra bit to make the total number of 1s either even or odd."
+  },
+  {
+   "front": "What is the main weakness of **simple parity**?",
+   "back": "It cannot detect an **even number of errors** (like 2 bits flipping). The parity stays the same, so the error is missed."
+  },
+  {
+   "front": "How does **Checksum** work at the Data Link Layer?",
+   "back": "The sender divides data into segments, calculates their **1's complement sum**, and sends it. The receiver repeats this to verify."
+  },
+  {
+   "front": "In **Checksum**, how do we know if the data is correct?",
+   "back": "The receiver sums all segments including the checksum. If the result is all 1s, the data is considered **error-free**."
+  },
+  {
+   "front": "What is **CRC (Cyclic Redundancy Check)** based on?",
+   "back": "It is based on **binary division** using a predefined **generator polynomial**. It is much stronger than parity or checksum."
+  },
+  {
+   "front": "If the **generator polynomial** has degree `k`, how many bits are appended?",
+   "back": "You append `k` bits. For example, if the divisor is `x^3 + x + 1` (degree 3), you append a 3-bit remainder."
+  },
+  {
+   "front": "What kind of arithmetic is used in **CRC division**?",
+   "back": "It uses **Modulo-2 arithmetic**. This is just the **XOR operation** for each bit, with no carries or borrows."
+  },
+  {
+   "front": "What errors can **CRC** reliably detect?",
+   "back": "- Single bit errors\n- Double bit errors\n- **Burst errors** up to the length of the generator polynomial."
+  }
+ ]
+}

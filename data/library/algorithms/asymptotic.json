@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "What does **Big O** `O(g(n))` represent?",
+   "back": "It's the **asymptotic upper bound**. It's like a \"ceiling\" that says the function won't grow faster than `g(n)`."
+  },
+  {
+   "front": "What does **Big Omega** `Omega(g(n))` represent?",
+   "back": "It's the **asymptotic lower bound**. It's like a \"floor\" that says the function will grow at least as fast as `g(n)`."
+  },
+  {
+   "front": "What does **Big Theta** `Theta(g(n))` represent?",
+   "back": "It's a **tight bound**. It means the function is sandwiched; it must be both `O(g(n))` and `Omega(g(n))`."
+  },
+  {
+   "front": "Why do we usually focus on **worst-case complexity**?",
+   "back": "It gives a **guaranteed limit**. It's our \"safety net\" to know the maximum time an algorithm will ever take."
+  },
+  {
+   "front": "Rank by **growth rate**: `n`, `log n`, `n^2`, `2^n`.",
+   "back": "- `log n` \n- `n` \n- `n^2` \n- `2^n` \n(Remember: `log n` is the slowest, `2^n` is the fastest!)"
+  },
+  {
+   "front": "What is **Space Complexity**?",
+   "back": "The **extra memory** used by the algorithm. Don't forget to include the **recursion stack** if the algorithm is recursive!"
+  },
+  {
+   "front": "If `f(n) = 5n^2 + 10n`, what is its **Big O**?",
+   "back": "`O(n^2)`. We drop the constant `5` and the lower-order `10n`. We only care about the **dominant term**!"
+  },
+  {
+   "front": "Is `Theta(g(n))` the same as `O(g(n))` AND `Omega(g(n))`?",
+   "back": "**Yes!** That is the definition. `Theta` is used when the upper and lower bounds are the same."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:30:56+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:31:17+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:31:34+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Which of the following functions has the slowest asymptotic growth rate?",
+   "options": [
+    "n log n",
+    "n^2",
+    "2^n",
+    "n!"
+   ],
+   "correct_index": 0,
+   "explanation": "Don't worry, just remember that as `n` gets huge, `n log n` stays much smaller than powers or factorials. It's the slowest growing one here!"
+  },
+  {
+   "question": "What is the worst-case time complexity of the following code snippet?\n`for i = 1 to n:`\n`  for j = 1 to i:`\n`    print(i, j)`",
+   "options": [
+    "O(n)",
+    "O(n log n)",
+    "O(n^2)",
+    "O(n^3)"
+   ],
+   "correct_index": 2,
+   "explanation": "You can solve this by summing the iterations: 1 + 2 + 3 + ... + n. This sum is n(n+1)/2, which simplifies to O(n^2)."
+  },
+  {
+   "question": "If f(n) = Theta(g(n)), which of the following must be true?",
+   "options": [
+    "f(n) = O(g(n)) and f(n) = Omega(g(n))",
+    "f(n) = o(g(n))",
+    "f(n) = Omega(g(n)) but not O(g(n))",
+    "f(n) < g(n) for all n > 0"
+   ],
+   "correct_index": 0,
+   "explanation": "Think of **Theta** as a tight bound. It means the function is bounded both above (Big O) and below (Omega) by the same growth rate."
+  },
+  {
+   "question": "Which of the following sequences correctly lists the functions in increasing order of asymptotic growth?",
+   "options": [
+    "n log n, n^2, n^2 log n, n^3",
+    "n log n, n^2, n^3, n^2 log n",
+    "n^2, n log n, n^2 log n, n^3",
+    "n^2 log n, n^2, n log n, n^3"
+   ],
+   "correct_index": 0,
+   "explanation": "When comparing, notice that `n^2 log n` grows slightly faster than `n^2` but much slower than `n^3`. Just take it step by step!"
+  },
+  {
+   "question": "What is the worst-case space complexity of the following recursive function?\n`Function fact(n):`\n`  if n == 0: return 1`\n`  return n * fact(n-1)`",
+   "options": [
+    "O(1)",
+    "O(log n)",
+    "O(n)",
+    "O(n^2)"
+   ],
+   "correct_index": 2,
+   "explanation": "Since each recursive call stays on the stack until the base case is reached, the space used is proportional to the recursion depth, which is `n`."
+  }
+ ],
+ "notes": "Don't let the math scare you! Asymptotic complexity is just a way to describe how an algorithm's running time or memory usage grows as the input size `n` gets huge. We don't care about small values of `n`; we care about the \"trend\" or growth rate.\n\n- **Big O (O)**: The upper bound. It says the growth won't exceed this rate.\n- **Big Omega (Omega)**: The lower bound. It says the growth will be at least this rate.\n- **Big Theta (Theta)**: The tight bound. It's used when the upper and lower bounds are the same.\n\nIn GATE, we mostly focus on **worst-case time complexity** because we want to know the maximum resources an algorithm might need for any input.\n\nExample: Find the Big O of `f(n) = 5n^2 + 10n + 100`.\n1. Identify the fastest-growing term: `5n^2`.\n2. Ignore the lower-order terms (`10n` and `100`) as they become insignificant as `n` grows.\n3. Ignore the constant coefficient `5`.\n4. Result: `f(n) = O(n^2)`.\n\nCommon traps:\n- Thinking Big O is the same as worst-case. Big O is a mathematical upper bound, while \"worst-case\" is the specific input scenario that results in the maximum number of steps.\n- Keeping constants in your final answer (e.g., writing `O(2n)` instead of `O(n)`).\n\nRemember this: Asymptotic analysis is about the rate of growth, not the exact number of operations."
+}

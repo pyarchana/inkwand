@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "Difference between **Primary** and **Clustering** index?",
+   "back": "**Primary index** is on a **sorted** file using a **unique** key. **Clustering index** is on a **sorted** file using a **non-unique** key."
+  },
+  {
+   "front": "**Dense** vs **Sparse** indexing?",
+   "back": "- **Dense**: An index entry exists for every search key value.\n- **Sparse**: Index entries exist only for some values (usually one per block)."
+  },
+  {
+   "front": "Where is data stored in a **B+ tree**?",
+   "back": "All data pointers are stored in the **leaf nodes**. Internal nodes only store keys to guide the search."
+  },
+  {
+   "front": "Why are **B+ trees** great for range queries?",
+   "back": "Because all leaf nodes are linked together in a **linked list**, making it easy to traverse consecutive values."
+  },
+  {
+   "front": "Formula for B+ tree order `n` (internal node)?",
+   "back": "`n * P + (n - 1) * K <= B` \n\nWhere `P` is pointer size, `K` is key size, and `B` is block size. You've got this!"
+  },
+  {
+   "front": "What is a **Secondary Index**?",
+   "back": "An index created on an **unsorted** file. It uses a non-ordering field to locate records."
+  },
+  {
+   "front": "Search complexity of a **B+ tree**?",
+   "back": "`O(log_f N)`, where `N` is the number of records and `f` is the fan-out. It's super efficient!"
+  },
+  {
+   "front": "Purpose of **Multi-level Indexing**?",
+   "back": "To minimize **disk I/Os**. It creates an index for the index, making the search process much faster."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:51:33+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:52:18+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:52:46+00:00"
+  }
+ },
+ "notes": "**File Organization** is how we physically arrange records on a disk. A **Heap file** is just an unordered pile, while a **Sequential file** is sorted by a specific key.\n\n**Indexing** is like a book's index; it helps us find data without scanning every single block. **B+ Trees** are the gold standard for database indexing. Unlike B-Trees, B+ Trees store all actual data (or pointers to records) in the **leaf nodes**. The internal nodes only store keys to guide the search. Plus, all leaf nodes are linked together, making range queries (like \"find all users aged 20 to 30\") incredibly efficient.\n\nExample:\nFind the maximum order `m` (number of pointers) of a B+ tree internal node.\nBlock size `B = 4096` bytes, Key size `K = 10` bytes, Pointer size `P = 8` bytes.\nAn internal node has `m` pointers and `m-1` keys.\nThe total size must be less than or equal to `B`:\n`m * P + (m-1) * K <= B`\n`m * 8 + (m-1) * 10 <= 4096`\n`8m + 10m - 10 <= 4096`\n`18m <= 4106`\n`m <= 228.11`\nSo, the maximum order `m` is `228`.\n\nCommon traps:\n- Confusing B-Trees and B+ Trees: In B-Trees, data can exist in internal nodes. In B+ Trees, all data is strictly in the leaf nodes.\n- Forgetting the key-pointer relationship: An internal node with `m` pointers always has `m-1` keys.\n\nRemember this: B+ Trees are preferred for databases because their linked leaf nodes make range searches much faster than B-Trees.",
+ "practice": [
+  {
+   "question": "In a **B+ tree**, where are the actual data pointers (or the records themselves) stored?",
+   "options": [
+    "Only in the leaf nodes",
+    "In both internal nodes and leaf nodes",
+    "Only in the root node",
+    "In all nodes equally"
+   ],
+   "correct_index": 0,
+   "explanation": "Remember, in a **B+ tree**, internal nodes only act as guides using keys, while all the actual data or pointers to it are stored in the leaf nodes."
+  },
+  {
+   "question": "A **B+ tree** index node has a block size of 512 bytes. Each key takes 10 bytes, and each pointer takes 8 bytes. What is the maximum number of children (order) this node can have?",
+   "options": [
+    "27",
+    "28",
+    "29",
+    "30"
+   ],
+   "correct_index": 2,
+   "explanation": "We solve `k * 10 + (k + 1) * 8 <= 512` to find that the maximum number of keys `k` is 28. Since the order is `k + 1`, the answer is 29."
+  },
+  {
+   "question": "Which of the following statements about a **primary index** is correct?",
+   "options": [
+    "It is created on a non-ordered field",
+    "It is created on a sorted field that is not a key",
+    "It is created on a sorted field that is a key",
+    "It is created on an unordered file"
+   ],
+   "correct_index": 2,
+   "explanation": "A **primary index** is specifically built on the sorted search key of a data file, making it very efficient for lookups."
+  },
+  {
+   "question": "For a **B+ tree** of order `p`, what is the minimum number of children that a non-root internal node must have?",
+   "options": [
+    "1",
+    "p/2",
+    "ceil(p/2)",
+    "p-1"
+   ],
+   "correct_index": 2,
+   "explanation": "To keep the tree balanced, every internal node (except the root) must be at least half-full, which means it needs at least `ceil(p/2)` children."
+  },
+  {
+   "question": "A data file consists of 10,000 blocks. An index is built where each index entry is 16 bytes and the index block size is 1024 bytes. How many blocks are required for the first level of this index?",
+   "options": [
+    "625",
+    "156",
+    "157",
+    "10000"
+   ],
+   "correct_index": 2,
+   "explanation": "First, find entries per block: `1024 / 16 = 64`. Then, divide the 10,000 required entries by 64, which gives 156.25, so we need 157 blocks."
+  }
+ ]
+}

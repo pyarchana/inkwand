@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "Which data structure is used to implement Breadth-First Search (BFS)?",
+   "back": "A **Queue** (FIFO). We use it to explore neighbors level by level."
+  },
+  {
+   "front": "What property does BFS guarantee in an unweighted graph?",
+   "back": "It finds the **shortest path** (minimum number of edges) from the source to all reachable nodes."
+  },
+  {
+   "front": "Which data structure is used to implement Depth-First Search (DFS)?",
+   "back": "A **Stack** (LIFO), often implemented implicitly using **recursion**."
+  },
+  {
+   "front": "Name two common uses of Depth-First Search (DFS).",
+   "back": "- Finding **connected components**\n- **Cycle detection** in directed/undirected graphs"
+  },
+  {
+   "front": "What is the time complexity of BFS/DFS using an adjacency list?",
+   "back": "**O(V + E)**, where V is the number of vertices and E is the number of edges."
+  },
+  {
+   "front": "What is the time complexity of BFS/DFS using an adjacency matrix?",
+   "back": "**O(V^2)**, because for every vertex, we must scan an entire row of size V to find neighbors."
+  },
+  {
+   "front": "On which type of graph can you perform a Topological Sort?",
+   "back": "Only on a **DAG** (Directed Acyclic Graph). If there is a cycle, topological sort is impossible."
+  },
+  {
+   "front": "What is a Topological Sort?",
+   "back": "A linear ordering of vertices such that for every directed edge `u -> v`, vertex `u` comes before `v`."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:33:20+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:34:02+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T14:02:23+00:00"
+  }
+ },
+ "notes": "Hey! Don't sweat these traversals; they are the foundation for almost everything in graphs. Here are my quick notes to help you out.\n\n- **BFS (Breadth-First Search)**: Uses a **Queue** (FIFO). It explores the graph layer by layer, like a ripple in a pond. It is the go-to for finding the shortest path in unweighted graphs. Time complexity: O(V + E).\n- **DFS (Depth-First Search)**: Uses a **Stack** (LIFO) or recursion. It dives as deep as possible down one branch before backtracking. It's great for detecting cycles and connectivity. Time complexity: O(V + E).\n- **Topological Sort**: A linear ordering for a **DAG** (Directed Acyclic Graph). If there is an edge `u -> v`, `u` must appear before `v`. You can find it by reversing the order in which nodes finish in a DFS.\n\nExample:\nGraph: 1 -> 2, 1 -> 3, 2 -> 4.\nBFS starting at 1:\n1. Queue: [1]. Visited: {1}.\n2. Pop 1. Add neighbors 2, 3 to Queue. Queue: [2, 3]. Visited: {1, 2, 3}.\n3. Pop 2. Add neighbor 4 to Queue. Queue: [3, 4]. Visited: {1, 2, 3, 4}.\n4. Pop 3. No new neighbors. Queue: [4].\n5. Pop 4. Queue empty.\nBFS Order: 1, 2, 3, 4.\n\nCommon traps:\n- Trying to perform Topological Sort on a graph with cycles. It only works on DAGs!\n- Mixing up the data structures: BFS uses a **Queue**, while DFS uses a **Stack**.\n\nRemember this: BFS explores layer-by-layer using a queue, while DFS explores deep into branches using a stack.",
+ "practice": [
+  {
+   "question": "What is the time complexity of performing a Depth First Search (DFS) on a directed graph represented using an adjacency list with V vertices and E edges?",
+   "options": [
+    "O(V)",
+    "O(E)",
+    "O(V + E)",
+    "O(V * E)"
+   ],
+   "correct_index": 2,
+   "explanation": "Since we use an adjacency list, we visit each vertex once and look at each edge exactly once, which gives us O(V + E)."
+  },
+  {
+   "question": "Which of the following conditions is necessary for a directed graph to have a valid topological sort?",
+   "options": [
+    "The graph must be connected",
+    "The graph must be a tree",
+    "The graph must be a Directed Acyclic Graph (DAG)",
+    "The graph must have at least one cycle"
+   ],
+   "correct_index": 2,
+   "explanation": "A topological sort works by ordering nodes so that for every edge u -> v, u comes before v. This is only possible if there are no cycles, meaning the graph must be a DAG."
+  },
+  {
+   "question": "In a DFS traversal of a directed graph, which type of edge connects a node to one of its ancestors in the DFS tree?",
+   "options": [
+    "Tree edge",
+    "Forward edge",
+    "Back edge",
+    "Cross edge"
+   ],
+   "correct_index": 2,
+   "explanation": "A back edge connects a node to one of its ancestors in the DFS tree. This is a very important concept because it's how we detect cycles!"
+  },
+  {
+   "question": "In an unweighted graph, if a BFS is performed starting from node s, and node u is visited before node v, which of the following must be true?",
+   "options": [
+    "distance(s, u) < distance(s, v)",
+    "distance(s, u) <= distance(s, v)",
+    "u is an ancestor of v in DFS tree",
+    "u is always a neighbor of v"
+   ],
+   "correct_index": 1,
+   "explanation": "BFS explores the graph layer by layer. Because of this, a node visited earlier will always have a distance from the source that is less than or equal to a node visited later."
+  },
+  {
+   "question": "Consider a directed graph with edges (1, 2), (2, 3), and (1, 3). Which of the following is a valid topological sort of the graph?",
+   "options": [
+    "1, 3, 2",
+    "2, 1, 3",
+    "1, 2, 3",
+    "3, 2, 1"
+   ],
+   "correct_index": 2,
+   "explanation": "Looking at the edges, 1 must come before 2 and 3, and 2 must come before 3. Therefore, the only valid sequence is 1, 2, 3."
+  }
+ ]
+}

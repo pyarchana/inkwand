@@ -1,0 +1,108 @@
+{
+ "notes": "Switching is how we move data from a source to a destination through a network of nodes.\n\n- **Circuit Switching** sets up a dedicated physical path before data flows (like a traditional phone call). It provides guaranteed bandwidth and constant delay, but it is inefficient because resources are wasted if no data is being sent.\n- **Packet Switching** breaks data into small chunks called packets. There is no dedicated path; packets find their own way. This is great for \"bursty\" internet traffic because it uses resources efficiently, though it can cause congestion.\n- **Virtual Circuit Switching** is a hybrid. It establishes a logical path first so all packets follow the same route (like packet switching), but it doesn't reserve dedicated physical resources (like circuit switching).\n\nPerformance is measured by **Delay** and **Throughput**. \nTotal delay = `Transmission delay` + `Propagation delay` + `Queuing delay` + `Processing delay`. \n**Throughput** is the actual rate of successful data delivery, often limited by the \"bottleneck\" link (the slowest link in the path).\n\nExample: A 1000-bit packet is sent over a 1 Mbps link. The distance is 2000 km and signal speed is 2 * 10^8 m/s. Find the total delay (ignore queuing/processing).\nStep 1: Transmission delay = Packet size / Bandwidth = 1000 / 10^6 = 0.001 s = 1 ms.\nStep 2: Propagation delay = Distance / Speed = 2 * 10^6 / 2 * 10^8 = 0.01 s = 10 ms.\nStep 3: Total delay = 1 ms + 10 ms = 11 ms.\n\nCommon traps:\n- Mixing up **Transmission delay** (time to push bits onto the wire, L/B) and **Propagation delay** (time for a bit to travel the distance, d/v).\n- Forgetting that in packet switching, each router/hop adds its own transmission delay.\n\nRemember this: Circuit switching reserves resources, while packet switching shares them.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:54:07+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:54:30+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T14:00:56+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Which of the following is a key feature of **circuit switching** that makes it different from **packet switching**?",
+   "options": [
+    "It uses a connectionless approach to transfer data.",
+    "It requires a dedicated path and resource reservation before data transfer.",
+    "It experiences higher queuing delays due to resource reservation.",
+    "It breaks data into small packets with individual headers."
+   ],
+   "correct_index": 1,
+   "explanation": "Think of it this way: circuit switching reserves the path first, like booking a specific seat on a train, unlike packet switching which is more like a bus where you just hop on."
+  },
+  {
+   "question": "A packet of size 12,000 bits is sent over a link with a bandwidth of 2 Mbps. If the propagation delay is 30 ms, what is the total **end-to-end delay** (neglecting queuing and processing delays)?",
+   "options": [
+    "6 ms",
+    "30 ms",
+    "36 ms",
+    "42 ms"
+   ],
+   "correct_index": 2,
+   "explanation": "Remember to calculate the transmission delay first (12,000 / 2,000,000 = 6 ms) and then simply add the propagation delay (30 ms) to get 36 ms."
+  },
+  {
+   "question": "In **virtual circuit switching**, how is the routing information typically handled to ensure packets follow the same path?",
+   "options": [
+    "Each packet must carry the full destination address.",
+    "Each packet carries a small identifier (VCID) that refers to the pre-established path.",
+    "There is no routing information included in the packets at all.",
+    "Routing is decided dynamically for every single packet by each router."
+   ],
+   "correct_index": 1,
+   "explanation": "Since the path is already decided during the setup phase, packets don't need heavy headers; they just use a small label to know which way to go."
+  },
+  {
+   "question": "A data stream is sent through a network path consisting of three consecutive links with capacities of 10 Mbps, 4 Mbps, and 8 Mbps. What is the maximum achievable **throughput** for this path?",
+   "options": [
+    "5 Mbps",
+    "10 Mbps",
+    "8 Mbps",
+    "4 Mbps"
+   ],
+   "correct_index": 3,
+   "explanation": "Don't let the higher speeds distract you; the throughput is always limited by the slowest link in the path, which is the 4 Mbps bottleneck here."
+  },
+  {
+   "question": "In a packet-switched network, what does the **store-and-forward** mechanism imply?",
+   "options": [
+    "The router can start transmitting the first bit of a packet before it has received the entire packet.",
+    "The router must receive the entire packet and check for errors before forwarding it to the next hop.",
+    "The data is stored in a permanent database at every router for later retrieval.",
+    "It reduces the propagation delay to zero by storing data in advance."
+   ],
+   "correct_index": 1,
+   "explanation": "In this mode, a router can't start forwarding a packet until it has the whole thing safely sitting in its buffer."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "Main characteristic of **Circuit Switching**?",
+   "back": "It reserves a **dedicated physical path** before data transfer starts. This guarantees bandwidth but can be inefficient if the link is idle."
+  },
+  {
+   "front": "What is **Store and Forward**?",
+   "back": "In packet switching, a node must receive the **entire packet** before it can start transmitting it to the next hop."
+  },
+  {
+   "front": "What defines **Virtual Circuit Switching**?",
+   "back": "It's a hybrid! It uses a **pre-established path** like circuit switching, but sends data in **packets** like packet switching."
+  },
+  {
+   "front": "Formula for **Transmission Delay**?",
+   "back": "`T_t = L / B` \n- `L`: Packet length (bits) \n- `B`: Bandwidth/Link capacity (bps)"
+  },
+  {
+   "front": "Formula for **Propagation Delay**?",
+   "back": "`T_p = d / v` \n- `d`: Distance of the link \n- `v`: Propagation speed in the medium"
+  },
+  {
+   "front": "Components of **Total Nodal Delay**?",
+   "back": "- **Transmission delay** \n- **Propagation delay** \n- **Queuing delay** (waiting in buffer) \n- **Processing delay** (header check)"
+  },
+  {
+   "front": "Definition of **Throughput**?",
+   "back": "The actual amount of data successfully delivered over a specific time. It is often limited by the **bottleneck link**."
+  },
+  {
+   "front": "**Circuit** vs **Packet** switching: resource usage?",
+   "back": "**Circuit switching** reserves resources in advance (guaranteed). **Packet switching** uses resources on-demand, making it better for bursty data."
+  }
+ ]
+}

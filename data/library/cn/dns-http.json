@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's tackle DNS and HTTP. Think of DNS as the internet's phonebook and HTTP as the language used to request a webpage.\n\n**DNS (Domain Name System)** translates human-friendly names like `google.com` into machine-friendly IP addresses. It works through a hierarchy:\n- **Root Servers**: The starting point of any query.\n- **TLD (Top-Level Domain) Servers**: Manage extensions like `.com` or `.edu`.\n- **Authoritative Servers**: The final stop that holds the actual IP address for a specific domain.\n\nQueries can be **Recursive** (the resolver does all the legwork for you) or **Iterative** (the server gives you a \"referral\" to the next server, and you ask it yourself).\n\n**HTTP (HyperText Transfer Protocol)** is the application layer protocol used to fetch web content. It is **stateless**, meaning the server does not \"remember\" previous requests from the same client by default.\n\nExample: A DNS record has a **TTL (Time To Live)** of 100 seconds. If a client queries the IP at `t = 0` and again at `t = 60`, how many times is the authoritative server contacted?\nStep 1: At `t = 0`, the resolver sees no cache and queries the authoritative server. (Count = 1)\nStep 2: The result is stored in the cache for 100 seconds.\nStep 3: At `t = 60`, the resolver checks the cache. Since 60 is less than the TTL of 100, it uses the cached IP.\nAnswer: 1 time.\n\nCommon traps:\n- Thinking HTTP is stateful. It isn't! We use cookies to *simulate* state, but the protocol itself is stateless.\n- Confusing Recursive and Iterative queries. In Recursive, the client gets a final answer; in Iterative, the client gets a \"pointer\" to the next server.\n\nRemember this: DNS maps names to IPs via a hierarchy, while HTTP is a stateless protocol used to transfer web content.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:58:14+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:59:09+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T13:59:23+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Which **port number** and **protocol** does DNS primarily use?",
+   "back": "DNS uses **port 53**. It mostly uses **UDP** for speed, but uses **TCP** for zone transfers or if the response is too large."
+  },
+  {
+   "front": "Difference between **Recursive** and **Iterative** DNS queries?",
+   "back": "In **Recursive**, the client asks a server to do all the work. In **Iterative**, the server just points you to the next server in line."
+  },
+  {
+   "front": "The three main levels in the **DNS hierarchy**?",
+   "back": "- **Root servers**\n- **TLD servers** (like .com)\n- **Authoritative servers** (the final source)"
+  },
+  {
+   "front": "What does it mean that **HTTP is stateless**?",
+   "back": "It means the **server doesn't remember** you! Each request is independent, so we use **cookies** to handle things like logins."
+  },
+  {
+   "front": "Difference between **4xx** and **5xx** HTTP status codes?",
+   "back": "Think of it this way: **4xx** means the **client** messed up (like a wrong URL), while **5xx** means the **server** failed."
+  },
+  {
+   "front": "How many **RTTs** for a single object in **Non-persistent HTTP**?",
+   "back": "You need **2 RTTs**: one for the `TCP handshake` and one for the `HTTP request/response` cycle."
+  },
+  {
+   "front": "Main difference between **GET** and **POST** methods?",
+   "back": "- **GET**: Asks for data; info is visible in the **URL**.\n- **POST**: Sends data; info is hidden in the **message body**."
+  },
+  {
+   "front": "What is the purpose of **TTL** in DNS?",
+   "back": "**TTL** tells a resolver how long to **cache** a record. This saves time and bandwidth by not asking the authoritative server every time."
+  }
+ ],
+ "practice": [
+  {
+   "question": "When a DNS client sends a **recursive query** to a DNS resolver, what is the primary responsibility of that resolver?",
+   "options": [
+    "To find the IP address by contacting other name servers itself on behalf of the client.",
+    "To provide the client with the address of the next name server in the hierarchy.",
+    "To only return the IP address if it is already present in its local cache.",
+    "To forward the query to the client's local default gateway."
+   ],
+   "correct_index": 0,
+   "explanation": "In a recursive query, the resolver takes on the work of querying other servers until it finds the answer or an error occurs."
+  },
+  {
+   "question": "In **non-persistent HTTP**, how many **RTTs** (Round Trip Times) are required to fetch a single object from a server, assuming the TCP connection has not yet been established?",
+   "options": [
+    "1 RTT",
+    "2 RTTs",
+    "3 RTTs",
+    "4 RTTs"
+   ],
+   "correct_index": 1,
+   "explanation": "One RTT is used for the TCP three-way handshake, and a second RTT is used to send the HTTP request and receive the object."
+  },
+  {
+   "question": "A DNS record has a **TTL (Time to Live)** of 600 seconds. If a resolver caches this record at time `t = 100`, at what time `t` will the cached record expire and require a new query?",
+   "options": [
+    "t = 100",
+    "t = 500",
+    "t = 600",
+    "t = 700"
+   ],
+   "correct_index": 3,
+   "explanation": "The TTL defines how long the record remains valid. Adding the TTL of 600 to the initial time of 100 gives the expiration time of 700."
+  },
+  {
+   "question": "Which of the following HTTP methods is considered **idempotent**?",
+   "options": [
+    "POST",
+    "GET",
+    "Both POST and GET",
+    "None of the above"
+   ],
+   "correct_index": 1,
+   "explanation": "A method is idempotent if multiple identical requests leave the server in the same state as a single request. GET fits this, while POST does not."
+  },
+  {
+   "question": "In the DNS resolution process, if a local resolver does not have the mapping for `mail.google.com` in its cache, which server is typically contacted **first** to begin the resolution?",
+   "options": [
+    "The authoritative server for `google.com`",
+    "The TLD server for `.com`",
+    "The root name server",
+    "The local host's gateway"
+   ],
+   "correct_index": 2,
+   "explanation": "The resolution process starts at the top of the DNS hierarchy, which is the root name server."
+  }
+ ]
+}
