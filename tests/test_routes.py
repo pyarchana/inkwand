@@ -147,3 +147,47 @@ def test_pages_are_revalidated_not_cached_stale():
     # unchanged files come back as a cheap 304
     etag = client.get("/static/styles.css").headers["etag"]
     assert client.get("/static/styles.css", headers={"If-None-Match": etag}).status_code == 304
+
+
+def test_falls_back_to_second_model_on_server_error(monkeypatch):
+    import asyncio
+    from google.genai import errors
+
+    calls = []
+
+    async def fake_ask(client, model, prompt, temperature, max_tokens):
+        calls.append(model)
+        if len(calls) == 1:
+            raise errors.ServerError(500, {"error": {"code": 500, "message": "Internal", "status": "INTERNAL"}})
+
+        class R:
+            text = "Notes from the backup model."
+            candidates = []
+        return R()
+
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    monkeypatch.setenv("GEMMA_MODEL", "main-model")
+    monkeypatch.setenv("GEMMA_FALLBACK_MODEL", "backup-model")
+    monkeypatch.setattr(llm, "_client", object())
+    monkeypatch.setattr(llm, "_ask", fake_ask)
+    assert asyncio.run(llm.generate("hi")) == "Notes from the backup model."
+    assert calls == ["main-model", "backup-model"]
+
+
+def test_no_fallback_for_client_errors(monkeypatch):
+    import asyncio
+    from google.genai import errors
+
+    calls = []
+
+    async def fake_ask(client, model, prompt, temperature, max_tokens):
+        calls.append(model)
+        raise errors.ClientError(429, {"error": {"code": 429, "message": "slow down", "status": "RESOURCE_EXHAUSTED"}})
+
+    monkeypatch.setenv("GEMMA_MODEL", "main-model")
+    monkeypatch.setattr(llm, "_client", object())
+    monkeypatch.setattr(llm, "_ask", fake_ask)
+    with pytest.raises(llm.LLMError) as e:
+        asyncio.run(llm.generate("hi"))
+    assert e.value.status_code == 429
+    assert calls == ["main-model"]

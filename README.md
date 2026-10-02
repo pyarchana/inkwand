@@ -129,6 +129,7 @@ The repo has a `render.yaml`, so Render can set everything up from it.
    | `GEMINI_API_KEY` | your Gemini API key (required, keep it secret) |
    | `GEMMA_MODEL` | already set to `gemma-4-26b-a4b-it` by `render.yaml`, change it if you want |
    | `PYTHON_VERSION` | already set to `3.11.9` by `render.yaml` |
+| `GEMMA_FALLBACK_MODEL` | optional. Tried once if the main model has a server error. Defaults to `gemma-4-31b-it`, set to `none` to turn it off |
 
 4. Deploy. The start command is `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, and Render checks `/api/health` to know the app is up.
 

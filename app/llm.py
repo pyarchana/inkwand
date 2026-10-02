@@ -9,6 +9,10 @@ from google.genai import errors, types
 log = logging.getLogger("inkwand.llm")
 
 DEFAULT_MODEL = "gemma-4-26b-a4b-it"
+# Tried once when the main model has a server-side failure (5xx). Gemma models on
+# the free tier have bad hours independently of each other.
+DEFAULT_FALLBACK_MODEL = "gemma-4-31b-it"
+SERVER_ERRORS = (500, 502, 503, 504)
 TIMEOUT_MS = 180_000
 # Gemma 4 always thinks before answering, and thinking counts against this
 # limit, so it has to be generous or the answer gets cut off.
@@ -46,18 +50,35 @@ def model_id() -> str:
     return os.getenv("GEMMA_MODEL") or DEFAULT_MODEL
 
 
+def fallback_model_id() -> str | None:
+    """Second model to try on a server error. Set GEMMA_FALLBACK_MODEL=none to disable."""
+    value = os.getenv("GEMMA_FALLBACK_MODEL", DEFAULT_FALLBACK_MODEL).strip()
+    if not value or value.lower() == "none" or value == model_id():
+        return None
+    return value
+
+
+async def _ask(client: genai.Client, model: str, prompt: str, temperature: float, max_tokens: int):
+    return await client.aio.models.generate_content(
+        model=model,
+        contents=prompt,
+        config=types.GenerateContentConfig(temperature=temperature, max_output_tokens=max_tokens),
+    )
+
+
 async def generate(
     prompt: str, *, temperature: float = 0.6, max_tokens: int = DEFAULT_MAX_TOKENS
 ) -> str:
     client = _get_client()
     try:
-        response = await client.aio.models.generate_content(
-            model=model_id(),
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=temperature, max_output_tokens=max_tokens
-            ),
-        )
+        try:
+            response = await _ask(client, model_id(), prompt, temperature, max_tokens)
+        except errors.APIError as first:
+            backup = fallback_model_id()
+            if first.code not in SERVER_ERRORS or not backup:
+                raise
+            log.warning("%s failed with %s, trying %s", model_id(), first.code, backup)
+            response = await _ask(client, backup, prompt, temperature, max_tokens)
     except errors.APIError as e:
         log.warning("Gemini API error %s: %s", e.code, e)
         if e.code == 429:
