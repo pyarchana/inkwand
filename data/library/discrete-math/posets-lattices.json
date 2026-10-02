@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let these terms intimidate you. I used to struggle with these too, but once you see the pattern, it's quite logical.\n\n- A **Partial Order** (or Poset) is a relation that is **Reflexive** (a `rel` a), **Antisymmetric** (if a `rel` b and b `rel` a, then a = b), and **Transitive** (if a `rel` b and b `rel` c, then a `rel` c).\n- A **Hasse Diagram** is a simplified drawing of a Poset. We remove all reflexive loops and redundant transitive edges, and we always draw the \"larger\" elements higher up.\n- A **Lattice** is a special kind of Poset. In a Lattice, every single pair of elements must have a unique **Least Upper Bound (LUB)** and a unique **Greatest Lower Bound (GLB)**.\n\nExample: Let S = {1, 2, 3, 6} under the relation `divides`.\n1. It is a Poset because divisibility is reflexive, antisymmetric, and transitive.\n2. Pick the pair {2, 3}.\n3. The LUB (Least Upper Bound) is 6, as it is the smallest element in S divisible by both 2 and 3.\n4. The GLB (Greatest Lower Bound) is 1, as it is the largest element in S that divides both 2 and 3.\n5. Since every pair in S has a unique LUB and GLB, it is a Lattice.\n\nCommon traps:\n- Thinking every Poset is a Lattice. (A Poset only becomes a Lattice if *every* pair has a LUB and GLB).\n- Forgetting that LUB and GLB must be *unique* and *contained within the set*.\n\nRemember this: A Lattice is just a Poset where every pair has a unique \"ceiling\" (LUB) and a unique \"floor\" (GLB).",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:28:05+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:29:03+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:30:27+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Three properties needed for a **Partial Order** relation?",
+   "back": "- **Reflexive**: xRx for all x\n- **Antisymmetric**: If xRy and yRx, then x=y\n- **Transitive**: If xRy and yRz, then xRz"
+  },
+  {
+   "front": "What is a **Hasse Diagram**?",
+   "back": "A simplified visual of a partial order. We remove **reflexive loops** and **transitive edges**, and arrange elements upward to show the order."
+  },
+  {
+   "front": "When is a poset called a **Lattice**?",
+   "back": "When **every pair** of elements has a unique **Least Upper Bound (LUB)** and a unique **Greatest Lower Bound (GLB)**."
+  },
+  {
+   "front": "What are **Join** and **Meet** in a lattice?",
+   "back": "- **Join** (v): The Least Upper Bound (LUB).\n- **Meet** (^): The Greatest Lower Bound (GLB)."
+  },
+  {
+   "front": "**Partial Order** vs **Total Order**?",
+   "back": "In a **Total Order**, every pair of elements is **comparable**. In a **Partial Order**, some pairs might not be comparable."
+  },
+  {
+   "front": "What is a **Distributive Lattice**?",
+   "back": "A lattice where meet and join distribute over each other:\n`x ^ (y v z) = (x ^ y) v (x ^ z)`"
+  },
+  {
+   "front": "What is a **Complemented Lattice**?",
+   "back": "A bounded lattice where every element `a` has a complement `b` such that:\n- `a v b` = top element\n- `a ^ b` = bottom element"
+  },
+  {
+   "front": "Define **Chain** and **Antichain** in a poset.",
+   "back": "- **Chain**: A subset where every pair of elements is comparable.\n- **Antichain**: A subset where no two distinct elements are comparable."
+  }
+ ],
+ "practice": [
+  {
+   "question": "A partially ordered set (poset) where every pair of elements has a unique least upper bound (LUB) and a unique greatest lower bound (GLB) is called a:",
+   "options": [
+    "Total order",
+    "Chain",
+    "Lattice",
+    "Boolean algebra"
+   ],
+   "correct_index": 2,
+   "explanation": "By definition, a lattice is a poset where every pair of elements has a unique join (LUB) and meet (GLB)."
+  },
+  {
+   "question": "Let L be a lattice. If for all a, b, and c in L, the condition a meet (b join c) = (a meet b) join (a meet c) holds, then the lattice is:",
+   "options": [
+    "Modular",
+    "Distributive",
+    "Complemented",
+    "Bounded"
+   ],
+   "correct_index": 1,
+   "explanation": "This identity is one of the two distributive laws. If it holds for all elements, the lattice is distributive."
+  },
+  {
+   "question": "Consider the set S = {2, 3, 4, 6, 8, 12} under the relation 'a divides b'. How many maximal elements does this poset have?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "Maximal elements are those that do not divide any other element in the set. In this set, 8 and 12 are maximal."
+  },
+  {
+   "question": "Let S = {1, 2, 3, 4, 6, 12} be ordered by the relation 'a divides b'. What is the value of (4 join 6) meet 3?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "6"
+   ],
+   "correct_index": 2,
+   "explanation": "In a 'divides' relation, join is the Least Common Multiple (LCM) and meet is the Greatest Common Divisor (GCD). So, LCM(4, 6) = 12, and GCD(12, 3) = 3."
+  },
+  {
+   "question": "In the power set lattice of S = {a, b, c} ordered by the subset relation, what is the complement of the set {a, b}?",
+   "options": [
+    "{c}",
+    "{a, b, c}",
+    "empty set",
+    "{a}"
+   ],
+   "correct_index": 0,
+   "explanation": "In a power set lattice, the complement of a set A is the set containing all elements of S that are not in A. Here, {a, b, c} minus {a, b} leaves {c}."
+  }
+ ]
+}

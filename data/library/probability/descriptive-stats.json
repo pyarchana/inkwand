@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's tackle these basics. They are the foundation for almost everything in Probability and Statistics, so getting them right is crucial.\n\nThink of these as ways to summarize a group of numbers:\n- **Mean** is the average. It's the \"balance point\" of your data, but be careful: it can be heavily pulled by very large or very small numbers (outliers).\n- **Median** is the middle value when you sort the data from smallest to largest. It is \"robust,\" meaning it doesn't change much even if you have extreme outliers.\n- **Mode** is simply the value that appears most frequently.\n- **Standard Deviation (SD)** measures the \"spread.\" A low SD means numbers are clustered close to the mean; a high SD means they are spread far apart.\n\nExample:\nFind the mean and SD for the set: 2, 4, 9.\n1. Mean: (2 + 4 + 9) / 3 = 15 / 3 = 5.\n2. Variance: Find the average of the squared differences from the mean.\n- (2 - 5)^2 = (-3)^2 = 9\n- (4 - 5)^2 = (-1)^2 = 1\n- (9 - 5)^2 = (4)^2 = 16\n- Sum = 9 + 1 + 16 = 26.\n- Variance = 26 / 3.\n3. SD: sqrt(26/3) approx 2.94.\n\nCommon traps:\n- Forgetting to sort the numbers in ascending order before picking the **median**.\n- Calculating the variance but forgetting to take the `sqrt()` to get the **standard deviation**.\n\nRemember this: Mean and Median find the center of your data, while Standard Deviation tells you how much the data fluctuates around that center.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:39:58+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:17+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:58+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Formula for the **Arithmetic Mean**?",
+   "back": "`sum(x_i) / n`. It is the average of all values, often denoted as `x_bar`."
+  },
+  {
+   "front": "What is the **Median**?",
+   "back": "The **middle value** when data is sorted. If `n` is even, it is the average of the two middle values."
+  },
+  {
+   "front": "Definition of **Mode**.",
+   "back": "The value that appears **most frequently** in a dataset."
+  },
+  {
+   "front": "**Empirical relationship** for moderately skewed distributions?",
+   "back": "`Mode = 3 * Median - 2 * Mean`."
+  },
+  {
+   "front": "What does **Standard Deviation** measure?",
+   "back": "The **spread** or dispersion of data around the mean. It is `sqrt(variance)`."
+  },
+  {
+   "front": "Relation between **Variance** and **Standard Deviation**?",
+   "back": "`Variance = (Standard Deviation)^2`."
+  },
+  {
+   "front": "Adding constant `k` to all values: effect on **Mean** and **SD**?",
+   "back": "- **Mean** becomes `mean + k`.\n- **Standard Deviation** remains **unchanged**."
+  },
+  {
+   "front": "Multiplying all values by `k`: effect on **Mean** and **SD**?",
+   "back": "- **Mean** becomes `k * mean`.\n- **Standard Deviation** becomes `|k| * SD`."
+  }
+ ],
+ "practice": [
+  {
+   "question": "For a **positively skewed** (right-skewed) distribution, which of the following relationships is typically true?",
+   "options": [
+    "Mode < Median < Mean",
+    "Mean < Median < Mode",
+    "Mean = Median = Mode",
+    "Median < Mode < Mean"
+   ],
+   "correct_index": 0,
+   "explanation": "In a positively skewed distribution, the long tail on the right pulls the **mean** towards the higher values, making it the largest of the three."
+  },
+  {
+   "question": "A set of 10 observations has a **mean** of 50 and a **standard deviation** of 5. If every observation is multiplied by 2, what are the new **mean** and **standard deviation**?",
+   "options": [
+    "Mean = 50, SD = 10",
+    "Mean = 100, SD = 5",
+    "Mean = 100, SD = 10",
+    "Mean = 52, SD = 7"
+   ],
+   "correct_index": 2,
+   "explanation": "When you multiply all data points by a constant, both the **mean** and the **standard deviation** are scaled by that same constant."
+  },
+  {
+   "question": "What is the **median** of the following dataset: 10, 2, 38, 23, 7, 15, 11?",
+   "options": [
+    "10",
+    "11",
+    "15",
+    "23"
+   ],
+   "correct_index": 1,
+   "explanation": "Always remember to sort your numbers from smallest to largest first! Once sorted (2, 7, 10, 11, 15, 23, 38), the middle value is your **median**."
+  },
+  {
+   "question": "If the **variance** of a dataset is 16, what is its **standard deviation**?",
+   "options": [
+    "4",
+    "8",
+    "256",
+    "2"
+   ],
+   "correct_index": 0,
+   "explanation": "Don't overthink this one—the **standard deviation** is just the positive square root of the **variance**, so `sqrt(16)` is 4."
+  },
+  {
+   "question": "In a dataset where all the values are identical (for example, {5, 5, 5, 5}), which of the following must be true?",
+   "options": [
+    "Mean = 0",
+    "Standard deviation = 0",
+    "Median is undefined",
+    "Mode is 0"
+   ],
+   "correct_index": 1,
+   "explanation": "Since there is no variation or spread between any of the numbers, the **standard deviation** will always be exactly 0."
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "notes": "Think of a matrix as a transformation that moves vectors. Usually, when you multiply a vector by a matrix, the vector changes both its length and its direction.\n\n**Eigenvectors** are special vectors that do not change their direction during this transformation; they only get stretched or shrunk. The factor by which they scale is called the **eigenvalue** (lambda).\n\nTo find these values, we solve the **characteristic equation**: `det(A - lambda * I) = 0`, where `I` is the identity matrix.\n\nExample:\nFind the eigenvalues for A = [[4, 1], [2, 3]].\n- Step 1: Subtract lambda from the diagonal elements: [[4-lambda, 1], [2, 3-lambda]].\n- Step 2: Set the determinant to zero: (4-lambda)(3-lambda) - (1 * 2) = 0.\n- Step 3: Expand the terms: 12 - 4*lambda - 3*lambda + lambda^2 - 2 = 0.\n- Step 4: Simplify to a quadratic equation: lambda^2 - 7*lambda + 10 = 0.\n- Step 5: Factorize: (lambda - 5)(lambda - 2) = 0.\n- The eigenvalues are lambda = 5 and lambda = 2.\n\nCommon traps:\n- Forgetting the \"quick check\": The sum of your eigenvalues must equal the **trace** (the sum of the diagonal elements of the original matrix), and their product must equal the **determinant**. If they don't, you made a calculation error!\n- Subtracting lambda from every element in the matrix instead of just the diagonal ones.\n\nRemember this: Eigenvalues are the roots of the characteristic equation `det(A - lambda * I) = 0`.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:34:53+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:35:25+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:35:31+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the equation for **eigenvalues** (`lambda`) and **eigenvectors** (`v`)?",
+   "back": "`A * v = lambda * v`, where `A` is a square matrix and `v` is a non-zero vector."
+  },
+  {
+   "front": "How do you find the **eigenvalues** of matrix `A`?",
+   "back": "Solve the **characteristic equation**: `det(A - lambda * I) = 0`, where `I` is the identity matrix."
+  },
+  {
+   "front": "Sum of **eigenvalues** vs. **trace** of matrix `A`?",
+   "back": "The **sum** of all eigenvalues equals the **trace** (sum of main diagonal elements)."
+  },
+  {
+   "front": "Product of **eigenvalues** vs. **determinant** of matrix `A`?",
+   "back": "The **product** of all eigenvalues equals the **determinant** of matrix `A`."
+  },
+  {
+   "front": "**Eigenvalues** of a **diagonal** or **triangular** matrix?",
+   "back": "They are just the elements on the **main diagonal**. Super simple!"
+  },
+  {
+   "front": "If `lambda` is an eigenvalue of `A`, what is the eigenvalue of `A^-1`?",
+   "back": "The eigenvalue is `1/lambda`. (Just make sure `A` is invertible!)"
+  },
+  {
+   "front": "If `lambda` is an eigenvalue of `A`, what is the eigenvalue of `A^k`?",
+   "back": "The eigenvalue is `lambda^k`."
+  },
+  {
+   "front": "If `v` is an **eigenvector** of `A`, is it also an **eigenvector** of `k * A`?",
+   "back": "**Yes**. The vector `v` stays the same, but the eigenvalue scales to `k * lambda`."
+  }
+ ],
+ "practice": [
+  {
+   "question": "If a 2x2 matrix has eigenvalues 3 and -2, what are its trace and determinant?",
+   "options": [
+    "Trace: 1, Determinant: -6",
+    "Trace: -1, Determinant: -6",
+    "Trace: 1, Determinant: 6",
+    "Trace: 5, Determinant: -6"
+   ],
+   "correct_index": 0,
+   "explanation": "Remember the two golden rules: the sum of eigenvalues is the trace, and their product is the determinant. Just add them (3 + -2 = 1) and multiply them (3 * -2 = -6)!"
+  },
+  {
+   "question": "What are the eigenvalues of the following upper triangular matrix: [[5, 2, 3], [0, 1, 4], [0, 0, 8]]?",
+   "options": [
+    "5, 1, 8",
+    "5, 2, 3",
+    "0, 1, 8",
+    "5, 4, 8"
+   ],
+   "correct_index": 0,
+   "explanation": "For any triangular matrix, you don't even need to solve the characteristic equation; the eigenvalues are simply the numbers sitting on the main diagonal."
+  },
+  {
+   "question": "If v is an eigenvector of matrix A with eigenvalue lambda, what is the eigenvalue of the matrix A^2 for the same vector v?",
+   "options": [
+    "lambda",
+    "lambda^2",
+    "1/lambda",
+    "2 * lambda"
+   ],
+   "correct_index": 1,
+   "explanation": "If you apply the matrix twice, you are essentially multiplying the eigenvalue by itself. So, the new eigenvalue becomes lambda^2."
+  },
+  {
+   "question": "Find the characteristic equation for the matrix A = [[1, 2], [2, 1]].",
+   "options": [
+    "lambda^2 - 2lambda - 3 = 0",
+    "lambda^2 + 2lambda - 3 = 0",
+    "lambda^2 - 2lambda + 3 = 0",
+    "lambda^2 + 2lambda + 3 = 0"
+   ],
+   "correct_index": 0,
+   "explanation": "The characteristic equation is found by solving det(A - lambda*I) = 0. For this matrix, it expands to (1 - lambda)^2 - 4 = 0, which simplifies to lambda^2 - 2lambda - 3 = 0."
+  },
+  {
+   "question": "If a 3x3 matrix is singular, which of the following must be true about its eigenvalues?",
+   "options": [
+    "All eigenvalues are 0",
+    "At least one eigenvalue is 0",
+    "No eigenvalue is 0",
+    "The sum of eigenvalues is 0"
+   ],
+   "correct_index": 1,
+   "explanation": "A singular matrix has a determinant of 0. Since the product of all eigenvalues equals the determinant, at least one of those eigenvalues must be zero."
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! K-maps might look intimidating at first, but they are actually a lifesaver compared to messy Boolean algebra. Think of them as a visual way to find patterns in your truth table.\n\n- We arrange cells using **Gray code** (00, 01, 11, 10) so that adjacent cells only differ by exactly one variable.\n- We group 1s in blocks of 2^n (1, 2, 4, 8...). The bigger the group, the fewer variables will remain in your final term.\n- **Don't cares** (marked as X) are your friends. Use them to make a group larger, but you don't have to cover them if they don't help.\n- A **Prime Implicant (PI)** is a group that cannot be expanded further. An **Essential Prime Implicant (EPI)** is a PI that covers at least one '1' that no other PI can cover.\n\nExample: Minimize f(A, B, C) = sum(m1, m3, m7) with don't care d5.\n- The cells are: m1(001), m3(011), m7(111), and d5(101).\n- These four cells (1, 3, 5, 7) form a single group of 4.\n- Looking at the variables: A changes (0 to 1) and B changes (0 to 1), but C is always 1 in all four cells.\n- Result: f = C.\n\nCommon traps:\n- Forgetting that the K-map \"wraps around.\" The far left column is actually adjacent to the far right column!\n- Including a don't care (X) in a group when it doesn't actually help make that group larger.\n\nRemember this: Always aim for the largest possible groups to ensure your final expression is as simple as possible.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:58+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:43:31+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:37+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the main purpose of a K-map?",
+   "back": "To simplify Boolean expressions visually. It helps find the **minimum SOP** or **POS** form by grouping adjacent cells."
+  },
+  {
+   "front": "Why does K-map use **Gray code** for cell labeling?",
+   "back": "It ensures only **one bit changes** between adjacent cells, which is what allows us to simplify terms."
+  },
+  {
+   "front": "What is an **implicant**?",
+   "back": "Any single '1' or any **group of 1s** (of size 2^n) that can be formed by circling adjacent cells."
+  },
+  {
+   "front": "What is a **Prime Implicant (PI)**?",
+   "back": "A PI is an implicant that **cannot be expanded** further by doubling its size. It's the largest possible group."
+  },
+  {
+   "front": "What is an **Essential Prime Implicant (EPI)**?",
+   "back": "A PI that covers at least one '1' that **no other PI** can cover. You must include these in your answer!"
+  },
+  {
+   "front": "How should you handle **Don't Care (X)** conditions?",
+   "back": "Use them only if they help create **larger groups** of 1s. You don't have to cover them!"
+  },
+  {
+   "front": "What are the valid sizes for grouping cells?",
+   "back": "Groups must be in **powers of 2**. This means 1, 2, 4, 8, or 16 cells. No groups of 3 or 6!"
+  },
+  {
+   "front": "Can you wrap groups around the edges of a K-map?",
+   "back": "**Yes!** K-maps are logically toroid. You can wrap groups from the far left to the far right, or top to bottom."
+  }
+ ],
+ "practice": [
+  {
+   "question": "In a 4-variable K-map, if a minterm is covered by only one prime implicant, that prime implicant is called a/an:",
+   "options": [
+    "Prime Implicant",
+    "Essential Prime Implicant",
+    "Minimal Prime Implicant",
+    "Implicant"
+   ],
+   "correct_index": 1,
+   "explanation": "An Essential Prime Implicant is a prime implicant that covers at least one minterm that no other prime implicant covers."
+  },
+  {
+   "question": "Consider a 3-variable function f(x, y, z) with minterms m(1, 3, 7) and don't care conditions d(0, 5). What is the simplest Sum of Products (SOP) expression?",
+   "options": [
+    "x",
+    "y",
+    "z",
+    "x + z"
+   ],
+   "correct_index": 2,
+   "explanation": "By using the don't care at 5, we can group minterms 1, 3, 5, and 7 into a single quad, which simplifies to z."
+  },
+  {
+   "question": "In a 4-variable K-map, how many cells are contained in a group that represents a single literal (for example, x_1)?",
+   "options": [
+    "2",
+    "4",
+    "8",
+    "16"
+   ],
+   "correct_index": 2,
+   "explanation": "In a 4-variable map, a single literal represents half of the total cells, which is 2^(4-1) = 8."
+  },
+  {
+   "question": "A 3-variable function is defined by the minterms m(0, 2, 4, 6). What is its simplest SOP form?",
+   "options": [
+    "x",
+    "y",
+    "z",
+    "z_bar"
+   ],
+   "correct_index": 3,
+   "explanation": "The minterms 0, 2, 4, and 6 form a quad in the K-map where the variable z is always 0, resulting in z_bar."
+  },
+  {
+   "question": "Which of the following is the correct definition of a Prime Implicant?",
+   "options": [
+    "A group of minterms that is a subset of another group.",
+    "A group of minterms that cannot be further expanded by combining with adjacent groups.",
+    "A group that must include all don't care conditions.",
+    "The smallest possible group that covers all minterms."
+   ],
+   "correct_index": 1,
+   "explanation": "A prime implicant is a maximal grouping of minterms that cannot be enlarged into a larger group of 2^n cells."
+  }
+ ]
+}

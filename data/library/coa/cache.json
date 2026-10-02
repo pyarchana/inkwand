@@ -1,0 +1,47 @@
+{
+ "notes": "Think of cache mapping as the rulebook that decides where a piece of data from the big RAM will be stored in the tiny, fast Cache.\n\n- **Direct Mapping**: Each RAM block has exactly one fixed slot in the cache. It is very simple and fast but can cause \"conflicts\" if two frequently used blocks want the same slot. Address: [Tag | Index | Offset].\n- **Fully Associative**: A RAM block can be placed in any available cache slot. This is very flexible and avoids conflicts, but searching for a specific block is hardware-intensive. Address: [Tag | Offset].\n- **Set Associative**: The middle ground. The cache is divided into \"sets.\" A block maps to a specific set, but once inside that set, it can sit in any available slot. Address: [Tag | Set Index | Offset].\n\nExample:\nMain memory is 64 KB (16-bit address), Cache is 4 KB, and Block size is 64 bytes. For **Direct Mapping**:\n1. Offset bits = log2(64) = 6 bits.\n2. Number of cache lines = 4 KB / 64 B = 64 lines.\n3. Index bits = log2(64) = 6 bits.\n4. Tag bits = 16 - (6 + 6) = 4 bits.\nAddress breakdown: [Tag: 4 | Index: 6 | Offset: 6].\n\nCommon traps:\n- Using \"Index\" bits in Fully Associative mapping (there are no index bits in Fully Associative!).\n- Confusing \"Block size\" (the size of one chunk in bytes) with \"Number of blocks\" (the total count of chunks).\n\nRemember this: Direct mapping is rigid, Fully Associative is flexible, and Set Associative is the smart middle ground used in most modern CPUs.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:47:21+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:47:55+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "In direct mapping, what three parts make up the address?",
+   "back": "- **Tag**\n- **Index** (Line number)\n- **Block offset**"
+  },
+  {
+   "front": "In fully associative mapping, what parts make up the address?",
+   "back": "- **Tag**\n- **Block offset**\n\n(Remember: No index is needed because a block can go anywhere!)"
+  },
+  {
+   "front": "In k-way set-associative mapping, what parts make up the address?",
+   "back": "- **Tag**\n- **Set index**\n- **Block offset**"
+  },
+  {
+   "front": "How many lines are in a direct-mapped cache?",
+   "back": "Number of lines = Total Cache Size / Block Size"
+  },
+  {
+   "front": "How many sets are in a k-way set-associative cache?",
+   "back": "Number of sets = (Total Cache Size / Block Size) / k"
+  },
+  {
+   "front": "Which mapping has the highest chance of conflict misses?",
+   "back": "**Direct mapping**. Since each block maps to only one specific line, different blocks often fight for the same spot."
+  },
+  {
+   "front": "Formula for calculating the number of Tag bits?",
+   "back": "Tag bits = Total Address bits - (Index/Set bits + Block offset bits)"
+  },
+  {
+   "front": "Why is fully associative mapping more expensive than direct mapping?",
+   "back": "It requires **comparators** for every line to check all tags simultaneously. This makes it faster but much more complex!"
+  }
+ ]
+}

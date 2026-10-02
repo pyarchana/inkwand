@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let these terms scare you. Think of them as levels of \"smoothness\" for a graph.\n\n- **Limits**: We look at what value `f(x)` approaches as `x` gets closer to a point `a`. For a limit to exist, the Left Hand Limit (LHL) must equal the Right Hand Limit (RHL).\n- **Continuity**: A function is continuous if you can draw it without lifting your pen. Mathematically, the limit at `a` must exist and equal the actual value `f(a)`.\n- **Differentiability**: This is the highest level. It means the function has a single, well-defined slope at that point. If there is a sharp corner, it is not differentiable.\n\nExample: Is `f(x) = |x|` differentiable at `x = 0`?\nStep 1: Check continuity. `LHL` as `x -> 0` is 0, and `RHL` is 0. Since `LHL = RHL = f(0)`, it is continuous.\nStep 2: Check slopes. The slope from the left is `-1`, and from the right is `+1`.\nStep 3: Since the slopes don't match, it is NOT differentiable at `x = 0`.\n\nCommon traps:\n- Assuming continuity implies differentiability. A function can be continuous but have a \"sharp turn\" (like `|x|`) that breaks differentiability.\n- Forgetting that a limit can exist even if the function is undefined at that specific point.\n\nRemember this: Differentiability implies continuity, but continuity does not guarantee differentiability.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:36:59+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:37:08+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:38:59+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Find the value of lim_{x -> 0} (1 - cos(x)) / x^2.",
+   "options": [
+    "0",
+    "1/2",
+    "1",
+    "-1/2"
+   ],
+   "correct_index": 1,
+   "explanation": "You can solve this using L'Hopital's rule or by looking at the Taylor series of cos(x); the result is 1/2."
+  },
+  {
+   "question": "Let f(x) = (x^2 - 9) / (x - 3) for x != 3. For what value of c will the function f(x) be continuous at x = 3 if f(3) = c?",
+   "options": [
+    "3",
+    "6",
+    "-6",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "For the function to be continuous, c must fill the 'hole' at x=3, which is the value of the limit (6)."
+  },
+  {
+   "question": "Consider the function f(x) = |x - 5|. At the point x = 5, the function is:",
+   "options": [
+    "Continuous but not differentiable",
+    "Differentiable but not continuous",
+    "Both continuous and differentiable",
+    "Neither continuous nor differentiable"
+   ],
+   "correct_index": 0,
+   "explanation": "The function is continuous because you can draw it without lifting your pen, but the sharp point at x=5 means it is not differentiable."
+  },
+  {
+   "question": "Find the value of lim_{x -> infinity} (x^3 + 2x) / (x^4 + 1).",
+   "options": [
+    "0",
+    "1",
+    "infinity",
+    "undefined"
+   ],
+   "correct_index": 0,
+   "explanation": "Since the denominator grows much faster than the numerator (power 4 vs power 3), the limit goes to 0."
+  },
+  {
+   "question": "Let f(x) = x^2 for x <= 1 and f(x) = 2x - 1 for x > 1. Is f(x) differentiable at x = 1?",
+   "options": [
+    "Yes",
+    "No",
+    "Continuous but not differentiable",
+    "Not continuous"
+   ],
+   "correct_index": 0,
+   "explanation": "Since the function is continuous at x=1 and both the left and right derivatives are equal to 2, it is differentiable."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "When to use **L'Hopital's Rule** for limits?",
+   "back": "Use it when you get indeterminate forms like `0/0` or `inf/inf`. Differentiate the top and bottom separately until you get a real value."
+  },
+  {
+   "front": "Three conditions for `f(x)` to be **continuous** at `x = a`.",
+   "back": "- `f(a)` exists.\n- `limit(x->a) f(x)` exists.\n- `limit(x->a) f(x) = f(a)`."
+  },
+  {
+   "front": "If a function is **differentiable** at `x = a`, is it also **continuous**?",
+   "back": "**Yes**. Differentiability implies continuity. But remember, the reverse isn't always true (like `f(x) = |x|` at `x = 0`)."
+  },
+  {
+   "front": "List the common **indeterminate forms** in limits.",
+   "back": "- `0/0` and `inf/inf`\n- `0 * inf`\n- `inf - inf`\n- `0^0`, `1^inf`, and `inf^0`"
+  },
+  {
+   "front": "Condition for a function to be **differentiable** at `x = a`.",
+   "back": "The **Left-Hand Derivative (LHD)** must equal the **Right-Hand Derivative (RHD)** at `x = a`, and both must be finite."
+  },
+  {
+   "front": "What is the **Squeeze Theorem**?",
+   "back": "If `g(x) <= f(x) <= h(x)` and both `g(x)` and `h(x)` approach `L` as `x -> a`, then `f(x)` must also approach `L`."
+  },
+  {
+   "front": "What is the limit of `(1 + 1/n)^n` as `n` approaches infinity?",
+   "back": "The limit is `e` (Euler's number). This is a super important one for GATE!"
+  },
+  {
+   "front": "What is a **removable discontinuity**?",
+   "back": "When the `limit(x->a) f(x)` exists, but it's not equal to `f(a)`. You can \"fix\" it by redefining the function at that single point."
+  }
+ ]
+}

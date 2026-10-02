@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! So, you know how K-maps are awesome but get super confusing once you hit 5 or 6 variables? That's where the **Quine-McCluskey (QM) method** comes in. It's basically the \"algorithmic\" way to do minimization, which makes it perfect for computers to handle.\n\nInstead of looking at a visual grid, we group minterms by the number of 1s they contain. We then compare terms in adjacent groups to see if they differ by exactly one bit. If they do, we combine them and mark them. We keep doing this until no more combinations are possible. The remaining terms are your **Prime Implicants (PIs)**.\n\nFinally, we use a **Prime Implicant Chart** to pick the minimum number of PIs needed to cover all the original minterms. The ones that are absolutely necessary are called **Essential Prime Implicants (EPIs)**.\n\nExample:\nF(A, B, C) = sum(1, 3, 7)\n1. Group by number of 1s:\nGroup 1: 1 (001)\nGroup 2: 3 (011), 7 (111)\n2. Compare adjacent groups:\n(1, 3) differs by one bit -> 0-1 (A'C)\n(3, 7) differs by one bit -> -11 (BC)\n3. These are our **Prime Implicants (PIs)**.\n4. Check for **Essential Prime Implicants (EPIs)**:\nMinterm 1 is only covered by A'C.\nMinterm 7 is only covered by BC.\nSince they are unique covers, both are EPIs.\nFinal Answer: F = A'C + BC\n\nCommon traps:\n- Thinking every Prime Implicant is an Essential Prime Implicant. (Only pick the ones that cover a minterm no one else can!)\n- Making a small mistake while grouping terms by the number of 1s.\n\nRemember this: QM is the systematic, step-by-step version of K-maps that works for any number of variables.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:42:48+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:43:52+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:04+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "What is the main difference between a Prime Implicant (PI) and an Essential Prime Implicant (EPI) in the Quine-McCluskey method?",
+   "options": [
+    "A PI is always part of the final minimal expression, while an EPI is not.",
+    "An EPI is a PI that covers at least one minterm that no other PI covers.",
+    "An EPI is a PI that contains more variables than a standard PI.",
+    "There is no difference; they are the same thing."
+   ],
+   "correct_index": 1,
+   "explanation": "An EPI is a 'must-have' because it is the only way to cover certain minterms. All EPIs are PIs, but not all PIs are EPIs."
+  },
+  {
+   "question": "Consider a 3-variable function f(x, y, z) with minterms m(0, 1, 2, 5). How many Prime Implicants (PIs) will the Quine-McCluskey method identify?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "By combining adjacent minterms, we find the pairs (0,1), (0,2), and (1,5). These three groups cannot be combined further, so they are the PIs."
+  },
+  {
+   "question": "In the first step of the Quine-McCluskey method, how are minterms grouped before the comparison process begins?",
+   "options": [
+    "Grouped by the number of 1s in their binary representation.",
+    "Grouped by the number of 0s in their binary representation.",
+    "Grouped alphabetically by their variable names.",
+    "Grouped into pairs of two regardless of their values."
+   ],
+   "correct_index": 0,
+   "explanation": "We group minterms by the count of 1s to ensure we only compare terms that differ by exactly one bit. This makes the process systematic."
+  },
+  {
+   "question": "Given the minterms m(1, 3, 7) for a 3-variable function, how many Essential Prime Implicants (EPIs) are there?",
+   "options": [
+    "There are 0 EPIs.",
+    "There is 1 EPI.",
+    "There are 2 EPIs.",
+    "There are 3 EPIs."
+   ],
+   "correct_index": 2,
+   "explanation": "The PIs are (1,3) and (3,7). Since minterm 1 is only covered by (1,3) and minterm 7 is only covered by (3,7), both are essential."
+  },
+  {
+   "question": "Why is the Quine-McCluskey (tabular) method preferred over the Karnaugh Map (K-map) method in certain scenarios?",
+   "options": [
+    "It is much faster for 2 or 3 variables.",
+    "It is easier to perform manually without any errors.",
+    "It can be easily generalized for functions with a large number of variables.",
+    "It eliminates the need for a Prime Implicant chart."
+   ],
+   "correct_index": 2,
+   "explanation": "While K-maps are great for visual learning, they become very difficult to use beyond 5 or 6 variables. The tabular method is algorithmic and scales much better."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is the main purpose of the Quine-McCluskey method?",
+   "back": "It's a **systematic, algorithmic way** to simplify Boolean expressions. It's much more reliable than K-maps when you're dealing with a large number of variables."
+  },
+  {
+   "front": "How are minterms first organized in the QM method?",
+   "back": "Minterms are first organized into groups based on the **number of 1s** in their binary form (e.g., group 1 has one 1, group 2 has two 1s)."
+  },
+  {
+   "front": "What is a **Prime Implicant (PI)** in the QM method?",
+   "back": "A **Prime Implicant (PI)** is a group of minterms that cannot be combined with any other group to form a larger one."
+  },
+  {
+   "front": "How do you identify an **Essential Prime Implicant (EPI)**?",
+   "back": "An **Essential Prime Implicant (EPI)** is a PI that covers at least one minterm that no other PI can cover. You must include these in your final answer."
+  },
+  {
+   "front": "When should you prefer QM over a K-map?",
+   "back": "Use QM when you have **many variables** (usually 5 or more). While K-maps are great visually, they get too messy and confusing as variables increase."
+  },
+  {
+   "front": "What is the purpose of the **Prime Implicant Table**?",
+   "back": "The PI table helps you identify which **EPIs** cover which minterms, making it easy to pick the minimum set of PIs for the final answer."
+  },
+  {
+   "front": "What is the rule for combining two terms in QM?",
+   "back": "Two terms can combine only if they differ by **exactly one bit**. That bit is replaced by a dash `-` (e.g., `1010` and `1011` become `101-`)."
+  },
+  {
+   "front": "How do you pick the final terms from the PI table?",
+   "back": "- Pick all **EPIs** first.\n- If any minterms remain uncovered, pick the **minimum number of additional PIs** needed to cover them."
+  }
+ ]
+}

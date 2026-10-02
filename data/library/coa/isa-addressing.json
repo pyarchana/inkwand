@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's tackle Instruction Sets and Addressing Modes. Think of the **Instruction Set** as the language your CPU speaks. An **Instruction Format** typically divides bits into an **Opcode** (the command) and an **Operand** field (the data or its location).\n\nSince instruction bits are limited, we use **Addressing Modes** to find the **Effective Address (EA)**—the actual location of the data in memory.\n\n- **Immediate**: The data is a constant inside the instruction.\n- **Direct**: The instruction contains the EA itself.\n- **Indirect**: The instruction contains an address that holds the EA.\n- **Register Indirect**: A register holds the EA.\n- **Displacement**: EA = Register + Offset (great for arrays).\n\nExample:\nSuppose we use **Indirect Addressing** with instruction `LOAD R1, [100]`.\nMemory at address 100 contains 500.\nMemory at address 500 contains 75.\nStep 1: Look at address 100 to find the EA -> 500.\nStep 2: Fetch the value at EA 500 -> 75.\nResult: R1 = 75.\n\nCommon traps:\n- Confusing **Direct** (EA = Address) with **Indirect** (EA = Memory[Address]). Indirect always costs an extra memory access!\n- In **Immediate** mode, the operand is the actual value, not an address.\n\nRemember this: Addressing modes are just different ways to calculate the Effective Address (EA) to fetch your data.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:45:35+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:45:49+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:47:38+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What are the two main parts of an instruction?",
+   "back": "An instruction has an **Opcode** (the operation to perform) and **Operands** (the data or addresses). Easy to remember!"
+  },
+  {
+   "front": "Define Immediate Addressing Mode.",
+   "back": "The operand is a **constant** value contained directly within the instruction. No memory access is needed, making it very fast!"
+  },
+  {
+   "front": "How does Register Addressing Mode work?",
+   "back": "The operand is held in a **CPU register**. Since you skip main memory, it is one of the fastest modes available!"
+  },
+  {
+   "front": "Explain Direct Addressing Mode.",
+   "back": "The instruction contains the **effective address** of the operand. It requires exactly **one memory access** to fetch the actual data."
+  },
+  {
+   "front": "What is Indirect Addressing Mode?",
+   "back": "The instruction contains an address that points to *another* address where the data lives. This requires **two memory accesses**."
+  },
+  {
+   "front": "What is the Effective Address (EA)?",
+   "back": "The **actual physical address** in memory where the operand is located. Every addressing mode has its own formula to calculate this EA."
+  },
+  {
+   "front": "What is Displacement Addressing Mode?",
+   "back": "The EA is found by adding a **constant offset** to the value in a **base or index register**. This is great for arrays!"
+  },
+  {
+   "front": "Define Stack Addressing Mode.",
+   "back": "The operand is implicitly at the **top of the stack**, managed by the `Stack Pointer` (SP). Very efficient for subroutines!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "In the instruction `ADD R1, #25`, where `#25` represents the constant value 25, which addressing mode is being used?",
+   "options": [
+    "Immediate addressing",
+    "Direct addressing",
+    "Register addressing",
+    "Indirect addressing"
+   ],
+   "correct_index": 0,
+   "explanation": "In immediate addressing, the operand is actually part of the instruction itself. This makes it very quick since you don't need to fetch from memory!"
+  },
+  {
+   "question": "Suppose memory address 100 contains the value 200, and memory address 200 contains the value 50. If an instruction uses indirect addressing with the operand address 100, what is the effective address?",
+   "options": [
+    "100",
+    "200",
+    "50",
+    "0"
+   ],
+   "correct_index": 1,
+   "explanation": "In indirect addressing, the address provided points to a memory location that holds the actual effective address. So, we look at 100 and find 200!"
+  },
+  {
+   "question": "A computer calculates the effective address by adding the contents of a base register, an index register, and a displacement. If the base register contains 1000, the index register contains 50, and the displacement is 20, what is the effective address?",
+   "options": [
+    "1020",
+    "1050",
+    "1070",
+    "1570"
+   ],
+   "correct_index": 2,
+   "explanation": "For this mode, you just add the base, the index, and the displacement together. It's like finding a specific seat in a theater row!"
+  },
+  {
+   "question": "An instruction format uses a 4-bit opcode and 3-bit register specifiers. If the instruction is a 3-address instruction, how many bits are required for the entire instruction?",
+   "options": [
+    "13 bits",
+    "10 bits",
+    "16 bits",
+    "7 bits"
+   ],
+   "correct_index": 0,
+   "explanation": "You just sum up the bits: 4 for the opcode plus 3 bits for each of the three registers. That gives us 4 + 9 = 13 bits total."
+  },
+  {
+   "question": "Which addressing mode is most useful for implementing pointers in high-level languages like C?",
+   "options": [
+    "Immediate addressing",
+    "Direct addressing",
+    "Register indirect addressing",
+    "Displacement addressing"
+   ],
+   "correct_index": 2,
+   "explanation": "Register indirect addressing lets a register hold a memory address, which is exactly how pointers work. Keep practicing, you're doing great!"
+  }
+ ]
+}

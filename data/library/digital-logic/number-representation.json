@@ -1,0 +1,108 @@
+{
+ "notes": "**Number Systems and Arithmetic**\n\nComputers only see 0s and 1s, so we use **Number Systems** like Hexadecimal to make long binary strings readable for us.\n\nFor negative numbers, **2's complement** is the gold standard. It is used because it allows the CPU to perform subtraction using the same hardware as addition, and it avoids the headache of having both a \"positive zero\" and a \"negative zero.\"\n\nWhen we need to represent decimals, we use **IEEE 754 Floating Point**. This format breaks a number into three parts: a **sign bit**, a **biased exponent** (which allows us to represent very large or tiny numbers without needing a separate sign bit for the exponent), and a **mantissa** (the fractional part that provides precision).\n\nExample: Represent -6 in 4-bit 2's complement.\n1. Write +6 in 4-bit binary: 0110.\n2. Flip all the bits (1's complement): 1001.\n3. Add 1 to the result: 1001 + 1 = 1010.\nResult: 1010.\n\nCommon traps:\n- Forgetting the range: For `n` bits, the range is `-2^(n-1)` to `2^(n-1) - 1`. For 4 bits, that is -8 to +7.\n- Forgetting the bias: In IEEE 754, the stored exponent is `actual_exponent + bias`. To find the real exponent, you must subtract the bias (like 127 for single precision).\n\nRemember this: 2's complement simplifies subtraction by turning it into addition, while IEEE 754 uses a biased exponent to handle decimal scales.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:54+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:45:14+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:45:51+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "How to convert a number from base `r` to decimal?",
+   "back": "Multiply each digit by `r^position` and sum them. Example: `(101)_2 = 1*2^2 + 0*2^1 + 1*2^0 = 5`."
+  },
+  {
+   "front": "Range of an `n`-bit **2's complement** integer?",
+   "back": "From `-2^(n-1)` to `2^(n-1) - 1`. Remember, there is one more negative number than positive!"
+  },
+  {
+   "front": "Two steps to find **2's complement** of a number?",
+   "back": "1. Find the **1's complement** (flip all bits). 2. Add `1` to the result."
+  },
+  {
+   "front": "Why is **2's complement** preferred over **Signed Magnitude**?",
+   "back": "**Signed Magnitude** has two zeros (+0 and -0). **2's complement** has only one unique zero, making arithmetic simpler."
+  },
+  {
+   "front": "Three components of an **IEEE 754** floating-point number?",
+   "back": "- **Sign bit** (1 bit)\n- **Biased Exponent**\n- **Mantissa** (fractional part)"
+  },
+  {
+   "front": "Bit distribution in **IEEE 754 Single Precision** (32-bit)?",
+   "back": "- **Sign**: 1 bit\n- **Exponent**: 8 bits\n- **Mantissa**: 23 bits"
+  },
+  {
+   "front": "What is the **Bias** for IEEE 754 Single Precision?",
+   "back": "The bias is `2^(k-1) - 1`. For Single Precision (8-bit exponent), it is `2^7 - 1 = 127`."
+  },
+  {
+   "front": "When does **overflow** occur in signed 2's complement addition?",
+   "back": "When you add two numbers with the same sign, but the result has the **opposite sign**."
+  }
+ ],
+ "practice": [
+  {
+   "question": "What is the range of integers that can be represented using an 8-bit signed 2's complement representation?",
+   "options": [
+    "-128 to 127",
+    "-127 to 128",
+    "-128 to 128",
+    "-127 to 127"
+   ],
+   "correct_index": 0,
+   "explanation": "For n bits, the range is -2^(n-1) to 2^(n-1) - 1. For 8 bits, this is -2^7 to 2^7 - 1, which equals -128 to 127."
+  },
+  {
+   "question": "In IEEE 754 single-precision floating-point format, how many bits are allocated to the exponent and the fraction (mantissa), respectively?",
+   "options": [
+    "8 bits and 23 bits",
+    "7 bits and 24 bits",
+    "11 bits and 20 bits",
+    "8 bits and 24 bits"
+   ],
+   "correct_index": 0,
+   "explanation": "The 32-bit single-precision format uses 1 bit for the sign, 8 bits for the biased exponent, and 23 bits for the fraction."
+  },
+  {
+   "question": "What is the decimal equivalent of the hexadecimal number 1AF?",
+   "options": [
+    "431",
+    "427",
+    "430",
+    "432"
+   ],
+   "correct_index": 0,
+   "explanation": "Convert each digit by multiplying with its positional power: 1 * 16^2 + 10 * 16^1 + 15 * 16^0 = 256 + 160 + 15 = 431."
+  },
+  {
+   "question": "Which of the following is the correct 8-bit 2's complement representation of the decimal number -5?",
+   "options": [
+    "10000101",
+    "11111010",
+    "11111011",
+    "10000111"
+   ],
+   "correct_index": 2,
+   "explanation": "Start with +5 (00000101), flip all bits to get 11111010, and then add 1 to get 11111011."
+  },
+  {
+   "question": "In IEEE 754 single-precision format, if the biased exponent is stored as 127, what is the actual (unbiased) exponent?",
+   "options": [
+    "127",
+    "0",
+    "1",
+    "-1"
+   ],
+   "correct_index": 1,
+   "explanation": "The bias for single precision is 127. To get the real exponent, just subtract the bias from the stored value: 127 - 127 = 0."
+  }
+ ]
+}

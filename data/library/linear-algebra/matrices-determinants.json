@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! I used to get confused between rank and determinant, but once you see how they connect, it gets much easier.\n\n- **Matrix Operations**: Addition is element-wise. Multiplication `A * B` is only possible if the number of columns in `A` equals the number of rows in `B`.\n- **Determinants**: A single value for square matrices. If `det(A) = 0`, the matrix is singular (it has no inverse).\n- **Rank**: The number of linearly independent rows or columns. It tells you the \"true\" dimension of the matrix.\n\nExample: Find the rank of A = [[1, 2], [2, 4]].\n- Step 1: Use row reduction. Perform R2 = R2 - 2*R1.\n- Step 2: The matrix becomes [[1, 2], [0, 0]].\n- Step 3: Count the non-zero rows. There is only 1.\n- Result: `rank(A) = 1`.\n\nCommon traps:\n- Assuming `det(A + B) = det(A) + det(B)`. This is a huge mistake!\n- Forgetting that for an n x n matrix, `det(k*A) = k^n * det(A)`.\n\nRemember this: A square matrix is invertible if and only if its determinant is non-zero and its rank is full.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:34:03+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:34:46+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:35:05+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Relationship between det(AB), det(A), and det(B)?",
+   "back": "**det(AB) = det(A) * det(B)**. This works for any square matrices A and B of the same size."
+  },
+  {
+   "front": "When is a square matrix **invertible**?",
+   "back": "A matrix is invertible if and only if its **determinant is non-zero** (det(A) != 0)."
+  },
+  {
+   "front": "What is the **rank** of a matrix?",
+   "back": "The **rank** is the maximum number of **linearly independent** rows or columns in the matrix."
+  },
+  {
+   "front": "Formula for **det(kA)** for an n x n matrix?",
+   "back": "**det(kA) = k^n * det(A)**. Remember, the scalar `k` is raised to the power of the matrix dimension `n`."
+  },
+  {
+   "front": "Relationship between **det(A^T)** and **det(A)**?",
+   "back": "**det(A^T) = det(A)**. Transposing a matrix doesn't change its determinant. You've got this!"
+  },
+  {
+   "front": "Relationship between **det(A^-1)** and **det(A)**?",
+   "back": "**det(A^-1) = 1 / det(A)**. This only works if the matrix is non-singular (det(A) != 0)."
+  },
+  {
+   "front": "What is the **Rank-Nullity Theorem**?",
+   "back": "**Rank(A) + Nullity(A) = n**, where `n` is the number of columns in matrix A. Very important for GATE!"
+  },
+  {
+   "front": "What happens to the determinant if you **swap two rows**?",
+   "back": "The **sign of the determinant flips**. If det(A) was positive, it becomes negative, and vice versa."
+  }
+ ],
+ "practice": [
+  {
+   "question": "If A is a 3x3 matrix with det(A) = 5, what is the value of det(2A)?",
+   "options": [
+    "10",
+    "20",
+    "40",
+    "80"
+   ],
+   "correct_index": 2,
+   "explanation": "Remember the property det(k*A) = k^n * det(A), where n is the dimension of the matrix. Here, it is 2^3 * 5 = 40."
+  },
+  {
+   "question": "A 3x4 matrix A has the following rows: [1, 0, 2, 1], [2, 0, 4, 2], and [0, 1, 0, 1]. What is the rank of matrix A?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 1,
+   "explanation": "Since the second row is just a multiple of the first, it doesn't add a new dimension. The first and third rows are independent, so the rank is 2."
+  },
+  {
+   "question": "If A is a 3x3 matrix and det(A) = 0, which of the following must be true?",
+   "options": [
+    "A is invertible",
+    "The rank of A is 3",
+    "The rows of A are linearly dependent",
+    "A^2 = 0"
+   ],
+   "correct_index": 2,
+   "explanation": "If the determinant is zero, the matrix is singular, which means its rows are linearly dependent."
+  },
+  {
+   "question": "Let A be a 2x2 matrix with det(A) = 3. Let B be a 2x2 matrix with det(B) = -2. What is det(A * B^-1)?",
+   "options": [
+    "-6",
+    "-1.5",
+    "1.5",
+    "6"
+   ],
+   "correct_index": 1,
+   "explanation": "A handy property is det(A * B^-1) = det(A) / det(B). So, 3 / -2 = -1.5."
+  },
+  {
+   "question": "In a system of 3 linear equations with 3 variables, if the determinant of the coefficient matrix is non-zero, how many solutions exist?",
+   "options": [
+    "No solution",
+    "Infinitely many solutions",
+    "Exactly one solution",
+    "Exactly two solutions"
+   ],
+   "correct_index": 2,
+   "explanation": "When the determinant is non-zero, the matrix is invertible, which guarantees a single unique solution."
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "practice": [
+  {
+   "question": "If a continuous random variable X is uniformly distributed between 2 and 8, what is the probability that X is less than 5?",
+   "options": [
+    "0.25",
+    "0.5",
+    "0.75",
+    "0.3"
+   ],
+   "correct_index": 1,
+   "explanation": "For a uniform distribution on [a, b], the probability is the width of the target interval divided by the total width. Here, (5 - 2) / (8 - 2) = 3/6 = 0.5."
+  },
+  {
+   "question": "Which of the following is a unique property of the exponential distribution?",
+   "options": [
+    "The mean is always 1",
+    "The distribution is symmetric",
+    "The memoryless property",
+    "The variance is always equal to the mean"
+   ],
+   "correct_index": 2,
+   "explanation": "The memoryless property is a special feature where the probability of an event occurring in the future is independent of how much time has already passed. This is the hallmark of the exponential distribution!"
+  },
+  {
+   "question": "A normally distributed variable has a mean of 50 and a standard deviation of 5. What is the Z-score for the value 60?",
+   "options": [
+    "1",
+    "2",
+    "5",
+    "10"
+   ],
+   "correct_index": 1,
+   "explanation": "The Z-score tells us how many standard deviations a value is from the mean. We calculate it as (value - mean) / standard_deviation, which is (60 - 50) / 5 = 2."
+  },
+  {
+   "question": "The average time between arrivals of packets at a router is 0.02 seconds. If the arrival intervals follow an exponential distribution, what is the rate parameter lambda?",
+   "options": [
+    "0.02",
+    "20",
+    "50",
+    "100"
+   ],
+   "correct_index": 2,
+   "explanation": "In an exponential distribution, the mean is 1/lambda. Since the mean is 0.02, we find lambda by calculating 1 / 0.02 = 50."
+  },
+  {
+   "question": "A continuous random variable X is uniformly distributed on the interval [a, b]. If the variance of X is 3, what is the value of (b - a)?",
+   "options": [
+    "3",
+    "6",
+    "12",
+    "36"
+   ],
+   "correct_index": 1,
+   "explanation": "The variance of a uniform distribution is (b - a)^2 / 12. Setting (b - a)^2 / 12 = 3 gives (b - a)^2 = 36, so b - a = 6."
+  }
+ ],
+ "meta": {
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:40:42+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:06+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:19+00:00"
+  }
+ },
+ "notes": "Hey! Don't let these scare you; they're just different ways to describe how \"randomness\" behaves.\n\n- **Uniform Distribution**: Every value in a range `[a, b]` is equally likely. The PDF is a flat line with height `1 / (b - a)`.\n- **Normal Distribution**: The famous bell curve. It's symmetric around the mean `mu`. We use the **Z-score** `z = (x - mu) / sigma` to scale any normal distribution to the Standard Normal (mean 0, variance 1).\n- **Exponential Distribution**: Models the time between events. It's defined by a rate `lambda`. Its coolest feature is the **memoryless property**: the chance of an event happening in the next minute is the same regardless of how much time has already passed.\n\nExample: A random variable `X` is uniformly distributed between `2` and `10`. Find `P(X < 4)`.\nStep 1: The total range width is `10 - 2 = 8`.\nStep 2: The height of the PDF is `1 / 8`.\nStep 3: The target interval `[2, 4]` has a width of `4 - 2 = 2`.\nStep 4: Probability = `width * height = 2 * (1 / 8) = 0.25`.\n\nCommon traps:\n- Mixing up the mean and the rate in Exponential distributions (Mean = `1/lambda`).\n- Forgetting that the total area under any PDF must always be 1.\n\nRemember this: Uniform is flat, Normal is a bell, and Exponential is for waiting times.",
+ "flashcards": [
+  {
+   "front": "What's the **PDF** for a continuous **Uniform distribution** on [a, b]?",
+   "back": "f(x) = 1 / (b - a) for **a <= x <= b**, and 0 otherwise."
+  },
+  {
+   "front": "**Mean** and **Variance** of a Uniform distribution [a, b]?",
+   "back": "- Mean = (a + b) / 2\n- Variance = (b - a)^2 / 12"
+  },
+  {
+   "front": "In a **Normal distribution**, how do mean, median, and mode relate?",
+   "back": "They are all **equal** because the distribution is perfectly symmetric."
+  },
+  {
+   "front": "What are the **Mean** and **Variance** of a **Standard Normal distribution**?",
+   "back": "- Mean = 0\n- Variance = 1"
+  },
+  {
+   "front": "How do you calculate a **Z-score**?",
+   "back": "Z = (x - mu) / sigma\nwhere **mu** is mean and **sigma** is standard deviation."
+  },
+  {
+   "front": "What is the **PDF** of an **Exponential distribution** with rate lambda?",
+   "back": "f(x) = lambda * e^(-lambda * x) for **x >= 0**, and 0 otherwise."
+  },
+  {
+   "front": "**Mean** and **Variance** of an **Exponential distribution** (lambda)?",
+   "back": "- Mean = 1 / lambda\n- Variance = 1 / (lambda^2)"
+  },
+  {
+   "front": "What does the **Memoryless property** mean for Exponential distributions?",
+   "back": "The probability of an event occurring is independent of time already passed.\nFormula: **P(X > s + t | X > s) = P(X > t)**"
+  }
+ ]
+}

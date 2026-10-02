@@ -1,0 +1,19 @@
+# secrets
+.env
+
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.tmp
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

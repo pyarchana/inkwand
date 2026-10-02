@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Let's dive into **Combinational Circuits**. The most important thing to keep in mind is that these circuits are \"memoryless.\" The output depends strictly on the current inputs, not on any previous state or history.\n\n- **Adders**: These perform arithmetic. A **Half Adder** handles two bits (producing Sum and Carry). A **Full Adder** handles three bits (it includes a Carry-in from a previous stage).\n- **Multiplexers (MUX)**: Think of this as a selector. It has many data inputs and only one output. The **select lines** act like a switch to choose which specific input reaches the output.\n- **Decoders**: These take `n` input lines and activate exactly one of `2^n` output lines. They are used to convert binary code into a specific signal.\n- **Encoders**: The reverse of a decoder; they take multiple input lines and compress them into a smaller binary code.\n\nExample:\nIf you have a 4-to-1 **Multiplexer**, how many select lines do you need?\nStep 1: Identify the number of inputs (N = 4).\nStep 2: Use the formula `2^s = N`, where `s` is the number of select lines.\nStep 3: `2^s = 4` means `s = 2`.\nAnswer: 2 select lines.\n\nCommon traps:\n- Confusing a **Decoder** with a **Demultiplexer**. A Decoder's inputs are the binary code itself, while a Demux uses select lines to route a single data input to one of many outputs.\n- Forgetting that a **Full Adder** is necessary for multi-bit addition because it accounts for the carry bit from the previous position.\n\nRemember this: Combinational circuits produce an output based solely on the present input values without any internal storage.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:43:51+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:25+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:40+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Difference between a **Half Adder** and a **Full Adder**?",
+   "back": "A **Half Adder** adds two bits. A **Full Adder** adds three bits (two inputs plus a carry-in from a previous stage)."
+  },
+  {
+   "front": "What is the main job of a **Multiplexer (MUX)**?",
+   "back": "It acts as a **data selector**. It picks one of many inputs and routes it to a single output based on `n` select lines."
+  },
+  {
+   "front": "What is the purpose of a **Decoder**?",
+   "back": "It takes an `n`-bit input and activates exactly one of the `2^n` possible output lines."
+  },
+  {
+   "front": "Can a **Multiplexer** implement any Boolean function?",
+   "back": "Yes! A MUX is a **universal logic element**. You can implement any truth table by connecting inputs to 0, 1, or variables."
+  },
+  {
+   "front": "How does an **Encoder** differ from a **Decoder**?",
+   "back": "They are opposites! An **Encoder** converts an active input into a binary code, while a **Decoder** converts a binary code into an active output."
+  },
+  {
+   "front": "What problem does a **Priority Encoder** solve?",
+   "back": "In a standard encoder, multiple inputs might trigger at once. A **Priority Encoder** only responds to the input with the **highest priority**."
+  },
+  {
+   "front": "What is the main drawback of a **Ripple Carry Adder**?",
+   "back": "**Propagation delay**. The carry has to \"ripple\" through every single bit, so the total time taken increases as you add more bits."
+  },
+  {
+   "front": "How many **select lines** does a MUX with `2^n` inputs need?",
+   "back": "It needs exactly `n` select lines. For example, a 16-to-1 MUX needs 4 select lines because `2^4 = 16`."
+  }
+ ],
+ "practice": [
+  {
+   "question": "If the select lines of a 4:1 multiplexer are S1 = 1 and S0 = 0, which input is routed to the output?",
+   "options": [
+    "I0",
+    "I1",
+    "I2",
+    "I3"
+   ],
+   "correct_index": 2,
+   "explanation": "The select lines S1 and S0 form a binary number; 10 in binary is 2, so the input I2 is selected."
+  },
+  {
+   "question": "For a Full Adder, if the input bits are A = 1, B = 1, and the Carry-in (Cin) = 1, what are the resulting Sum (S) and Carry-out (Cout)?",
+   "options": [
+    "S = 0, Cout = 0",
+    "S = 1, Cout = 0",
+    "S = 1, Cout = 1",
+    "S = 0, Cout = 1"
+   ],
+   "correct_index": 2,
+   "explanation": "Adding 1 + 1 + 1 gives 3, which is 11 in binary, making the sum bit 1 and the carry bit 1."
+  },
+  {
+   "question": "How many 2-to-4 line decoders are needed to construct a 3-to-8 line decoder?",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 1,
+   "explanation": "We can use the most significant bit to decide which of the two 2-to-4 decoders is enabled, giving us 8 total outputs."
+  },
+  {
+   "question": "In a 4-to-2 priority encoder, the input with the highest index has the highest priority. If the inputs are D3 = 0, D2 = 1, D1 = 1, and D0 = 0, what is the output?",
+   "options": [
+    "00",
+    "01",
+    "10",
+    "11"
+   ],
+   "correct_index": 2,
+   "explanation": "Since D2 is the highest-order input that is active (set to 1), the encoder outputs its binary representation, which is 10."
+  },
+  {
+   "question": "How many 2:1 multiplexers are required to implement a 4:1 multiplexer?",
+   "options": [
+    "2",
+    "3",
+    "4",
+    "5"
+   ],
+   "correct_index": 1,
+   "explanation": "You need two 2:1 MUXes for the first stage to handle the four inputs, and one more 2:1 MUX to select between their outputs."
+  }
+ ]
+}

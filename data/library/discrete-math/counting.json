@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Combinatorics is all about \"how many ways.\" It's one of my favorite topics because once you get the logic, it's like solving a puzzle.\n\n- **Permutations**: Use this when the **order matters**. Think of a PIN code; 1-2-3 is different from 3-2-1. Formula: `n! / (n-r)!`.\n- **Combinations**: Use this when **order doesn't matter**. Think of picking a team; picking Alice then Bob is the same as Bob then Alice. Formula: `n! / (r! * (n-r)!)`.\n- **Pigeonhole Principle**: If you have more \"pigeons\" than \"holes,\" at least one hole must contain more than one pigeon. It is a powerful tool for proving existence.\n- **Inclusion-Exclusion**: To find the size of the union of sets, add the individual sizes and subtract the sizes of their intersections to avoid double-counting.\n\nExample: How many ways can you pick a committee of 3 people from a group of 7?\n- Step 1: Does order matter? No, a committee is just a group. Use **Combinations**.\n- Step 2: `n = 7`, `r = 3`.\n- Step 3: `7C3 = 7! / (3! * (7-3)!) = (7 * 6 * 5) / (3 * 2 * 1) = 35`.\n\nCommon traps:\n- Using **Permutations** when the problem is just about selecting a group (where order doesn't matter).\n- Forgetting to subtract the intersection in **Inclusion-Exclusion** problems, leading to overcounting.\n\nRemember this: Always ask \"Does the order matter?\" before you pick your formula.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:32:14+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:32:28+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:33:24+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the main difference between **Permutations** and **Combinations**?",
+   "back": "**Permutations** care about **order** (like a password). **Combinations** only care about **selection** (like picking a team) where order doesn't matter."
+  },
+  {
+   "front": "Formula for **Permutations** of `n` items taken `r` at a time?",
+   "back": "`nPr = n! / (n - r)!`. Use this when the **sequence** or **position** of items is important."
+  },
+  {
+   "front": "Formula for **Combinations** of `n` items taken `r` at a time?",
+   "back": "`nCr = n! / (r! * (n - r)!)`. Use this when you are just **selecting** a group and order is irrelevant."
+  },
+  {
+   "front": "What does the basic **Pigeonhole Principle** state?",
+   "back": "If you have `n` holes and `n + 1` pigeons, at least one hole must contain **more than one** pigeon."
+  },
+  {
+   "front": "**Generalized Pigeonhole Principle**: `n` items in `k` boxes. Min items in one box?",
+   "back": "At least one box contains `ceil(n / k)` items. Remember, `ceil` means always round up to the next integer!"
+  },
+  {
+   "front": "**Inclusion-Exclusion** formula for two sets `A` and `B`?",
+   "back": "`|A union B| = |A| + |B| - |A intersection B|`. We subtract the intersection so we don't **double-count** the overlap."
+  },
+  {
+   "front": "**Inclusion-Exclusion** formula for three sets `A`, `B`, and `C`?",
+   "back": "`|A union B union C| = |A| + |B| + |C| - (|A int B| + |B int C| + |A int C|) + |A int B int C|`."
+  },
+  {
+   "front": "How many ways to arrange `n` distinct objects in a **circle**?",
+   "back": "`(n - 1)!`. We fix one object's position to account for the fact that rotations are considered the same arrangement."
+  }
+ ],
+ "practice": [
+  {
+   "question": "How many distinct ways can the letters in the word **APPLE** be arranged?",
+   "options": [
+    "120",
+    "60",
+    "24",
+    "30"
+   ],
+   "correct_index": 1,
+   "explanation": "Since the letter 'P' is repeated twice, we divide the total permutations (5!) by the number of ways to arrange the repeated letters (2!). So, 120 / 2 = 60."
+  },
+  {
+   "question": "A bag contains 10 red, 10 blue, and 10 green balls. What is the minimum number of balls you must pick to guarantee that you have at least 3 balls of the same color?",
+   "options": [
+    "6",
+    "7",
+    "9",
+    "10"
+   ],
+   "correct_index": 1,
+   "explanation": "Think about the worst case: you pick 2 red, 2 blue, and 2 green balls (6 balls total). The very next ball you pick (the 7th) must complete a set of 3 for one of the colors."
+  },
+  {
+   "question": "In a class of 50 students, 30 study Python, 25 study Java, and 10 study both. How many students study neither Python nor Java?",
+   "options": [
+    "5",
+    "10",
+    "15",
+    "20"
+   ],
+   "correct_index": 0,
+   "explanation": "First, find how many students study at least one language using the inclusion-exclusion principle: 30 + 25 - 10 = 45. Then, subtract that from the total of 50 to get 5."
+  },
+  {
+   "question": "A committee of 3 members is to be formed from a group of 5 men and 4 women. How many ways can this be done if the committee must contain at least 1 woman?",
+   "options": [
+    "74",
+    "35",
+    "40",
+    "84"
+   ],
+   "correct_index": 0,
+   "explanation": "It's easier to subtract the 'bad' cases from the total. Total ways to pick 3 from 9 is 9C3 = 84, and the ways to pick only men is 5C3 = 10. So, 84 - 10 = 74."
+  },
+  {
+   "question": "How many 3-digit numbers can be formed using the digits {1, 2, 3, 4, 5} if repetition is not allowed and the number must be even?",
+   "options": [
+    "60",
+    "24",
+    "120",
+    "12"
+   ],
+   "correct_index": 1,
+   "explanation": "For the number to be even, the last digit must be 2 or 4 (2 choices). For the remaining two positions, you have 4 and 3 choices left, so 2 * 4 * 3 = 24."
+  }
+ ]
+}

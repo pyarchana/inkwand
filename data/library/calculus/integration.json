@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let integration scare you. It's just differentiation in reverse. Think of it as \"undoing\" a derivative to find the original function.\n\n- **Indefinite Integration** finds the general form of a function. Since the derivative of any constant is zero, we always add a `+ C` at the end to represent that unknown constant.\n- **Definite Integration** calculates the actual area under a curve between two specific points, `a` and `b`. Unlike indefinite integration, this results in a specific number.\n\nExample: Evaluate the definite integral of `2x` from `x = 1` to `x = 3`.\n1. Find the anti-derivative of `2x`. Using the power rule, it becomes `x^2`.\n2. Plug in the upper limit (3): `3^2 = 9`.\n3. Plug in the lower limit (1): `1^2 = 1`.\n4. Subtract the lower limit value from the upper limit value: `9 - 1 = 8`.\n\nCommon traps:\n- Forgetting the `+ C` in **indefinite integrals**. Even if it seems obvious, get into the habit of writing it to avoid silly mistakes in MCQ options.\n- Mixing up the subtraction order in **definite integrals**. Always do `Value_at_upper_limit - Value_at_lower_limit`.\n\nRemember this: Integration is the reverse of differentiation, used to find the area under a curve or total accumulation.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:37:43+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:38:49+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:38:55+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Find the indefinite integral of `x * e^(x^2)` with respect to `x`.",
+   "options": [
+    "1/2 * e^(x^2) + C",
+    "e^(x^2) + C",
+    "2 * e^(x^2) + C",
+    "x^2 * e^(x^2) + C"
+   ],
+   "correct_index": 0,
+   "explanation": "Try using substitution here! Let `u = x^2`, then `du = 2x dx`, and the integral becomes much easier to solve."
+  },
+  {
+   "question": "Evaluate the definite integral: integral from 0 to 1 of `(3x^2 + 2x + 1) dx`.",
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "Just find the antiderivative first and then plug in the upper and lower limits. It's a straightforward application of the power rule."
+  },
+  {
+   "question": "If `F(x) = integral from 0 to x of sin(t^2) dt`, what is the value of `F'(x)`?",
+   "options": [
+    "cos(x^2)",
+    "sin(x^2)",
+    "-cos(x^2)",
+    "2x * sin(x^2)"
+   ],
+   "correct_index": 1,
+   "explanation": "This is a direct application of the Fundamental Theorem of Calculus. When you differentiate an integral with respect to its upper limit, you just get the integrand evaluated at that limit."
+  },
+  {
+   "question": "Evaluate the definite integral: integral from 0 to pi/2 of `sin(x) * cos(x) dx`.",
+   "options": [
+    "0",
+    "1/2",
+    "1",
+    "pi/4"
+   ],
+   "correct_index": 1,
+   "explanation": "You can use the identity `sin(x)cos(x) = 1/2 sin(2x)` or just use substitution with `u = sin(x)`. Both methods will lead you to 1/2."
+  },
+  {
+   "question": "Evaluate the definite integral: integral from 1 to 2 of `4/x dx`.",
+   "options": [
+    "ln(2)",
+    "2 * ln(2)",
+    "4 * ln(2)",
+    "4"
+   ],
+   "correct_index": 2,
+   "explanation": "Remember that the integral of `1/x` is `ln(x)`. Just apply the limits carefully to get the final answer."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is the **Fundamental Theorem of Calculus** for definite integrals?",
+   "back": "integral from a to b of f(x) dx = F(b) - F(a). Here, F is the antiderivative of f."
+  },
+  {
+   "front": "Formula for **Integration by Parts**?",
+   "back": "integral(u dv) = uv - integral(v du). Use the **LIATE** rule to pick your 'u' easily!"
+  },
+  {
+   "front": "Integral of an **odd function** from -a to a?",
+   "back": "It is always **0**. Remember, for odd functions, f(-x) = -f(x)."
+  },
+  {
+   "front": "Integral of an **even function** from -a to a?",
+   "back": "It is **2 * integral from 0 to a of f(x) dx**. For even functions, f(-x) = f(x)."
+  },
+  {
+   "front": "Indefinite integral of **x^n** (where n != -1)?",
+   "back": "(x^(n+1)) / (n+1) + C. Don't forget that **C**! It's a common mistake in GATE."
+  },
+  {
+   "front": "Indefinite integral of **1/x**?",
+   "back": "ln|x| + C. Always include the **absolute value** for the natural log."
+  },
+  {
+   "front": "When do we use **u-substitution**?",
+   "back": "Use it when you see a function and its **derivative** present in the integrand. It makes life much easier!"
+  },
+  {
+   "front": "Integral of a constant **k** from a to b?",
+   "back": "k * (b - a). Think of it as the area of a rectangle with height k and width (b-a)."
+  }
+ ]
+}

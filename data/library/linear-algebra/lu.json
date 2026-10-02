@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let the name intimidate you. **LU Decomposition** is just a way to break a square matrix `A` into two simpler parts: `L` (Lower triangular) and `U` (Upper triangular).\n\n- `L` has 1s on the diagonal and non-zero values only below it.\n- `U` is the upper triangular matrix you get after performing Gaussian elimination.\n\nIt's super useful for solving `Ax = b`. Instead of one big headache, you solve two easy steps: first `Ly = b` (using forward substitution), then `Ux = y` (using back substitution).\n\nExample:\nFind LU for `A = [[2, 3], [4, 7]]`.\n1. Perform Gaussian elimination to find `U`.\n   To make the element at `A[2,1]` zero, we do: Row 2 = Row 2 - (4/2) * Row 1.\n   The multiplier used is `2`.\n   `U = [[2, 3], [0, 1]]`.\n2. Build `L` using the multiplier.\n   Put the multiplier `2` in the position we zeroed out (`L[2,1]`).\n   `L = [[1, 0], [2, 1]]`.\nCheck: `L * U = [[1,0],[2,1]] * [[2,3],[0,1]] = [[2,3],[4,7]]`. Correct!\n\nCommon traps:\n- Forgetting that in the standard version (Doolittle's method), the diagonal of `L` must be all `1`s.\n- Assuming every matrix has a simple LU decomposition. If you have to swap rows to avoid a zero on the diagonal, you actually need **PLU decomposition** (where `P` is a permutation matrix).\n\nRemember this: LU decomposition splits a matrix into two triangular pieces to make solving linear equations much faster.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:35:23+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:35:43+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:39:18+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the core idea of **LU Decomposition**?",
+   "back": "Breaking a square matrix `A` into a **Lower triangular** matrix `L` and an **Upper triangular** matrix `U`, such that `A = LU`."
+  },
+  {
+   "front": "What is the main property of matrix `L`?",
+   "back": "It is **Lower triangular**, meaning all entries **above** the main diagonal are zero."
+  },
+  {
+   "front": "What is the main property of matrix `U`?",
+   "back": "It is **Upper triangular**, meaning all entries **below** the main diagonal are zero."
+  },
+  {
+   "front": "Difference between **Doolittle** and **Crout** methods?",
+   "back": "- **Doolittle**: `L` has 1s on its diagonal.\n- **Crout**: `U` has 1s on its diagonal."
+  },
+  {
+   "front": "How to solve `Ax = b` using `LU`?",
+   "back": "1. Solve `Ly = b` using **Forward substitution**.\n2. Solve `Ux = y` using **Backward substitution**."
+  },
+  {
+   "front": "When is **pivoting** (using `P`) necessary?",
+   "back": "When a zero appears in a **pivot position** during elimination. We use a **Permutation matrix** `P` to get `PA = LU`."
+  },
+  {
+   "front": "What condition ensures `LU` exists without row swaps?",
+   "back": "All **leading principal minors** of matrix `A` must be **non-zero**."
+  },
+  {
+   "front": "What is the time complexity of LU decomposition?",
+   "back": "Approximately **O(n^3)**, where `n` is the dimension of the matrix."
+  }
+ ],
+ "practice": [
+  {
+   "question": "In **LU decomposition**, a square matrix A is factored into which two types of matrices?",
+   "options": [
+    "A lower triangular matrix L and an upper triangular matrix U",
+    "An orthogonal matrix Q and a diagonal matrix D",
+    "A symmetric matrix and its inverse",
+    "A diagonal matrix and a permutation matrix"
+   ],
+   "correct_index": 0,
+   "explanation": "This is the basic definition: L stands for Lower and U stands for Upper."
+  },
+  {
+   "question": "Consider the matrix A = [[4, 3], [6, 3]]. If we perform **LU decomposition** such that the diagonal elements of L are all 1, what are the matrices L and U?",
+   "options": [
+    "L = [[1, 0], [1.5, 1]], U = [[4, 3], [0, -1.5]]",
+    "L = [[1, 0], [0.5, 1]], U = [[4, 3], [0, 1.5]]",
+    "L = [[1, 0], [1.5, 1]], U = [[4, 3], [0, 1.5]]",
+    "L = [[1, 0], [2, 1]], U = [[4, 3], [0, -3]]"
+   ],
+   "correct_index": 0,
+   "explanation": "We use Gaussian elimination: R2 becomes R2 - (6/4)R1, so the multiplier is 1.5."
+  },
+  {
+   "question": "For a square matrix A to have a unique **LU decomposition** where the diagonal elements of L are all 1, which of the following must be true?",
+   "options": [
+    "A must be a symmetric matrix",
+    "All leading principal minors of A must be non-zero",
+    "The determinant of A must be zero",
+    "A must be a diagonal matrix"
+   ],
+   "correct_index": 1,
+   "explanation": "If any leading principal minor is zero, we might encounter a division by zero during the elimination process."
+  },
+  {
+   "question": "To solve the system of linear equations Ax = b using **LU decomposition** (where A = LU), what is the correct sequence of steps?",
+   "options": [
+    "First solve Ux = b for x, then solve Ly = x for y",
+    "First solve Ly = b for y, then solve Ux = y for x",
+    "First solve Ly = x for y, then solve Ux = b for x",
+    "First solve Ux = y for y, then solve Ly = b for x"
+   ],
+   "correct_index": 1,
+   "explanation": "We substitute Ax = b with LUx = b, let Ux = y, so we first solve Ly = b for y and then Ux = y for x."
+  },
+  {
+   "question": "Given the matrix A = [[2, 1], [4, 7]], find the value of the multiplier used to zero out the element in the second row, first column during **LU decomposition** (with L having 1s on the diagonal).",
+   "options": [
+    "1",
+    "2",
+    "4",
+    "0.5"
+   ],
+   "correct_index": 1,
+   "explanation": "To make the element at (2,1) zero, we subtract (4/2) times the first row from the second row."
+  }
+ ]
+}

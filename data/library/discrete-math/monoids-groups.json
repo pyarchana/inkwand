@@ -1,0 +1,108 @@
+{
+ "notes": "Think of these as a \"level-up\" system for a set with an operation:\n\n- **Semigroup**: The operation must be **associative** ( (a * b) * c = a * (b * c) ).\n- **Monoid**: A semigroup that also has an **identity element** `e` (where a * e = a).\n- **Group**: A monoid where every element `a` has an **inverse** `a^-1` (where a * a^-1 = e).\n- **Subgroup**: A subset of a group that is itself a group under the same operation.\n\nExample: Is the set of natural numbers N = {1, 2, 3, ...} under addition (+) a group?\n1. Associativity: (a+b)+c = a+(b+c). Yes, it's a **semigroup**.\n2. Identity: We need an element `e` such that a+e = a. The identity is 0, but 0 is NOT in N.\n3. Conclusion: Since it lacks an identity, it is not a monoid or a group.\n\nCommon traps:\n- Always check if the identity or inverse is actually **inside** the set. For example, integers under multiplication are not a group because the inverse of 2 is 1/2, which is not an integer.\n- Don't assume a group must be commutative (a * b = b * a). If it is, it's called an **Abelian group**, but it's still a group even if it isn't.\n\nRemember this: Semigroup (associative) -> Monoid (+identity) -> Group (+inverses).",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:29:57+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:30:33+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:33:56+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Let S be the set of all positive integers {1, 2, 3, ...} under the operation of addition. Which of the following is true?",
+   "options": [
+    "S is a group",
+    "S is a monoid",
+    "S is a semigroup but not a monoid",
+    "S is not a semigroup"
+   ],
+   "correct_index": 2,
+   "explanation": "Since addition is associative and the set is closed, it's a semigroup. But because 0 is not in our set, we don't have an identity element, so it can't be a monoid."
+  },
+  {
+   "question": "Consider the set A = {1, -1, i, -i} where i^2 = -1. Under the operation of complex multiplication, which statement is correct?",
+   "options": [
+    "A is a semigroup but not a monoid",
+    "A is a monoid but not a group",
+    "A is a group",
+    "A is not a monoid"
+   ],
+   "correct_index": 2,
+   "explanation": "This set is closed, associative, has an identity (1), and every element has an inverse. That means it satisfies all the requirements to be a group!"
+  },
+  {
+   "question": "Let G be the group of integers (Z) under the operation of addition (+). Which of the following subsets is a subgroup of G?",
+   "options": [
+    "{0, 1, 2}",
+    "{all positive integers}",
+    "{all even integers}",
+    "{all odd integers}"
+   ],
+   "correct_index": 2,
+   "explanation": "The even integers are closed under addition, include the identity (0), and every even number has its negative counterpart in the set. The other options fail one or more of these rules."
+  },
+  {
+   "question": "Let M be the set of all 2x2 matrices with real entries. Under the operation of matrix multiplication, M is a:",
+   "options": [
+    "Semigroup but not a monoid",
+    "Monoid but not a group",
+    "Group",
+    "Not a semigroup"
+   ],
+   "correct_index": 1,
+   "explanation": "Matrix multiplication is associative and has an identity matrix, so it's a monoid. However, it's not a group because matrices with a determinant of 0 don't have inverses."
+  },
+  {
+   "question": "Let G be a finite group of order 12. If H is a subgroup of G with order 3, how many distinct left cosets of H exist in G?",
+   "options": [
+    "3",
+    "4",
+    "9",
+    "12"
+   ],
+   "correct_index": 1,
+   "explanation": "Using Lagrange's Theorem, the number of cosets is simply the size of the group divided by the size of the subgroup. So, 12 / 3 = 4."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What two properties define a **semigroup**?",
+   "back": "- **Closure**: the result stays in the set.\n- **Associativity**: (a * b) * c = a * (b * c)."
+  },
+  {
+   "front": "How does a **monoid** differ from a semigroup?",
+   "back": "A monoid is a semigroup that also has an **identity element** `e` where a * e = a."
+  },
+  {
+   "front": "What extra property makes a monoid a **group**?",
+   "back": "It must have **inverses**. For every `a`, there must be an `a^-1` such that a * a^-1 = e."
+  },
+  {
+   "front": "What makes a group **Abelian**?",
+   "back": "It must satisfy the **commutative property**: a * b = b * a for all elements."
+  },
+  {
+   "front": "What is a **subgroup**?",
+   "back": "A subset of a group that is itself a group under the **same operation**."
+  },
+  {
+   "front": "Is the **identity element** unique in a group?",
+   "back": "Yes, every group has exactly **one unique identity element**."
+  },
+  {
+   "front": "Is the **inverse** of an element unique in a group?",
+   "back": "Yes, for every element `a`, its **inverse** `a^-1` is unique."
+  },
+  {
+   "front": "What is the **order** of a group?",
+   "back": "The **order** is simply the total **number of elements** in the group."
+  }
+ ]
+}

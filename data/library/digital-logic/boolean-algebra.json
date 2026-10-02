@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Think of **Boolean Algebra** as the math of logic gates. Instead of complex numbers, we only work with 0 and 1.\n\n**Algebraic Minimization** is the process of simplifying these expressions. In GATE, the goal is to find the simplest form because, in hardware, fewer terms mean fewer gates, less power, and less cost.\n\nKey tools you'll need:\n- **Identity/Null**: x + 0 = x, x . 1 = x, x + 1 = 1, x . 0 = 0.\n- **Idempotent/Complement**: x + x = x, x + x' = 1, x . x' = 0.\n- **De Morgan's**: `(x + y)' = x' . y'` and `(x . y)' = x' + y'`.\n- **Distributive**: x(y + z) = xy + xz and the tricky one: x + (yz) = (x + y)(x + z).\n\nExample:\nSimplify F = x'y + xy + xy'\n- Step 1: Factor out `y`: F = y(x' + x) + xy'\n- Step 2: Use Complement Law (x' + x = 1): F = y(1) + xy'\n- Step 3: Simplify: F = y + xy'\n- Step 4: Use Distributive Law: F = (y + x)(y + y')\n- Step 5: Use Complement Law (y + y' = 1): F = (y + x)(1)\n- Final Answer: F = x + y\n\nCommon traps:\n- Forgetting the second distributive law: `x + (yz) = (x + y)(x + z)`. This is a lifesaver!\n- Confusing `x + x' = 1` with `x . x' = 0`.\n\nRemember this: Minimization is all about using laws to reduce the number of literals and terms to keep your circuit efficient.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:45+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:42:49+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:43:17+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Simplify the Boolean expression: (A + B)' . (A' + B')'",
+   "options": [
+    "0",
+    "1",
+    "A",
+    "B"
+   ],
+   "correct_index": 0,
+   "explanation": "Just apply De Morgan's law to both parts first. You'll see that one part becomes A'B' and the other becomes AB, and since A and A' can't both be true, the whole expression becomes 0."
+  },
+  {
+   "question": "What is the simplest form of the function F(A, B, C) = A'B'C + A'BC + AB'C + ABC?",
+   "options": [
+    "A",
+    "B",
+    "C",
+    "A + B + C"
+   ],
+   "correct_index": 2,
+   "explanation": "Try grouping the terms that have common variables. Grouping them as A'C(B' + B) and AC(B' + B) makes the simplification very smooth!"
+  },
+  {
+   "question": "According to the principle of duality, if the identity A + 0 = A holds true, what is its dual?",
+   "options": [
+    "A + 1 = A",
+    "A . 1 = A",
+    "A + 0 = 1",
+    "A . 0 = 0"
+   ],
+   "correct_index": 1,
+   "explanation": "Remember the rule for duality: just swap the AND (.) and OR (+) operators, and swap 0 with 1. It's a common trick used in GATE!"
+  },
+  {
+   "question": "Simplify the following expression: XY + X(Y + Z) + Y(Y + Z)",
+   "options": [
+    "X",
+    "Y",
+    "Y + XZ",
+    "XZ"
+   ],
+   "correct_index": 2,
+   "explanation": "Expand the brackets first and look for terms like Y + YZ. Since Y is already there, adding YZ doesn't change anything because of the absorption law!"
+  },
+  {
+   "question": "Which of the following represents the correct Consensus Theorem?",
+   "options": [
+    "AB + A'C + BC = AB + A'C",
+    "AB + A'C + BC = BC",
+    "AB + A'C + BC = A'C",
+    "AB + A'C + BC = AB"
+   ],
+   "correct_index": 0,
+   "explanation": "The consensus theorem helps us remove the redundant term BC. It's a super handy shortcut for minimization problems!"
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "State De Morgan's Laws.",
+   "back": "- `NOT (A AND B) = (NOT A) OR (NOT B)`\n- `NOT (A OR B) = (NOT A) AND (NOT B)`"
+  },
+  {
+   "front": "What are the Idempotent Laws?",
+   "back": "- `A + A = A`\n- `A * A = A`\nRepeating a variable doesn't change the logic!"
+  },
+  {
+   "front": "State the Absorption Law.",
+   "back": "- `A + (A * B) = A`\n- `A * (A + B) = A`\nThis is a huge time-saver for simplification!"
+  },
+  {
+   "front": "State the Consensus Theorem formula.",
+   "back": "`(A * B) + (NOT A * C) + (B * C) = (A * B) + (NOT A * C)`\nNote that `B * C` is redundant!"
+  },
+  {
+   "front": "State the second Distributive Law.",
+   "back": "`A + (B * C) = (A + B) * (A + C)`\nIt's different from standard algebra, so memorize it!"
+  },
+  {
+   "front": "What are the Complementation Laws?",
+   "back": "- `A + NOT A = 1`\n- `A * NOT A = 0`\nOne is always true, the other is always false."
+  },
+  {
+   "front": "What is the goal of algebraic minimization?",
+   "back": "To reduce the number of **literals** and **gates**. This makes your hardware smaller, faster, and cheaper!"
+  },
+  {
+   "front": "How do you find the **dual** of an expression?",
+   "back": "- Swap `+` with `*` and `*` with `+`.\n- Swap `0` with `1` and `1` with `0`.\n- **Do not** change the variables!"
+  }
+ ]
+}

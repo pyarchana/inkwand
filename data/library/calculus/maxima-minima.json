@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "What are **critical points**?",
+   "back": "Points where `f'(x) = 0` or `f'(x)` is **undefined**. Always find these first when looking for local maxima or minima!"
+  },
+  {
+   "front": "**Second Derivative Test** for a **local maximum**?",
+   "back": "If `f'(c) = 0` and `f''(c) < 0` (negative), then `x = c` is a **local maximum**."
+  },
+  {
+   "front": "**Second Derivative Test** for a **local minimum**?",
+   "back": "If `f'(c) = 0` and `f''(c) > 0` (positive), then `x = c` is a **local minimum**."
+  },
+  {
+   "front": "What if `f'(c) = 0` and `f''(c) = 0`?",
+   "back": "The test is **inconclusive**. Don't worry! Just use the **first derivative test** to check the sign change of `f'(x)` around `c`."
+  },
+  {
+   "front": "Finding **global extrema** on a closed interval [a, b]?",
+   "back": "1. Find all **critical points** in [a, b]. 2. Check `f(x)` at these points and at the **endpoints** `a` and `b`. The largest/smallest value is your answer!"
+  },
+  {
+   "front": "What is a **saddle point**?",
+   "back": "A point where `f'(c) = 0`, but the function has **neither** a local maximum nor a minimum there. The sign of `f'(x)` stays the same."
+  },
+  {
+   "front": "**First Derivative Test** for a **local maximum**?",
+   "back": "If `f'(x)` changes from **positive to negative** as `x` increases through `c`, then `c` is a **local maximum**."
+  },
+  {
+   "front": "**First Derivative Test** for a **local minimum**?",
+   "back": "If `f'(x)` changes from **negative to positive** as `x` increases through `c`, then `c` is a **local minimum**."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:37:04+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:37:47+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:37:52+00:00"
+  }
+ },
+ "notes": "Hey! Don't let calculus intimidate you. Finding maxima and minima is just like finding the \"peaks\" and \"valleys\" of a mountain range.\n\n- **Local Maxima/Minima** are the highest or lowest points in a small, specific neighborhood.\n- **Global Maxima/Minima** are the absolute highest or lowest points over the entire allowed range (the domain).\n\nTo find them:\n- Find the first derivative `f'(x)` and set it to `0`. These are your **critical points**.\n- Use the **Second Derivative Test**:\n  - If `f''(x) < 0` at a critical point, it's a **local maximum**.\n  - If `f''(x) > 0` at a critical point, it's a **local minimum**.\n- For **global** extrema on a closed interval `[a, b]`, you must also check the function values at the **endpoints** `a` and `b`.\n\nExample: Find the local minimum value of `f(x) = x^3 - 3x`.\n1. Find `f'(x)`: `f'(x) = 3x^2 - 3`.\n2. Set `f'(x) = 0`: `3(x^2 - 1) = 0` => `x = 1` or `x = -1`.\n3. Find `f''(x)`: `f''(x) = 6x`.\n4. Test `x = 1`: `f''(1) = 6`. Since `6 > 0`, `x = 1` is a **local minimum**.\n5. Calculate value: `f(1) = 1 - 3 = -2`.\n\nCommon traps:\n- Forgetting to check the **endpoints** of the interval when looking for **global** extrema.\n- Assuming `f''(x) = 0` always means there is no max or min (the test is just inconclusive).\n\nRemember this: Critical points find the local peaks, but endpoints can still win the global prize.",
+ "practice": [
+  {
+   "question": "If f(x) is a twice-differentiable function and at a point c, f'(c) = 0 and f''(c) < 0, then x = c is a:",
+   "options": [
+    "local maximum",
+    "local minimum",
+    "saddle point",
+    "inflection point"
+   ],
+   "correct_index": 0,
+   "explanation": "Since the first derivative is zero, it is a stationary point, and the negative second derivative indicates the curve is concave down, making it a local maximum."
+  },
+  {
+   "question": "Find the local minimum value of the function f(x) = x^3 - 3x + 2.",
+   "options": [
+    "0",
+    "2",
+    "4",
+    "-2"
+   ],
+   "correct_index": 0,
+   "explanation": "Setting f'(x) = 3x^2 - 3 = 0 gives x = 1 or x = -1. Using the second derivative test, x = 1 is the minimum, and f(1) = 0."
+  },
+  {
+   "question": "A continuous function f(x) is defined on a closed interval [a, b]. According to the Extreme Value Theorem, which of the following is always true?",
+   "options": [
+    "The function must have a local maximum at x = a",
+    "The function must have a local minimum at x = b",
+    "The function must attain both a global maximum and a global minimum",
+    "The derivative f'(x) must be zero at the global maximum"
+   ],
+   "correct_index": 2,
+   "explanation": "The Extreme Value Theorem guarantees that any continuous function on a closed, bounded interval will reach its absolute highest and lowest values."
+  },
+  {
+   "question": "A point (a, b) is called a critical point of a function f(x, y) if:",
+   "options": [
+    "f(a, b) = 0",
+    "The partial derivatives f_x and f_y are both zero or undefined at (a, b)",
+    "The second-order partial derivatives are all zero",
+    "The function reaches its global maximum at (a, b)"
+   ],
+   "correct_index": 1,
+   "explanation": "Critical points are the candidates for local extrema, occurring where the gradient is zero or where the partial derivatives do not exist."
+  },
+  {
+   "question": "At which value of x does the function f(x) = x^4 - 4x^2 + 5 have a local maximum?",
+   "options": [
+    "0",
+    "sqrt(2)",
+    "-sqrt(2)",
+    "2"
+   ],
+   "correct_index": 0,
+   "explanation": "The critical points are x = 0, sqrt(2), and -sqrt(2). Using the second derivative test, f''(0) = -8, which indicates a local maximum."
+  }
+ ]
+}

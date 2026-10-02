@@ -1,0 +1,108 @@
+{
+ "notes": "- **Rolle's Theorem**: This is a special case. If a function `f(x)` is continuous on `[a, b]`, differentiable on `(a, b)`, and starts and ends at the same value (`f(a) = f(b)`), then there must be at least one point `c` in the interval where the slope `f'(c) = 0`. Basically, if you return to your starting height, you had to have leveled off at some point.\n\n- **Lagrange Mean Value Theorem (LMVT)**: This is the general version. If `f(x)` is continuous on `[a, b]` and differentiable on `(a, b)`, there is at least one point `c` in `(a, b)` where the instantaneous slope `f'(c)` equals the average slope: `(f(b) - f(a)) / (b - a)`.\n\nExample: Find `c` for `f(x) = x^2 - 4x + 3` on the interval `[1, 3]`.\n- Step 1: Check conditions. It is a polynomial, so it is continuous and differentiable everywhere.\n- Step 2: Calculate endpoints. `f(1) = 1 - 4 + 3 = 0` and `f(3) = 9 - 12 + 3 = 0`.\n- Step 3: Since `f(1) = f(3)`, we can use Rolle's Theorem.\n- Step 4: Find the derivative: `f'(x) = 2x - 4`.\n- Step 5: Set `f'(c) = 0` -> `2c - 4 = 0` -> `c = 2`.\n- Step 6: Check if `c` is in `(1, 3)`. Yes, `2` is inside.\n\nCommon traps:\n- Forgetting to check if the function is **differentiable**. If there is a sharp corner (like `f(x) = |x|`), the theorem might not apply.\n- Thinking `c` can be the endpoints `a` or `b`. The theorem guarantees `c` is strictly **inside** the open interval `(a, b)`.\n\nRemember this: MVT guarantees that at some point, the instantaneous rate of change equals the average rate of change over the interval.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:36:48+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:38:12+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:38:25+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What are the 3 conditions for **Rolle's Theorem**?",
+   "back": "- `f(x)` is continuous on `[a, b]`\n- `f(x)` is differentiable on `(a, b)`\n- `f(a) = f(b)`"
+  },
+  {
+   "front": "What is the conclusion of **Rolle's Theorem**?",
+   "back": "There exists at least one `c` in `(a, b)` such that `f'(c) = 0`."
+  },
+  {
+   "front": "Conditions for **Lagrange Mean Value Theorem**?",
+   "back": "- `f(x)` is continuous on `[a, b]`\n- `f(x)` is differentiable on `(a, b)`"
+  },
+  {
+   "front": "The formula for **Lagrange Mean Value Theorem**?",
+   "back": "There exists `c` in `(a, b)` such that:\n`f'(c) = (f(b) - f(a)) / (b - a)`"
+  },
+  {
+   "front": "Geometric meaning of **Rolle's Theorem**?",
+   "back": "If a curve starts and ends at the same height, there is a point where the **tangent is horizontal** (slope is 0)."
+  },
+  {
+   "front": "Geometric meaning of **Lagrange MVT**?",
+   "back": "There is a point where the **tangent is parallel** to the secant line connecting the endpoints `(a, f(a))` and `(b, f(b))`."
+  },
+  {
+   "front": "How is **Rolle's Theorem** related to **Lagrange MVT**?",
+   "back": "Rolle's Theorem is a **special case** of Lagrange MVT where the condition `f(a) = f(b)` is met."
+  },
+  {
+   "front": "A common pitfall to avoid in **MVT** questions?",
+   "back": "Always check if the function is **differentiable** on the open interval `(a, b)`. Sharp corners (like in `|x|`) can make MVT inapplicable!"
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following is a necessary condition for Rolle's Theorem to be applicable to a function f(x) on the closed interval [a, b]?",
+   "options": [
+    "f(x) must be a polynomial",
+    "f(a) must equal f(b)",
+    "f'(x) must be continuous on [a, b]",
+    "f(x) must be strictly increasing"
+   ],
+   "correct_index": 1,
+   "explanation": "Remember, for Rolle's theorem, the function has to 'return' to the same height it started at, so f(a) must equal f(b)."
+  },
+  {
+   "question": "For the function f(x) = x^2 on the interval [1, 3], find the value of 'c' that satisfies the Lagrange Mean Value Theorem.",
+   "options": [
+    "c = 1",
+    "c = 1.5",
+    "c = 2",
+    "c = 2.5"
+   ],
+   "correct_index": 2,
+   "explanation": "Just plug the values into the formula f'(c) = (f(b) - f(a)) / (b - a) and solve for c. You've got this!"
+  },
+  {
+   "question": "What is the relationship between Rolle's Theorem and Lagrange's Mean Value Theorem?",
+   "options": [
+    "Rolle's theorem is a special case of Lagrange's MVT when f(a) = f(b)",
+    "Lagrange's MVT is a special case of Rolle's theorem",
+    "They are completely unrelated concepts",
+    "Rolle's theorem only applies to even functions"
+   ],
+   "correct_index": 0,
+   "explanation": "Think of Lagrange's MVT as the 'big brother' of Rolle's theorem; it works even when the start and end heights are different."
+  },
+  {
+   "question": "Consider the function f(x) = |x| on the interval [-1, 1]. Does Rolle's Theorem apply to this function on this interval?",
+   "options": [
+    "Yes, because f(-1) = f(1)",
+    "No, because the function is not differentiable at x = 0",
+    "Yes, because the function is continuous",
+    "No, because the function is not strictly increasing"
+   ],
+   "correct_index": 1,
+   "explanation": "Even though the ends are equal, the sharp corner at x = 0 means the derivative doesn't exist there, so Rolle's theorem fails."
+  },
+  {
+   "question": "Find the value of 'c' in the interval (0, 2) for the function f(x) = x^2 + 2x using the Mean Value Theorem.",
+   "options": [
+    "c = 0",
+    "c = 1",
+    "c = 2",
+    "c = 1.5"
+   ],
+   "correct_index": 1,
+   "explanation": "Don't let the algebra scare you! Find the average slope first, then set the derivative equal to that value."
+  }
+ ]
+}

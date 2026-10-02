@@ -1,0 +1,108 @@
+{
+ "notes": "Think of a **Random Variable (RV)** as a way to map random outcomes to numbers. It is not just a single value, but a description of all possible values and their likelihoods.\n\n- **Discrete RVs**: These have countable values (like the number of heads in 3 coin flips). We use a **Probability Mass Function (PMF)**, where `P(X = x)` gives the actual probability of a specific value.\n- **Continuous RVs**: These can take any value in a range (like the time you wait for a bus). We use a **Probability Density Function (PDF)**. Important: the probability at an exact point is always 0; we only find probability by calculating the area under the curve over an interval.\n\n**Expectation (E[X])** is the \"average\" value we expect over many trials. **Variance (Var(X))** measures how much the values \"spread out\" from that average.\n\nExample: A discrete RV `X` has values {0, 1, 2} with probabilities `P(X=0)=0.2`, `P(X=1)=0.5`, and `P(X=2)=0.3`. Find `E[X]` and `Var(X)`.\n1. `E[X] = (0 * 0.2) + (1 * 0.5) + (2 * 0.3) = 0 + 0.5 + 0.6 = 1.1`.\n2. To find variance, first find `E[X^2] = (0^2 * 0.2) + (1^2 * 0.5) + (2^2 * 0.3) = 0 + 0.5 + 1.2 = 1.7`.\n3. `Var(X) = E[X^2] - (E[X])^2 = 1.7 - (1.1)^2 = 1.7 - 1.21 = 0.49`.\n\nCommon traps:\n- For continuous RVs, the PDF value `f(x)` is **density**, not probability. `f(x)` can actually be greater than 1!\n- When calculating `Var(X)`, a very common mistake is forgetting to square the `E[X]` term.\n\nRemember this: Expectation is the center of the distribution, and variance is the measure of its spread.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:38:46+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:39:00+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:40:28+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What defines a **Discrete Random Variable**?",
+   "back": "An RV that can take only a countable number of distinct values (like 0, 1, 2...). Think of rolling a die!"
+  },
+  {
+   "front": "What defines a **Continuous Random Variable**?",
+   "back": "An RV that can take any value within a given range or interval (like height or time). Note: probability at a single point is always 0."
+  },
+  {
+   "front": "Formula for **Expectation E[X]** of a discrete RV?",
+   "back": "Sum of (each value times its probability):\nE[X] = sum(x_i * P(X = x_i))"
+  },
+  {
+   "front": "Formula for **Expectation E[X]** of a continuous RV?",
+   "back": "Integral of (x times the density function):\nE[X] = integral from -inf to inf of (x * f(x) dx)"
+  },
+  {
+   "front": "The most useful formula for **Variance Var(X)**?",
+   "back": "The average squared deviation from the mean:\nVar(X) = E[X^2] - (E[X])^2\n(This one is a lifesaver in exams!)"
+  },
+  {
+   "front": "Relationship between **Variance** and **Standard Deviation**?",
+   "back": "Standard Deviation is simply the square root of Variance:\nSD = sqrt(Var(X))"
+  },
+  {
+   "front": "What is the **Linearity of Expectation**?",
+   "back": "For any constants a and b:\nE[aX + b] = aE[X] + b.\nThis works even if the variables are dependent!"
+  },
+  {
+   "front": "Two essential properties of a **Probability Density Function f(x)**?",
+   "back": "- f(x) >= 0 for all x.\n- Total area under the curve must be 1:\nintegral of f(x) dx = 1"
+  }
+ ],
+ "practice": [
+  {
+   "question": "A discrete random variable X takes values 1, 2, and 3 with probabilities 0.2, 0.5, and 0.3 respectively. What is the expected value E[X]?",
+   "options": [
+    "1.5",
+    "2.0",
+    "2.1",
+    "2.5"
+   ],
+   "correct_index": 2,
+   "explanation": "To find the expectation, just multiply each value by its probability and sum them up. You've got this!"
+  },
+  {
+   "question": "If the variance of a random variable Y is 4, what is the variance of the new random variable Z = 3Y + 5?",
+   "options": [
+    "4",
+    "12",
+    "36",
+    "41"
+   ],
+   "correct_index": 2,
+   "explanation": "Remember the property: Var(aY + b) = a^2 * Var(Y). The constant 'b' doesn't affect the spread, but 'a' gets squared!"
+  },
+  {
+   "question": "A continuous random variable X has a probability density function f(x) = k * x for 0 <= x <= 2, and f(x) = 0 otherwise. What is the value of the constant k?",
+   "options": [
+    "0.25",
+    "0.5",
+    "1.0",
+    "2.0"
+   ],
+   "correct_index": 1,
+   "explanation": "For a PDF to be valid, the total area under the curve must be 1. Integrating kx from 0 to 2 gives 2k, so k must be 0.5."
+  },
+  {
+   "question": "Which of the following statements is true regarding a continuous random variable X?",
+   "options": [
+    "P(X = c) = 0 for any constant c",
+    "The sum of f(x) for all x must equal 1",
+    "The density f(x) must always be less than or equal to 1",
+    "The variance of a continuous random variable is always 0"
+   ],
+   "correct_index": 0,
+   "explanation": "In continuous distributions, we talk about intervals rather than exact points. The probability of hitting a single exact point is always zero!"
+  },
+  {
+   "question": "For a random variable X, if E[X] = 5 and E[X^2] = 29, what is the variance Var(X)?",
+   "options": [
+    "4",
+    "5",
+    "24",
+    "29"
+   ],
+   "correct_index": 0,
+   "explanation": "This is a classic formula! Just use Var(X) = E[X^2] - (E[X])^2 and plug in the numbers."
+  }
+ ]
+}

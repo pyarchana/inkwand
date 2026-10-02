@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! In combinational circuits, the output only depends on the current input. But in **Sequential Circuits**, the output depends on the current input AND the **past history** (the state). This is possible because we add a **memory element**.\n\n- **Latches** are level-sensitive; they respond to the input as long as the enable signal is active.\n- **Flip-flops** are edge-triggered; they only change state at the exact moment the clock transitions (the rising or falling edge).\n- **Registers** are collections of flip-flops used to store multiple bits of data together.\n- **Counters** are circuits designed to move through a specific sequence of states, like 0 -> 1 -> 2 -> 3.\n\nExample:\nA JK flip-flop is currently in state Q = 0. If the inputs are J = 1 and K = 1, what is the next state Q_next?\n1. Look at the JK truth table for the case where J = 1 and K = 1.\n2. This specific input combination triggers the \"Toggle\" mode.\n3. Toggling the current state (0) means switching it to its complement.\n4. Therefore, Q_next = 1.\n\nCommon traps:\n- Confusing latches and flip-flops. Always check if the question says \"level-sensitive\" (latch) or \"edge-triggered\" (flip-flop).\n- In asynchronous counters (ripple counters), the delay accumulates because the clock of one flip-flop is driven by the output of the previous one.\n\nRemember this: Sequential circuits = Combinational logic + Memory.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:08+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:44+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:45:43+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "Main difference between combinational and sequential circuits?",
+   "back": "Combinational depends only on **present inputs**. Sequential depends on **present inputs** and **past states** (stored memory)."
+  },
+  {
+   "front": "Difference between a latch and a flip-flop?",
+   "back": "Latches are **level-triggered** (respond to the signal level). Flip-flops are **edge-triggered** (respond to clock transitions)."
+  },
+  {
+   "front": "JK Flip-Flop: What happens when J=1 and K=1?",
+   "back": "The output **toggles**. If the current state is `q`, the next state becomes `q_bar`."
+  },
+  {
+   "front": "Characteristic equation of a D flip-flop?",
+   "back": "`Q(next) = D`. The output simply follows the input at the clock edge."
+  },
+  {
+   "front": "Characteristic equation of a T flip-flop?",
+   "back": "`Q(next) = T xor Q`. If `T=1`, it toggles; if `T=0`, it stays the same."
+  },
+  {
+   "front": "What does the 'Modulus' (MOD) of a counter represent?",
+   "back": "The total **number of unique states** the counter cycles through. A counter with `n` flip-flops has a max MOD of `2^n`."
+  },
+  {
+   "front": "Synchronous vs. Asynchronous (Ripple) counters?",
+   "back": "**Synchronous**: All flip-flops share the same clock. **Asynchronous**: The clock ripples from one flip-flop to the next, causing higher delay."
+  },
+  {
+   "front": "How many flip-flops are needed for an n-bit shift register?",
+   "back": "`n` flip-flops. Each flip-flop is used to store exactly one bit of the data."
+  }
+ ],
+ "practice": [
+  {
+   "question": "Which of the following is the primary reason for using a **Master-Slave JK Flip-Flop** instead of a simple JK Flip-Flop?",
+   "options": [
+    "To increase the propagation delay",
+    "To eliminate the race-around condition",
+    "To reduce the number of gates required",
+    "To allow for asynchronous inputs"
+   ],
+   "correct_index": 1,
+   "explanation": "The race-around condition happens when J=1 and K=1 during a long clock pulse. Using a master-slave setup is a classic way to prevent this by ensuring the output only changes once per clock cycle."
+  },
+  {
+   "question": "An asynchronous (ripple) counter is constructed using 4 T flip-flops. If the input clock frequency is 16 kHz, what is the frequency of the output of the **last** flip-flop?",
+   "options": [
+    "16 kHz",
+    "8 kHz",
+    "4 kHz",
+    "1 kHz"
+   ],
+   "correct_index": 3,
+   "explanation": "Think of each flip-flop as a frequency divider. Since there are 4 flip-flops in a ripple counter, the frequency is divided by 2^4, which is 16."
+  },
+  {
+   "question": "In a **T flip-flop**, if the current state is `Q = 1` and the input `T = 0`, what will be the next state after a clock pulse?",
+   "options": [
+    "0",
+    "1",
+    "Undefined",
+    "Toggles to 0"
+   ],
+   "correct_index": 1,
+   "explanation": "This one is simple! When T is 0, the flip-flop just holds onto its current value without changing anything."
+  },
+  {
+   "question": "How many flip-flops are required to design a **modulo-12** counter?",
+   "options": [
+    "3",
+    "4",
+    "12",
+    "13"
+   ],
+   "correct_index": 1,
+   "explanation": "We need enough states to count up to 11 (for a total of 12 states). 2^3 is only 8, so we have to jump up to 2^4, which gives us 16 states."
+  },
+  {
+   "question": "A **4-bit shift register** is used to store a binary number. If the register is initialized to `1011` and we perform a **logical right shift** twice, what will be the final content of the register? (Assume 0 is shifted in from the left)",
+   "options": [
+    "0010",
+    "1010",
+    "0101",
+    "0011"
+   ],
+   "correct_index": 0,
+   "explanation": "Just trace it step by step: shifting `1011` right once gives `0101`, and shifting it right again gives `0010`."
+  }
+ ]
+}

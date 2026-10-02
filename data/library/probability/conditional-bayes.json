@@ -1,0 +1,108 @@
+{
+ "notes": "Hey! Don't let these terms scare you. Think of **Conditional Probability** as \"updating\" your chances based on new info. Instead of looking at the whole sample space, you only look at the part where event B has already happened. We write this as `P(A|B)`.\n\n**Total Probability** is just summing up all the different ways an event can happen across various mutually exclusive scenarios.\n\n**Bayes Theorem** is the \"reversing\" tool. If you know the probability of a symptom given a disease, Bayes helps you find the probability of the disease given the symptom.\n\nExample:\nA disease affects 10% of a population. A test is 80% accurate for those with the disease (`P(Pos|Disease) = 0.8`), but has a 10% false positive rate (`P(Pos|No Disease) = 0.1`). If a person tests positive, what is the probability they actually have the disease?\nStep 1: Find Total Probability of testing positive:\n`P(Pos) = (P(Pos|Disease) * P(Disease)) + (P(Pos|No Disease) * P(No Disease))`\n`P(Pos) = (0.8 * 0.1) + (0.1 * 0.9) = 0.08 + 0.09 = 0.17`\nStep 2: Apply Bayes Theorem:\n`P(Disease|Pos) = (P(Pos|Disease) * P(Disease)) / P(Pos)`\n`P(Disease|Pos) = 0.08 / 0.17 = 8/17`\n\nCommon traps:\n- Confusing `P(A|B)` with `P(B|A)`. They are almost never the same!\n- Forgetting to calculate the \"Total Probability\" (the denominator) before applying Bayes.\n\nRemember this: Bayes Theorem is just a way to update your prior belief using new evidence.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:41:40+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:42:52+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:44:01+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "Given P(A) = 0.6, P(B) = 0.3, and P(A and B) = 0.2, what is the value of P(A|B)?",
+   "options": [
+    "0.2",
+    "0.5",
+    "0.67",
+    "2.0"
+   ],
+   "correct_index": 2,
+   "explanation": "Just remember the definition: **P(A|B)** is the probability of A occurring given that B has already happened. It is simply **P(A and B)** divided by **P(B)**!"
+  },
+  {
+   "question": "A factory uses two machines, M1 and M2. M1 produces 60% of the total output and M2 produces 40%. The probability that an item from M1 is defective is 0.05, and for M2 it is 0.10. What is the probability that a randomly selected item is defective?",
+   "options": [
+    "0.05",
+    "0.07",
+    "0.08",
+    "0.10"
+   ],
+   "correct_index": 1,
+   "explanation": "We use the **Law of Total Probability** here. We calculate the probability of a defect from each machine and add them up weighted by their production shares: (0.60 * 0.05) + (0.40 * 0.10)."
+  },
+  {
+   "question": "Using the machine scenario from the previous question, if a randomly selected item is found to be defective, what is the probability that it was produced by machine M1?",
+   "options": [
+    "3/7",
+    "4/7",
+    "5/7",
+    "6/7"
+   ],
+   "correct_index": 0,
+   "explanation": "This is a classic **Bayes' Theorem** problem. We take the probability of being from M1 and defective (0.03) and divide it by the total probability of being defective (0.07)."
+  },
+  {
+   "question": "If two events A and B are independent, which of the following statements is always true regarding their conditional probability?",
+   "options": [
+    "P(A|B) = P(B|A)",
+    "P(A|B) = P(A)",
+    "P(A|B) = 1",
+    "P(A|B) = P(A and B)"
+   ],
+   "correct_index": 1,
+   "explanation": "**Independence** means that the occurrence of event B provides no new information about event A, so the probability remains unchanged."
+  },
+  {
+   "question": "In a group of students, 40% like Mathematics, 30% like Computer Science, and 10% like both subjects. If a student is selected at random and we are told they like Mathematics, what is the probability that they also like Computer Science?",
+   "options": [
+    "0.1",
+    "0.25",
+    "0.3",
+    "0.4"
+   ],
+   "correct_index": 1,
+   "explanation": "Since we already know the student likes Math, our **sample space** shrinks to only the 40% who like Math. We then find what fraction of that group also likes CS: 0.1 / 0.4 = 0.25."
+  }
+ ],
+ "flashcards": [
+  {
+   "front": "What is **Conditional Probability**?",
+   "back": "The probability of event `A` occurring, given that `B` has already happened. It essentially shrinks our sample space to just the outcomes in `B`."
+  },
+  {
+   "front": "Formula for **P(A|B)**?",
+   "back": "`P(A|B) = P(A and B) / P(B)`, where `P(B) > 0`. It's the probability of the intersection divided by the probability of the condition."
+  },
+  {
+   "front": "The **Multiplication Rule** for `P(A and B)`.",
+   "back": "`P(A and B) = P(A|B) * P(B)` or `P(A and B) = P(B|A) * P(A)`. Use this to find joint probabilities when you know conditional ones."
+  },
+  {
+   "front": "What is the **Law of Total Probability**?",
+   "back": "If `B_1, B_2, ..., B_n` partition the sample space, then `P(A) = sum(P(A|B_i) * P(B_i))`. It helps find the total probability of `A` by summing its parts."
+  },
+  {
+   "front": "State the **Bayes Theorem** formula.",
+   "back": "`P(A|B) = [P(B|A) * P(A)] / P(B)`. This is the gold standard for updating probabilities when new evidence `B` is found."
+  },
+  {
+   "front": "In Bayes Theorem, what are **Prior** and **Posterior**?",
+   "back": "- **Prior** `P(A)`: Probability before seeing evidence.\n- **Posterior** `P(A|B)`: Updated probability after seeing evidence `B`."
+  },
+  {
+   "front": "When are `A` and `B` **Independent**?",
+   "back": "When `P(A and B) = P(A) * P(B)`. This also means `P(A|B) = P(A)`. Knowing `B` happened doesn't change the likelihood of `A`."
+  },
+  {
+   "front": "**Mutually Exclusive** vs **Independent** events?",
+   "back": "- **Mutually Exclusive**: `P(A and B) = 0`. They cannot happen together.\n- **Independent**: `P(A and B) = P(A) * P(B)`. One doesn't affect the other."
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "notes": "Hey! Don't stress about memory hierarchy. It's just a way to balance speed and cost. We can't build a 1TB memory that works at CPU speeds—it would be way too expensive!\n\nInstead, we use a **Memory Hierarchy**:\n- **Cache/Registers**: Fast, small, and expensive.\n- **Main Memory**: Medium speed and medium size.\n- **Secondary Storage**: Slow, huge, and very cheap.\n\nWe rely on the **Principle of Locality** (Temporal and Spatial) to keep the data we need most in the fast layers. To measure how well this works, we calculate the **Average Access Time (AAT)**.\n\nExample:\nA system has a cache with a hit time of 2 ns. The miss penalty (total time to access main memory) is 100 ns. If the hit rate is 90%, find the AAT.\n1. Hit rate = 0.9.\n2. Miss rate = 1 - 0.9 = 0.1.\n3. AAT = (Hit rate * Hit time) + (Miss rate * Miss penalty)\n4. AAT = (0.9 * 2) + (0.1 * 100)\n5. AAT = 1.8 + 10 = 11.8 ns.\n\nCommon traps:\n- Watch the definition of **Miss Penalty**. Some questions define it as the *total* time to access the next level, while others define it as the *extra* time added to the hit time. Always read the wording carefully!\n- Don't confuse **Hit Rate** (probability of success) with **Miss Rate** (probability of failure).\n\nRemember this: A higher hit rate and a lower miss penalty are the keys to minimizing average access time.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:47:05+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:47:52+00:00"
+  }
+ },
+ "practice": [
+  {
+   "question": "A program accesses memory locations in the following sequence: 100, 104, 108, 112. This sequence most likely exploits which type of locality?",
+   "options": [
+    "Temporal locality",
+    "Spatial locality",
+    "Both temporal and spatial locality",
+    "Neither temporal nor spatial locality"
+   ],
+   "correct_index": 1,
+   "explanation": "Since the memory addresses are close to each other, the program is accessing data in a contiguous manner, which is the definition of spatial locality."
+  },
+  {
+   "question": "A processor has a cache with a hit time of 2 ns. On a cache miss, it takes an additional 100 ns to fetch the data from main memory. If the hit ratio is 0.9, what is the average memory access time (AMAT)?",
+   "options": [
+    "10 ns",
+    "12 ns",
+    "92 ns",
+    "102 ns"
+   ],
+   "correct_index": 1,
+   "explanation": "Using the formula AMAT = Hit Time + (Miss Rate * Miss Penalty), we get 2 + (0.1 * 100) = 12 ns."
+  },
+  {
+   "question": "A direct-mapped cache has a total capacity of 64 KB. If each cache block is 64 bytes, how many lines (slots) are available in the cache?",
+   "options": [
+    "64",
+    "512",
+    "1024",
+    "4096"
+   ],
+   "correct_index": 2,
+   "explanation": "The number of lines is the total cache size divided by the block size. So, 64 KB / 64 B = 1024 lines."
+  },
+  {
+   "question": "When a memory block is brought into the cache for the very first time, a cache miss occurs. What type of miss is this?",
+   "options": [
+    "Capacity miss",
+    "Conflict miss",
+    "Compulsory miss",
+    "Coherence miss"
+   ],
+   "correct_index": 2,
+   "explanation": "Compulsory misses (also called cold misses) happen because the data is being accessed for the first time and therefore cannot be in the cache."
+  },
+  {
+   "question": "A system has a hit time of 1 cycle and a miss penalty of 100 cycles. If the hit ratio improves from 0.9 to 0.99, by what factor does the average memory access time (AMAT) decrease?",
+   "options": [
+    "2",
+    "5.5",
+    "10",
+    "11"
+   ],
+   "correct_index": 1,
+   "explanation": "The old AMAT is 1 + (0.1 * 100) = 11, and the new AMAT is 1 + (0.01 * 100) = 2. Dividing the old by the new gives 11 / 2 = 5.5."
+  }
+ ]
+}

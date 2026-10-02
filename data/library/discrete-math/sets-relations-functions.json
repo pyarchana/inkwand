@@ -1,0 +1,108 @@
+{
+ "flashcards": [
+  {
+   "front": "If a set has `n` elements, how many elements are in its **Power Set**?",
+   "back": "The power set has `2^n` elements. Don't forget, this includes the **empty set** and the set itself!"
+  },
+  {
+   "front": "What is a **reflexive relation** on set `A`?",
+   "back": "A relation `R` is reflexive if **every** element is related to itself. Formally: `(a, a)` must be in `R` for all `a` in `A`."
+  },
+  {
+   "front": "What three properties make a relation an **equivalence relation**?",
+   "back": "It must be:\n- **Reflexive**\n- **Symmetric**\n- **Transitive**\nLearn these, and you'll nail most equivalence problems!"
+  },
+  {
+   "front": "Define a **transitive relation**.",
+   "back": "If `(a, b)` is in `R` and `(b, c)` is in `R`, then `(a, c)` **must** also be in `R`. Keep an eye on that middle `b`!"
+  },
+  {
+   "front": "What is an **injective** (one-to-one) function?",
+   "back": "Every element in the domain maps to a **unique** element in the codomain. If `f(x) = f(y)`, then `x` must equal `y`."
+  },
+  {
+   "front": "What is a **surjective** (onto) function?",
+   "back": "A function where every element in the codomain has at least one pre-image. Simply put: **Range = Codomain**."
+  },
+  {
+   "front": "When is a function called **bijective**?",
+   "back": "When it is both **injective** (one-to-one) AND **surjective** (onto). These are the functions that have an inverse!"
+  },
+  {
+   "front": "How many total relations can be defined on a set with `n` elements?",
+   "back": "There are `2^(n^2)` possible relations. This is because there are `n^2` possible ordered pairs in the set `A x A`."
+  }
+ ],
+ "meta": {
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:27:35+00:00"
+  },
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:27:45+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:28:31+00:00"
+  }
+ },
+ "notes": "Hey! I know Discrete Math can feel heavy at first, but you've got this. Here are my quick notes to help you revise.\n\nThe core idea:\n- **Sets** are just collections of unique items. Pro-tip: the **Power Set** of a set with `n` elements always has `2^n` elements.\n- **Relations** connect elements. We look for three properties: **Reflexive** (`aRa`), **Symmetric** (`aRb` implies `bRa`), and **Transitive** (`aRb` and `bRc` implies `aRc`).\n- An **Equivalence Relation** is a relation that is all three. These are great because they partition a set into disjoint \"equivalence classes.\"\n- **Functions** are special relations where every input has exactly one output. If a function is both **Injective** (one-to-one) and **Surjective** (onto), it is **Bijective**.\n\nExample: Let A = {1, 2}. Is R = {(1,1), (2,2), (1,2",
+ "practice": [
+  {
+   "question": "Let set A = {1, 2, {3}}. What is the number of elements in the power set of A?",
+   "options": [
+    "4",
+    "8",
+    "3",
+    "9"
+   ],
+   "correct_index": 1,
+   "explanation": "Don't let the nested set {3} trip you up! A has 3 distinct elements: 1, 2, and the set {3}, so the power set has 2^3 = 8 elements."
+  },
+  {
+   "question": "A relation R is defined on the set of all integers Z such that a R b if and only if (a - b) is divisible by 5. This relation is:",
+   "options": [
+    "reflexive but not symmetric",
+    "symmetric but not transitive",
+    "an equivalence relation",
+    "not reflexive"
+   ],
+   "correct_index": 2,
+   "explanation": "This is a classic congruence relation. Since it is reflexive, symmetric, and transitive, it qualifies as an equivalence relation."
+  },
+  {
+   "question": "Let f be a function from set A = {1, 2, 3} to set B = {x, y, z, w} defined by f(1) = x, f(2) = y, and f(3) = z. The function f is:",
+   "options": [
+    "bijective",
+    "surjective",
+    "injective but not surjective",
+    "neither injective nor surjective"
+   ],
+   "correct_index": 2,
+   "explanation": "Since every input maps to a unique output, the function is injective. However, it is not surjective because the element 'w' in set B is never reached."
+  },
+  {
+   "question": "Consider the relation R = {(1, 2), (2, 1), (1, 1)} on the set {1, 2, 3}. Which of the following is true?",
+   "options": [
+    "reflexive",
+    "symmetric",
+    "transitive",
+    "equivalence relation"
+   ],
+   "correct_index": 1,
+   "explanation": "It is symmetric because the pairs are mirrors of each other. It is not transitive because (2, 1) and (1, 2) are in R, but (2, 2) is missing!"
+  },
+  {
+   "question": "How many different functions can be defined from a set with 3 elements to a set with 2 elements?",
+   "options": [
+    "6",
+    "8",
+    "9",
+    "5"
+   ],
+   "correct_index": 1,
+   "explanation": "A simple rule to remember: for functions from set A to set B, the total number is |B|^|A|. Here, that is 2^3 = 8."
+  }
+ ]
+}

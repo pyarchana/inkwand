@@ -1,0 +1,108 @@
+{
+ "notes": "The **ALU (Arithmetic and Logic Unit)** is the part of the CPU that performs all calculations. It handles two main types of tasks: **arithmetic** (like addition and subtraction) and **logic** (like AND, OR, and NOT).\n\nInstead of one giant, complex circuit, we design an ALU by taking several small, independent circuits and feeding all their outputs into a **Multiplexer (MUX)**. The MUX acts as a selector.\n\nThe **selection lines** (control signals) determine which operation's result gets passed to the final output. If you have `n` operations to perform, you need `k` selection lines such that 2^k >= n.\n\nExample:\nAn ALU is designed to perform 6 different operations. How many selection lines are required?\nStep 1: We need to find the smallest integer `k` such that 2^k >= 6.\nStep 2: Test values:\nIf k = 2, 2^2 = 4 (too small).\nIf k = 3, 2^3 = 8 (this covers 6).\nStep 3: So, 3 selection lines are needed.\nAnswer: 3.\n\nCommon traps:\n- Mistaking the number of operations for the number of selection lines. Always use the 2^k rule.\n- Confusing the number of bits in the data (e.g., a 32-bit ALU) with the number of control/selection lines.\n\nRemember this: The ALU uses a Multiplexer to select one specific operation's result from multiple functional units based on control signals.",
+ "meta": {
+  "notes": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:45:46+00:00"
+  },
+  "flashcards": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:46:18+00:00"
+  },
+  "practice": {
+   "model": "gemma-4-26b-a4b-it",
+   "written_at": "2026-10-02T11:46:53+00:00"
+  }
+ },
+ "flashcards": [
+  {
+   "front": "What is the primary role of an **ALU** in a CPU?",
+   "back": "It performs all **arithmetic** (like addition) and **logic** (like AND, OR) operations on binary data."
+  },
+  {
+   "front": "Difference between **arithmetic** and **logic** operations?",
+   "back": "**Arithmetic** operations involve carries between bits (e.g., addition), while **logic** operations are **bitwise** and do not involve carries."
+  },
+  {
+   "front": "How is **subtraction** (A - B) implemented in an ALU?",
+   "back": "By adding A to the **2's complement** of B. Formula: `A + (NOT B + 1)`."
+  },
+  {
+   "front": "When does an **unsigned** addition result in an **overflow**?",
+   "back": "When there is a **carry out** from the most significant bit (MSB)."
+  },
+  {
+   "front": "How to detect **signed overflow** in 2's complement addition?",
+   "back": "An overflow occurs if the **carry into** the MSB is **different** from the **carry out** of the MSB."
+  },
+  {
+   "front": "Which component selects the specific operation in an ALU?",
+   "back": "A **Multiplexer (MUX)**. The control signals act as select lines to choose which operation's result to output."
+  },
+  {
+   "front": "Why is a **Carry Look-ahead Adder** faster than a Ripple Carry Adder?",
+   "back": "It calculates carries in **parallel** using logic, avoiding the sequential delay of waiting for carries to ripple through every bit."
+  },
+  {
+   "front": "Do **logical operations** (AND, OR, XOR) produce a carry?",
+   "back": "**No**. They are **bitwise** operations, meaning each bit is processed independently without affecting its neighbors."
+  }
+ ],
+ "practice": [
+  {
+   "question": "In an ALU, multiple functional units (like an adder and a shifter) calculate their results simultaneously. Which component is used to select the final output based on the control signal?",
+   "options": [
+    "Multiplexer",
+    "Decoder",
+    "Register",
+    "ALU Control Unit"
+   ],
+   "correct_index": 0,
+   "explanation": "Think of a **multiplexer** as a selector switch; it picks the right result from all the different units based on our control signal."
+  },
+  {
+   "question": "To implement the subtraction operation `A - B` using a standard 4-bit binary adder, how should the input `B` and the carry-in `C_in` be configured?",
+   "options": [
+    "Invert all bits of B and set `C_in` to 1",
+    "Invert all bits of B and set `C_in` to 0",
+    "Keep B as it is and set `C_in` to 1",
+    "Use a separate subtraction circuit"
+   ],
+   "correct_index": 0,
+   "explanation": "To get `A - B`, we need `A + (not B + 1)`. We get that `+1` by simply setting the **carry-in** to 1!"
+  },
+  {
+   "question": "A 4-bit ALU performs 2's complement arithmetic. If the input operands are `0111` (which is +7) and `0001` (which is +1), what will be the 4-bit result and the state of the **overflow flag**?",
+   "options": [
+    "1000, Overflow flag is set",
+    "1000, Overflow flag is not set",
+    "0110, Overflow flag is set",
+    "0111, Overflow flag is not set"
+   ],
+   "correct_index": 0,
+   "explanation": "Since we added two positive numbers and got a negative result (`1000`), the hardware knows something went wrong, so it sets the **overflow flag**."
+  },
+  {
+   "question": "A 4-bit ALU performs a bitwise `AND` operation. If the inputs are `A = 1010` and `B = 0101`, what is the result and which flag is most likely to be **set**?",
+   "options": [
+    "0000, Zero flag is set",
+    "0000, Sign flag is set",
+    "1010, Zero flag is set",
+    "1111, Sign flag is set"
+   ],
+   "correct_index": 0,
+   "explanation": "Since `1010 AND 0101` results in all zeros, the ALU will automatically set the **Zero flag** to let us know the result is zero."
+  },
+  {
+   "question": "Which signal is typically used by the Control Unit to tell the ALU whether to perform an arithmetic operation or a logical operation?",
+   "options": [
+    "Opcode",
+    "Address",
+    "Data",
+    "Clock"
+   ],
+   "correct_index": 0,
+   "explanation": "The **opcode** is just the part of the instruction that tells the ALU exactly which operation to perform, like addition or AND."
+  }
+ ]
+}

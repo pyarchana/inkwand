@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>inkwand</title>
+  <meta name="description" content="Free GATE CSE notes, practice papers and flashcards, made for self-taught students.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- Small doodles in the page margins (hidden on small screens) -->
+  <div class="margin-doodles" aria-hidden="true">
+    <svg class="doodle plane plane-1" viewBox="0 0 80 50"><path d="M3 24 L76 4 L44 46 L36 30 Z M36 30 L76 4 M3 24 L36 30" /><path class="trail" d="M2 40 q-14 6 -26 2 q-10 -4 -20 3" /></svg>
+    <svg class="doodle plane plane-2" viewBox="0 0 80 50"><path d="M3 24 L76 4 L44 46 L36 30 Z M36 30 L76 4 M3 24 L36 30" /></svg>
+    <svg class="doodle clip clip-1" viewBox="0 0 30 80"><path d="M10 70 V16 a8 8 0 0 1 16 0 V62 a12 12 0 0 1 -24 0 V22" /></svg>
+    <svg class="doodle star-doodle s-1" viewBox="0 0 40 40"><path d="M20 3 l4.5 11 11.5 1 -8.8 7.6 2.8 11.4 -10 -6.2 -10 6.2 2.8 -11.4 -8.8 -7.6 11.5 -1 z" /></svg>
+    <svg class="doodle star-doodle s-2" viewBox="0 0 40 40"><path d="M20 3 l4.5 11 11.5 1 -8.8 7.6 2.8 11.4 -10 -6.2 -10 6.2 2.8 -11.4 -8.8 -7.6 11.5 -1 z" /></svg>
+    <svg class="doodle pencil-doodle" viewBox="0 0 140 30"><path d="M6 15 L26 6 H128 V24 H26 Z M26 6 V24 M128 6 h6 v18 h-6 M6 15 l8 -3.5 v7 z" /><path d="M40 11 H118 M40 19 H118" class="thin" /></svg>
+    <svg class="doodle ruler-doodle" viewBox="0 0 30 180"><rect x="3" y="3" width="24" height="174" rx="2" /><path class="thin" d="M3 20 h9 M3 38 h6 M3 56 h9 M3 74 h6 M3 92 h9 M3 110 h6 M3 128 h9 M3 146 h6 M3 164 h9" /></svg>
+  </div>
+
+  <header class="topbar">
+    <a href="#/" class="logo" aria-label="inkwand home">
+      <svg class="logo-pen" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40 L32 12 l6 5 -24 28 -8 2 z M32 12 l4 -5 a3 3 0 0 1 5 0 l1 1 a3 3 0 0 1 0 4 l-5 5 M12 36 l4 4" /><path class="spark" d="M40 26 v6 M37 29 h6 M44 36 v3 M42.5 37.5 h3" /></svg>
+      <span data-site-name>inkwand</span>
+    </a>
+    <a href="#/" class="stars-badge" id="stars" aria-live="polite" title="Stickers you have earned">
+      <span class="badge-sticker" data-badge-sticker aria-hidden="true"></span>
+      <span><b data-stars>0</b> <span class="stars-label">stickers</span></span>
+    </a>
+  </header>
+
+  <main id="app">
+    <!-- Bookshelf -->
+    <section id="shelf-view" class="view" hidden>
+      <div class="intro">
+        <div>
+          <h1 class="underlined">Your GATE CSE library</h1>
+          <p class="lead">Every subject in the GATE syllabus, one book each. Open a book and every chapter has <span class="hl">notes</span>, a <span class="hl">practice paper</span> and <span class="hl">flashcards</span>.</p>
+        </div>
+        <div class="sticky-note intro-note">
+          <span class="tape" aria-hidden="true"></span>
+          <p>Free forever. No login. Made for self-taught students.</p>
+          <svg class="arrow-doodle" viewBox="0 0 120 90" aria-hidden="true"><path d="M10 8 C 40 10, 70 30, 72 78" /><path d="M60 66 L72 80 L82 64" /></svg>
+        </div>
+      </div>
+      <div class="home-grid">
+        <div id="shelves" class="bookcase"></div>
+        <aside class="home-side">
+          <section class="calendar" aria-labelledby="cal-title">
+            <div class="rings" aria-hidden="true"></div>
+            <div class="cal-head">
+              <button class="cal-nav" data-cal="-1" aria-label="Previous month">&lsaquo;</button>
+              <h2 id="cal-title"></h2>
+              <button class="cal-nav" data-cal="1" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div class="cal-grid" id="cal-grid" role="grid"></div>
+            <p class="cal-streak" id="cal-streak"></p>
+          </section>
+          <section class="sticker-sheet" aria-labelledby="sheet-title">
+            <h2 id="sheet-title">My sticker sheet</h2>
+            <div class="sheet-grid" id="sheet-grid"></div>
+            <p class="sheet-hint">Get a question right to earn a sticker. Full marks earns a trophy.</p>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Open book -->
+    <section id="book-view" class="view" hidden>
+      <a href="#/" class="back-link">&larr; back to the shelf</a>
+      <div class="notebook" id="notebook">
+        <aside class="contents">
+          <details id="contents-details" open>
+            <summary><h2 id="book-title" class="underlined"></h2></summary>
+            <div class="progress" id="book-progress">
+              <div class="progress-track"><div class="progress-fill" data-fill></div></div>
+              <p class="progress-text" data-progress-text></p>
+            </div>
+            <ol id="chapter-list" class="chapter-list"></ol>
+          </details>
+          <form id="ask-form" class="ask-form">
+            <label for="ask-topic">Can't find your topic? Ask about anything in this book:</label>
+            <div class="ask-row">
+              <input id="ask-topic" name="topic" type="text" minlength="2" maxlength="150" required placeholder="e.g. Belady's anomaly">
+              <button type="submit" class="btn small">Ask</button>
+            </div>
+          </form>
+        </aside>
+
+        <article class="page" aria-labelledby="page-title">
+          <svg class="page-clip" viewBox="0 0 30 80" aria-hidden="true"><path d="M10 70 V16 a8 8 0 0 1 16 0 V62 a12 12 0 0 1 -24 0 V22" /></svg>
+          <p class="page-kicker" id="page-kicker"></p>
+          <h2 id="page-title" class="page-title"></h2>
+          <div class="page-tabs" role="tablist" aria-label="Study mode">
+            <button role="tab" class="page-tab tab-notes" data-tab="notes">Notes</button>
+            <button role="tab" class="page-tab tab-practice" data-tab="practice">Practice paper</button>
+            <button role="tab" class="page-tab tab-flashcards" data-tab="flashcards">Flashcards</button>
+          </div>
+          <div id="page-body" class="page-body" role="tabpanel" aria-live="polite"></div>
+          <p class="part-rule">A chapter gets its green tick when you read the notes to the end, answer the whole practice paper and flip every flashcard.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Empty classroom footer -->
+  <footer class="classroom">
+    <svg class="torn-edge" viewBox="0 0 1200 30" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 0 H1200 V14 l-30 9 -26 -7 -34 10 -28 -8 -40 9 -22 -6 -36 8 -30 -9 -24 7 -38 -6 -26 9 -34 -8 -28 7 -40 -9 -22 8 -36 -7 -30 9 -26 -6 -34 8 -28 -9 -40 7 -22 -6 -36 9 -30 -8 -24 7 -38 -6 -26 8 -34 -9 -28 7 -40 -8 -22 9 -36 -7 -30 6 -26 -8 -34 9 -28 -7 -16 4 Z" />
+    </svg>
+    <svg class="classroom-scene" viewBox="0 0 1200 440" preserveAspectRatio="xMidYMax slice" role="img" aria-label="A hand-drawn empty classroom with a blackboard and benches">
+      <defs>
+        <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
+        <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#b07a4a" stroke-width="2" opacity=".35" /></pattern>
+        <pattern id="floor" width="90" height="40" patternUnits="userSpaceOnUse"><path d="M0 39 H90 M45 0 V39" stroke="#c9a577" stroke-width="1.5" fill="none" /></pattern>
+      </defs>
+      <!-- wall and floor -->
+      <rect x="0" y="0" width="1200" height="440" fill="#f4ecdc" />
+      <path d="M0 22 H1200" stroke="#e6d9bf" stroke-width="10" />
+      <rect x="0" y="352" width="1200" height="88" fill="#ead7b5" />
+      <rect x="0" y="352" width="1200" height="88" fill="url(#floor)" />
+
+      <g filter="url(#wobble)" fill="none" stroke="#1f2a44" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M0 352 H1200" />
+        <path d="M0 340 H1200" stroke-width="1.6" />
+
+        <!-- window -->
+        <rect x="60" y="60" width="170" height="180" fill="#dcefff" />
+        <path d="M145 60 V240 M60 150 H230" />
+        <circle cx="105" cy="100" r="16" fill="#ffe28a" />
+        <path d="M160 125 q8 -14 22 -8 q8 -12 22 -2 q14 0 12 12 h-56 z" fill="#fff" />
+        <path d="M50 240 H240" stroke-width="5" />
+        <!-- potted plant on the sill -->
+        <path d="M200 236 l4 -26 h22 l4 26 z" fill="#e8916b" />
+        <path d="M215 210 q-16 -24 -4 -40 M215 210 q4 -26 18 -34 M215 210 q-24 -10 -30 -26" stroke="#3f8f5a" />
+
+        <!-- blackboard -->
+        <rect x="320" y="40" width="560" height="230" rx="6" fill="#2f4f3e" stroke="#7a5230" stroke-width="10" />
+        <path d="M330 282 H870" stroke="#7a5230" stroke-width="7" />
+        <rect x="380" y="272" width="44" height="10" fill="#f4f4f4" stroke-width="1.8" />
+        <rect x="760" y="270" width="60" height="14" rx="2" fill="#8a6d4d" stroke-width="1.8" />
+        <path d="M444 278 h18" stroke="#fff" stroke-width="4" />
+
+        <!-- wall clock -->
+        <circle cx="1060" cy="90" r="40" fill="#fff" />
+        <path d="M1060 60 v4 M1060 116 v4 M1030 90 h4 M1086 90 h4" stroke-width="2" />
+        <path d="M1060 90 V68 M1060 90 L1076 98" />
+
+        <!-- teacher's table with books and a globe -->
+        <path d="M915 262 H1135 V276 H915 Z" fill="#c9935f" />
+        <path d="M930 276 V352 M1120 276 V352" stroke-width="4" />
+        <rect x="935" y="236" width="70" height="12" fill="#e07a5f" />
+        <rect x="940" y="224" width="60" height="12" fill="#3d85c6" />
+        <rect x="932" y="248" width="76" height="14" fill="#f1c232" />
+        <circle cx="1080" cy="214" r="26" fill="#bfe3f5" />
+        <path d="M1062 202 q12 6 10 18 q12 2 14 14 M1090 192 q-6 10 4 16" stroke="#3f8f5a" stroke-width="2" />
+        <path d="M1080 240 v14 M1064 262 h32 l-6 -8 h-20 z" />
+        <path d="M1050 214 a30 30 0 0 1 58 -8" stroke-width="2" />
+
+        <!-- benches: back row -->
+        <g fill="#d9a46c">
+          <path d="M110 296 H330 V306 H110 Z" />
+          <path d="M470 296 H730 V306 H470 Z" />
+          <path d="M870 296 H1090 V306 H870 Z" />
+        </g>
+        <path d="M120 306 V352 M320 306 V352 M480 306 V352 M720 306 V352 M880 306 V352 M1080 306 V352" stroke-width="3.2" />
+        <path d="M110 326 H330 M470 326 H730 M870 326 H1090" stroke-width="1.8" />
+
+        <!-- benches: front row (bigger, closer) -->
+        <g fill="#c98f55">
+          <path d="M40 360 H360 V376 H40 Z" />
+          <path d="M440 360 H760 V376 H440 Z" />
+          <path d="M840 360 H1160 V376 H840 Z" />
+        </g>
+        <path d="M54 376 V440 M346 376 V440 M454 376 V440 M746 376 V440 M854 376 V440 M1146 376 V440" stroke-width="4" />
+        <path d="M60 406 H340 M460 406 H740 M860 406 H1140" stroke-width="2.2" />
+        <path d="M70 360 V368 q0 4 4 4 h40 M470 360 v8 M870 360 v8" stroke-width="1.4" />
+
+        <!-- a forgotten notebook, pencil and a paper airplane -->
+        <path d="M160 352 l40 -6 6 6 -40 6 z" fill="#fff" stroke-width="1.8" />
+        <path d="M600 352 l46 -6" stroke="#f1c232" stroke-width="5" />
+        <path d="M980 430 l60 -18 -24 30 -6 -12 z M1010 430 l30 -18" fill="#fff" stroke-width="1.8" />
+      </g>
+
+      <!-- outside the wobble filter so the ticking hand does not redraw the whole scene -->
+      <path class="clock-hand" d="M1060 92 V60" stroke="#e0823d" stroke-width="1.6" stroke-linecap="round" />
+
+      <!-- chalk writing on the board -->
+      <g class="chalk" font-family="Kalam, cursive" fill="#f5f5ee" text-anchor="middle">
+        <text x="600" y="102" font-size="46" font-weight="700" data-board-title>inkwand</text>
+        <path d="M480 116 q60 8 120 0 t120 0" stroke="#f5f5ee" stroke-width="2.4" fill="none" stroke-linecap="round" />
+        <text x="600" y="162" font-size="27" data-board-line>Built for every self-taught student</text>
+        <text x="600" y="210" font-size="22" opacity=".85">Notes · Practice papers · Flashcards</text>
+        <a data-link-github href="#"><text x="520" y="250" font-size="22" text-decoration="underline">GitHub</text></a>
+        <text x="600" y="250" font-size="22">·</text>
+        <a data-link-dev href="#"><text x="680" y="250" font-size="22" text-decoration="underline">DEV post</text></a>
+      </g>
+    </svg>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
