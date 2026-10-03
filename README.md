@@ -1,61 +1,84 @@
 # inkwand
 
-A free study site for GATE CSE. Every subject in the syllabus is a book on a shelf, and every chapter has short notes, a practice paper and a deck of flashcards.
+A free study notebook for GATE CSE. Every subject is a book on a shelf, and every chapter comes with notes, a practice paper and a deck of flashcards, all written by Gemma, an open model.
 
-I built this for students like I was: self-taught, from a small town, no coaching, no money for paid courses, usually on an old laptop with patchy internet. Studying alone for GATE gets lonely. inkwand tries to feel like your own school notebook, with gold stars for right answers and a calendar that shows you showing up every day.
+**Try it:** https://inkwand.onrender.com
 
-Live site: https://inkwand.onrender.com
+![A book sliding off the shelf and opening](docs/demo/1-open-a-book.gif)
 
-## Features
+## Why I made it
 
-- **The whole GATE 2027 CS syllabus.** 13 books (Discrete Maths, Linear Algebra, Calculus, Probability, Digital Logic, COA, Programming and Data Structures, Algorithms, TOC, Compilers, OS, DBMS, Computer Networks) and 86 chapters, taken from the official syllabus.
-- **Notes** for every chapter, written like a senior's notes: a simple explanation, one worked example, common traps, and one line to remember.
-- **Practice papers** of 5 GATE-style MCQs. Pick an answer and you get a tick or a cross and a short explanation.
+My brother is preparing for GATE, the big engineering exam in India that decides master's admissions at places like the IITs. The computer science paper covers pretty much everything from college, and studying for it on your own can feel lonely. Nobody is around to tell you that you're getting better.
+
+So I built him a notebook that does. It looks like the grid paper notebooks we all had in school, it hands out gold stars when you get things right, and it quietly keeps track of every day you show up :)
+
+## What's inside
+
+- **The whole syllabus as a bookshelf.** 13 subjects and 86 chapters, straight from the official GATE 2027 CS syllabus. Click a book and it slides off the shelf and opens.
+- **Notes for every chapter**, written like a friendly senior's notes: the idea in simple words, one worked example, the common traps, and one line to remember. Key terms are marked in pink, green and yellow highlighter, and traps get orange.
+- **A practice paper for every chapter.** Five exam-style questions. Get one right and a sticker lands on the page (a gold star, a medal, a crown or a "Very good!"). Get one wrong and you get a gentle cross and an explanation. Full marks earns a trophy.
 - **Flashcards** you tap to flip, with shuffle.
-- **Stickers.** Every right answer earns a sticker (gold star, medal, crown, "Very good!"). Full marks earns a trophy.
-- **Study calendar.** Each day you study gets a green tick, and it tracks your streak.
-- **Progress.** A chapter is done when you have read the notes, finished the paper and flipped every card. Finished chapters get a green tick, and each book shows a progress bar.
-- **Ask about anything.** Each book has a box where you can type any topic and get fresh notes, a paper or flashcards written on the spot.
-- **No login, no database.** Stickers, progress and the calendar are saved in your own browser.
-- **Light.** Plain HTML, CSS and JavaScript with no build step and no image files. The pre-written library loads instantly, even on a slow connection.
+- **Green ticks.** Read the notes, finish the paper and flip every card, and the chapter gets ticked off. Each book shows how far along you are.
+- **A study calendar.** Every day you study gets a tick, there's a streak, and hovering over a day shows what you did that day.
+- **Ask about anything.** If a topic is missing, type it into the book's ask box and Gemma writes fresh notes, a paper or flashcards on the spot.
+- **No login and no accounts.** Your stickers, ticks and calendar live in your own browser.
+
+## A quick look
+
+**Practice paper with stickers**
+
+![Answering practice questions and collecting tick marks and stickers](docs/demo/2-practice-stickers.gif)
+
+**Flashcards, then the chapter gets its green tick**
+
+![Flipping flashcards until the chapter is marked covered](docs/demo/3-flashcards-done.gif)
+
+**The study calendar**
+
+![Hovering a ticked day on the calendar shows what was studied](docs/demo/4-calendar.gif)
+
+**And the classroom waiting at the bottom of the page**
+
+![The classroom footer with chalk on the blackboard and a sunny window](docs/demo/5-classroom.gif)
 
 ## How it works
 
-The content is written by Gemma, Google's open-weight model, through the Gemini API.
+Everything is written by **Gemma 4**, Google's open-weight model, through the Gemini API.
 
-Gemma 4 thinks before it answers, and on the free tier one answer takes one to two minutes. That is too slow to make students wait for every page. So `scripts/build_library.py` writes the whole library once and saves it as JSON files in `data/library/`. The site serves those files, so opening a chapter is instant and costs nothing.
+My first version asked Gemma for notes every time someone opened a page. It worked, but Gemma 4 thinks before it answers, and on the free tier that took anywhere from 45 to 90 seconds per answer. Nobody wants to wait that long for a page of notes. So instead, `scripts/build_library.py` asks Gemma to write the whole library once, all 258 pieces of it, and saves them as JSON files in `data/library/`. The site just serves those files, so chapters open instantly and cost nothing to load.
 
-Live writing is still used for the "ask about anything" box and the "write me a fresh paper" buttons. Those take about a minute and the page says so.
+Gemma is still called live for the "ask about anything" box and the "write me a fresh paper" buttons. Those take about a minute, and the page says so up front.
 
-Everything the model writes is checked before it is shown. MCQs and flashcards must come back as JSON in the right shape (4 options, one correct index, an explanation, and so on). If the reply does not parse, the server asks once more with a stricter prompt, and if that also fails the student sees a friendly error.
+Every reply from the model gets checked before anyone sees it. Practice papers and flashcards have to come back as proper JSON (four options, one correct answer, an explanation, and so on), validated with Pydantic. If a reply doesn't parse, the server asks once more with a stricter prompt, and if that fails too, you get a friendly message instead of a broken page. And if one Gemma model is having a bad day on the free tier, inkwand quietly asks a second one.
 
-## Project layout
+The front end is plain HTML, CSS and JavaScript with no framework and no build step. Every icon, sticker and drawing is an inline SVG, so there are no image files to download.
+
+### Project layout
 
 ```
 app/
-  main.py          FastAPI app, serves the API and the static site
+  main.py          FastAPI app, serves the API and the site
   config.py        site name, links, and the syllabus (books and chapters)
   prompts.py       every prompt sent to the model
-  llm.py           small wrapper around the google-genai SDK
-  content.py       writing content and reading/saving the library
+  llm.py           a small wrapper around the google-genai SDK
+  content.py       writes content and reads or saves the library
   schemas.py       Pydantic models and JSON parsing
   routes/api.py    API routes
 static/            index.html, styles.css, app.js, favicon
-data/library/      pre-written chapters, one JSON file per chapter
+data/library/      the pre-written chapters, one JSON file each
 scripts/
   list_models.py   lists the Gemma models your API key can use
   build_library.py writes the library
-tests/             pytest tests (the model is mocked)
+tests/             pytest tests, with the model mocked
+docs/demo/         the GIFs in this README
 render.yaml        Render deploy config
 ```
 
-## Setup on Windows (PowerShell)
+## Run it yourself
 
-You need Python 3.11 or newer and a free Gemini API key.
+You'll need Python 3.11 or newer and a free Gemini API key from https://aistudio.google.com/apikey. These steps are for Windows PowerShell, but they translate easily to macOS and Linux.
 
-1. Get an API key from https://aistudio.google.com/apikey
-
-2. Clone the repo and create a virtual environment:
+1. Clone the repo and install everything:
 
    ```powershell
    git clone https://github.com/pyarchana/inkwand.git
@@ -64,32 +87,30 @@ You need Python 3.11 or newer and a free Gemini API key.
    .\.venv\Scripts\python -m pip install -r requirements.txt
    ```
 
-3. Create your `.env` file and paste your key into it:
+2. Create your `.env` file and paste your key into it:
 
    ```powershell
    Copy-Item .env.example .env
    notepad .env
    ```
 
-   `.env` is in `.gitignore`, so your key never gets committed.
+   Don't worry, `.env` is in `.gitignore`, so your key never gets committed.
 
-4. Check which Gemma models your key can use:
+3. Check which Gemma models your key can use:
 
    ```powershell
    .\.venv\Scripts\python scripts\list_models.py
    ```
 
-   Put the one you want in `.env` as `GEMMA_MODEL`. The default is `gemma-4-26b-a4b-it`, which is the faster of the two Gemma 4 models.
+   Put the one you like in `.env` as `GEMMA_MODEL`. The default, `gemma-4-26b-a4b-it`, is the faster of the two Gemma 4 models.
 
-## Run locally
+4. Start the app and open http://localhost:8000
 
-```powershell
-.\.venv\Scripts\python -m uvicorn app.main:app --reload --port 8000
-```
+   ```powershell
+   .\.venv\Scripts\python -m uvicorn app.main:app --reload --port 8000
+   ```
 
-Open http://localhost:8000
-
-Run the tests:
+To run the tests:
 
 ```powershell
 .\.venv\Scripts\python -m pytest -q
@@ -97,56 +118,56 @@ Run the tests:
 
 ### Writing or refreshing the library
 
-The repo already includes the written chapters. To write any that are missing:
+The written chapters already come with the repo, so you only need this if you want to fill in something missing or rewrite a chapter:
 
 ```powershell
 .\.venv\Scripts\python scripts\build_library.py
 ```
 
-It skips anything already written, so you can stop it and run it again later. Some handy options:
+It skips anything that's already written, so it's safe to stop it and run it again later. A few handy options:
 
 ```powershell
-# only one book
+# just one book
 .\.venv\Scripts\python scripts\build_library.py --book os
-# rewrite one chapter
+# rewrite a single chapter
 .\.venv\Scripts\python scripts\build_library.py --book os --chapter deadlock --force
-# fewer parallel requests if you hit rate limits
+# go easier on the free tier if you hit rate limits
 .\.venv\Scripts\python scripts\build_library.py --workers 2
 ```
 
-To add a subject or chapter, edit `BOOKS` in `app/config.py` and run the script again.
+Want to add a subject or a chapter? Edit `BOOKS` in `app/config.py` and run the script again.
 
 ## Deploy on Render
 
-The repo has a `render.yaml`, so Render can set everything up from it.
+The repo includes a `render.yaml`, so Render can set everything up for you.
 
-1. Push the repo to GitHub.
-2. In the Render dashboard, click **New**, then **Blueprint**, and pick this repo. Render reads `render.yaml` and creates a web service called `inkwand`.
-3. When it asks for environment variables, set:
+1. In the Render dashboard, click **New**, then **Blueprint**, and pick this repo. Render reads `render.yaml` and creates a web service called `inkwand`.
+2. When it asks for environment variables, fill these in:
 
    | Variable | Value |
    |---|---|
    | `GEMINI_API_KEY` | your Gemini API key (required, keep it secret) |
-   | `GEMMA_MODEL` | already set to `gemma-4-26b-a4b-it` by `render.yaml`, change it if you want |
+   | `GEMMA_MODEL` | already set to `gemma-4-26b-a4b-it` by `render.yaml` |
    | `PYTHON_VERSION` | already set to `3.11.9` by `render.yaml` |
-| `GEMMA_FALLBACK_MODEL` | optional. Tried once if the main model has a server error. Defaults to `gemma-4-31b-it`, set to `none` to turn it off |
+   | `GEMMA_FALLBACK_MODEL` | optional, the model to try if the main one has a server error. Defaults to `gemma-4-31b-it`, set it to `none` to turn it off |
 
-4. Deploy. The start command is `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, and Render checks `/api/health` to know the app is up.
+3. Hit deploy. Render starts the app with `uvicorn app.main:app --host 0.0.0.0 --port $PORT` and checks `/api/health` to know it's up.
 
-The pre-written library is part of the repo, so it works on Render with no extra steps. Only live writing needs the API key.
+Since the library lives in the repo, the site works straight away. Only live writing needs the API key.
 
-On the free plan the service sleeps after about 15 minutes with no visitors, and the next visit takes around a minute to wake it. To keep it always on, change `plan: free` to `plan: starter` in `render.yaml`.
+On the free plan the service goes to sleep after about 15 minutes without visitors, and the next visit takes around a minute to wake it up. If you'd rather keep it always on, change `plan: free` to `plan: starter` in `render.yaml`.
 
-## Why open-weight models
+## Why an open model
 
-- **Free to use.** Gemma costs nothing on the Gemini API free tier, which matters when the whole point is helping students who cannot pay for courses.
-- **No vendor lock-in.** The weights are public. If the hosted API changes or goes away, the same model can be run somewhere else, and nothing in this app has to change except `app/llm.py`.
-- **It can run fully offline.** Anyone with better hardware than my 8 GB laptop can download Gemma and run it locally with no internet and no API key. A coaching centre or a college lab could host the whole thing for its students.
+- **It's free.** Gemma costs nothing on the Gemini API free tier, and good study material shouldn't sit behind a paywall.
+- **The content is open too.** The whole library is plain JSON in this repo. If you spot a wrong answer, open a pull request and it's fixed for everyone.
+- **No lock-in.** The weights are public. If the hosted API ever changes, the same model can run somewhere else, and only `app/llm.py` needs to change.
+- **It can go fully offline.** My 8 GB laptop can't run Gemma locally, but anyone with better hardware can. A college lab could host the whole thing for its students with no internet and no API key.
 
 ## A note on accuracy
 
-All notes, questions and flashcards are written by a model. They are usually right, but not always. If something looks off, trust your textbook, and feel free to open an issue so it can be fixed.
+Everything here was written by a model. It's usually right, but not always. If something looks off, trust your textbook, and please open an issue so it can be fixed :)
 
 ## License
 
-MIT, see [LICENSE](LICENSE). Made by Archana.
+MIT, see [LICENSE](LICENSE). Made with care by Archana.
