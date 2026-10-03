@@ -2,9 +2,9 @@ services:
   - type: web
     name: inkwand
     runtime: python
-    # free sleeps after ~15 min idle (first visit then takes ~1 min to wake).
-    # Switch to "starter" to keep it always on.
-    plan: free
+    # starter stays awake. "free" also works, but sleeps after ~15 min idle
+    # and the first visit then takes about a minute to wake it.
+    plan: starter
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
