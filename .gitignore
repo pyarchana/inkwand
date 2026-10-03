@@ -19,4 +19,4 @@ htmlcov/
 Thumbs.db
 
 # local recordings
-demo/
+/demo/
