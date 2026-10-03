@@ -155,7 +155,7 @@ The repo includes a `render.yaml`, so Render can set everything up for you.
 
 Since the library lives in the repo, the site works straight away. Only live writing needs the API key.
 
-On the free plan the service goes to sleep after about 15 minutes without visitors, and the next visit takes around a minute to wake it up. If you'd rather keep it always on, change `plan: free` to `plan: starter` in `render.yaml`.
+`render.yaml` uses Render's **Starter** instance, so the site stays awake and opens instantly. If you'd rather run it for free, change `plan: starter` to `plan: free`. Just know that the free plan goes to sleep after about 15 minutes without visitors, and the next visit takes around a minute to wake it up.
 
 ## Why an open model
 
