@@ -167,7 +167,7 @@ Since the library lives in the repo, the site works straight away. Only live wri
 - **It's free.** Gemma costs nothing on the Gemini API free tier, and good study material shouldn't sit behind a paywall.
 - **The content is open too.** The whole library is plain JSON in this repo. If you spot a wrong answer, open a pull request and it's fixed for everyone.
 - **No lock-in.** The weights are public. If the hosted API ever changes, the same model can run somewhere else, and only `app/llm.py` needs to change.
-- **It can go fully offline.** My 8 GB laptop can't run Gemma locally, but anyone with better hardware can. A college lab could host the whole thing for its students with no internet and no API key.
+- **It works offline.** The whole library is saved in your browser, so every chapter opens with no internet. And because Gemma's weights are public, the model itself can run fully offline too, with no API key at all. A college lab could host the whole thing for its students.
 
 ## A note on accuracy
 
