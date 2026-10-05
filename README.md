@@ -40,9 +40,17 @@ So I built him a notebook that does. It looks like the grid paper notebooks we a
 
 ![Hovering a ticked day on the calendar shows what was studied](docs/demo/4-calendar.gif)
 
-**And the classroom waiting at the bottom of the page**
+**Get one wrong, correct it later in the mistakes notebook**
 
-![The classroom footer with chalk on the blackboard and a sunny window](docs/demo/5-classroom.gif)
+![A wrong answer lands in the mistakes notebook and gets crossed off once corrected](docs/demo/6-mistakes.gif)
+
+**A report card, with remarks from Gemma**
+
+![The report card showing grades per subject and red-pen remarks written by Gemma](docs/demo/7-report-card.gif)
+
+**And it works offline**
+
+![With the internet off, the library still opens and a book can be read](docs/demo/8-offline.gif)
 
 ## How it works
 
