@@ -117,6 +117,53 @@ def parse_mcqs(text: str, expected: int) -> list[MCQ]:
     return _parse_list(text, "questions", MCQ, expected, minimum=expected)
 
 
+class SubjectProgress(BaseModel):
+    """What the browser knows about one subject. Titles come from the server's config."""
+
+    book: str = Field(min_length=1, max_length=40)
+    chapters_done: int = Field(ge=0, le=200)
+    progress_pct: int = Field(ge=0, le=100)
+    avg_score_pct: int | None = Field(default=None, ge=0, le=100)
+    papers: int = Field(default=0, ge=0, le=10_000)
+
+
+class ReportRequest(BaseModel):
+    subjects: list[SubjectProgress] = Field(min_length=1, max_length=40)
+    days_studied: int = Field(default=0, ge=0, le=10_000)
+    streak: int = Field(default=0, ge=0, le=10_000)
+    stickers: int = Field(default=0, ge=0, le=100_000)
+
+
+class SubjectRemark(BaseModel):
+    book: str = Field(min_length=1, max_length=40)
+    remark: str = Field(min_length=1, max_length=400)
+
+    @field_validator("remark")
+    @classmethod
+    def strip_text(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("must not be blank")
+        return v
+
+
+class ReportRemarks(BaseModel):
+    overall: str = Field(min_length=1, max_length=600)
+    subjects: list[SubjectRemark]
+
+
+def parse_report(text: str, books: set[str]) -> ReportRemarks:
+    data = _extract_json(text)
+    try:
+        report = ReportRemarks.model_validate(data)
+    except ValidationError as e:
+        raise ParseError(f"report failed validation: {e.error_count()} error(s)") from e
+    report.subjects = [s for s in report.subjects if s.book in books]
+    if not report.subjects:
+        raise ParseError("report has no remarks for the subjects asked about")
+    return report
+
+
 def parse_flashcards(text: str, expected: int) -> list[Flashcard]:
     # A deck one or two cards short is still useful.
     return _parse_list(text, "cards", Flashcard, expected, minimum=max(1, expected - 2))

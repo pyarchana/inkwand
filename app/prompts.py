@@ -90,6 +90,29 @@ Use exactly this shape:
 """
 
 
+def report_prompt(progress: str) -> str:
+    return f"""You are the class teacher writing remarks on a student's report card for their
+GATE CSE preparation on inkwand, a free study notebook. Be warm, honest and specific, like a
+teacher who believes in the student. Mention their actual numbers. Praise real progress, and
+for weak or barely started subjects, give one small, concrete next step. Never be harsh.
+
+The student's progress (one line per subject they have started, then their overall habits):
+{progress}
+
+Write one remark per subject listed, at most 25 words each, and one overall remark of at most
+40 words. Plain text only inside the strings, no markdown, no emojis.
+
+Return ONLY valid JSON, with no text before or after it and no markdown code fences.
+Use exactly this shape, with "book" copied exactly from the subject's id:
+{{
+  "overall": "string",
+  "subjects": [
+    {{"book": "string", "remark": "string"}}
+  ]
+}}
+"""
+
+
 RETRY_SUFFIX = """
 Your previous reply could not be parsed. Reply again with ONLY the JSON object,
 exactly in the shape described above, and nothing else.

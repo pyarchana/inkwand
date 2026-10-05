@@ -191,3 +191,53 @@ def test_no_fallback_for_client_errors(monkeypatch):
         asyncio.run(llm.generate("hi"))
     assert e.value.status_code == 429
     assert calls == ["main-model"]
+
+
+REPORT_REQ = {
+    "subjects": [
+        {"book": "os", "chapters_done": 2, "progress_pct": 30, "avg_score_pct": 80, "papers": 2},
+        {"book": "dbms", "chapters_done": 0, "progress_pct": 5, "avg_score_pct": None, "papers": 0},
+        {"book": "not-a-book", "chapters_done": 1, "progress_pct": 50},
+    ],
+    "days_studied": 4, "streak": 3, "stickers": 9,
+}
+GOOD_REPORT = json.dumps({
+    "overall": "Steady work, keep the streak going.",
+    "subjects": [
+        {"book": "os", "remark": "Great scores in OS."},
+        {"book": "dbms", "remark": "Try one DBMS paper this week."},
+        {"book": "made-up", "remark": "Should be dropped."},
+    ],
+})
+
+
+def test_report_ok(monkeypatch):
+    calls = fake_llm(monkeypatch, [GOOD_REPORT])
+    r = client.post("/api/report", json=REPORT_REQ)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["overall"].startswith("Steady")
+    assert [s["book"] for s in data["subjects"]] == ["os", "dbms"]   # unknown book dropped
+    # titles come from our config, and unknown books never reach the prompt
+    assert "Operating Systems" in calls[0] and "not-a-book" not in calls[0]
+
+
+def test_report_retries_once_then_fails(monkeypatch):
+    calls = fake_llm(monkeypatch, ["nope", '{"overall": "x", "subjects": []}'])
+    r = client.post("/api/report", json=REPORT_REQ)
+    assert r.status_code == 502
+    assert len(calls) == 2
+
+
+def test_report_needs_a_known_subject(monkeypatch):
+    fake_llm(monkeypatch, [])
+    r = client.post("/api/report", json={"subjects": [{"book": "nope", "chapters_done": 0, "progress_pct": 1}]})
+    assert r.status_code == 422
+
+
+def test_service_worker_served_from_root():
+    r = client.get("/sw.js")
+    assert r.status_code == 200
+    assert "javascript" in r.headers["content-type"]
+    assert r.headers["cache-control"] == "no-cache"
+    assert "inkwand-v1" in r.text

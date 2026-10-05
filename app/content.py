@@ -6,8 +6,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from app import llm, prompts
-from app.config import FLASHCARDS_PER_DECK, MCQS_PER_PAPER
-from app.schemas import Kind, ParseError, parse_flashcards, parse_mcqs
+from app.config import BOOKS_BY_ID, FLASHCARDS_PER_DECK, MCQS_PER_PAPER
+from app.schemas import Kind, ParseError, ReportRequest, parse_flashcards, parse_mcqs, parse_report
 
 log = logging.getLogger("inkwand.content")
 
@@ -44,6 +44,35 @@ async def write(kind: Kind, book: str, chapter: str, scope: str):
         "The page came out smudged (the model's answer was not in the right shape). "
         "Please try again."
     )
+
+
+async def write_report(req: ReportRequest) -> dict:
+    """Ask Gemma for report card remarks. Subject titles come from our config, never the client."""
+    subjects = [s for s in req.subjects if s.book in BOOKS_BY_ID]
+    if not subjects:
+        raise llm.LLMError("No studied subjects to write a report about yet.", status_code=422)
+    lines = []
+    for s in subjects:
+        book = BOOKS_BY_ID[s.book]
+        score = f"{s.avg_score_pct}% average over {s.papers} practice paper(s)" if s.papers else "no practice papers yet"
+        lines.append(
+            f"- id={s.book}; subject={book['title']}; chapters fully done {s.chapters_done} of "
+            f"{len(book['chapters'])}; overall progress {s.progress_pct}%; {score}"
+        )
+    lines.append(f"Overall: studied on {req.days_studied} day(s), current streak {req.streak} day(s), {req.stickers} sticker(s) earned.")
+    prompt = prompts.report_prompt("\n".join(lines))
+    books = {s.book for s in subjects}
+
+    for attempt in range(2):
+        text = await llm.generate(
+            prompt if attempt == 0 else prompt + prompts.RETRY_SUFFIX,
+            temperature=0.6 if attempt == 0 else 0.3,
+        )
+        try:
+            return parse_report(text, books).model_dump()
+        except ParseError as e:
+            log.warning("report parse failed (attempt %d): %s", attempt + 1, e)
+    raise llm.LLMError("The teacher's handwriting came out smudged. Please try again.")
 
 
 # ---------- saved library ----------

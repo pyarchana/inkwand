@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app import content, llm
 from app.config import BOOKS_BY_ID, CHAPTERS, public_config
-from app.schemas import GenerateRequest
+from app.schemas import GenerateRequest, ReportRequest
 
 router = APIRouter(prefix="/api")
 
@@ -48,6 +48,16 @@ async def get_chapter(book_id: str, chapter_id: str) -> dict:
         "title": chapter["title"],
         **{kind: data.get(kind) for kind in content.KINDS},
     }
+
+
+@router.post("/report")
+async def report(req: ReportRequest) -> dict:
+    """Report card remarks from the 'class teacher', written live by Gemma."""
+    async with _live_slots:
+        try:
+            return await content.write_report(req)
+        except llm.LLMError as e:
+            raise HTTPException(status_code=e.status_code, detail=e.message) from e
 
 
 @router.post("/generate")
