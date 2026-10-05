@@ -29,7 +29,7 @@ async def revalidate_pages(request: Request, call_next):
     # but a redeploy shows up straight away instead of serving a stale stylesheet.
     response = await call_next(request)
     path = request.url.path
-    if path == "/" or path == "/favicon.svg" or path.startswith("/static/"):
+    if path in ("/", "/favicon.svg", "/sw.js") or path.startswith("/static/"):
         response.headers["Cache-Control"] = "no-cache"
     return response
 
@@ -45,6 +45,12 @@ async def friendly_validation_error(request: Request, exc: RequestValidationErro
 @app.get("/", include_in_schema=False)
 async def index():
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/sw.js", include_in_schema=False)
+async def service_worker():
+    # Served from the root so it can keep every page and chapter available offline.
+    return FileResponse(STATIC_DIR / "sw.js", media_type="text/javascript")
 
 
 @app.get("/favicon.svg", include_in_schema=False)
