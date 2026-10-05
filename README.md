@@ -21,6 +21,9 @@ So I built him a notebook that does. It looks like the grid paper notebooks we a
 - **Green ticks.** Read the notes, finish the paper and flip every card, and the chapter gets ticked off. Each book shows how far along you are.
 - **A study calendar.** Every day you study gets a tick, there's a streak, and hovering over a day shows what you did that day.
 - **Ask about anything.** If a topic is missing, type it into the book's ask box and Gemma writes fresh notes, a paper or flashcards on the spot.
+- **A mistakes notebook.** Every question you get wrong is copied into a red notebook on the shelf, like the corrections teachers made us write. Answer it right later and it gets crossed off.
+- **A report card.** A grade for every subject, and a note from your "class teacher", written by Gemma from your actual progress, in red pen.
+- **Works offline.** The whole library is saved in your browser, so all 86 chapters still open with no internet. Only writing something new needs a connection.
 - **No login and no accounts.** Your stickers, ticks and calendar live in your own browser.
 
 ## A quick look
@@ -50,6 +53,8 @@ My first version asked Gemma for notes every time someone opened a page. It work
 Gemma is still called live for the "ask about anything" box and the "write me a fresh paper" buttons. Those take about a minute, and the page says so up front.
 
 Every reply from the model gets checked before anyone sees it. Practice papers and flashcards have to come back as proper JSON (four options, one correct answer, an explanation, and so on), validated with Pydantic. If a reply doesn't parse, the server asks once more with a stricter prompt, and if that fails too, you get a friendly message instead of a broken page. And if one Gemma model is having a bad day on the free tier, inkwand quietly asks a second one.
+
+A small service worker (`static/sw.js`) saves the whole library in the browser the first time you visit, which is what makes inkwand work offline.
 
 The front end is plain HTML, CSS and JavaScript with no framework and no build step. Every icon, sticker and drawing is an inline SVG, so there are no image files to download.
 
