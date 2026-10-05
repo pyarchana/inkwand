@@ -195,7 +195,9 @@
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
       } : undefined);
     } catch {
-      throw new Error("Could not reach inkwand. Check your internet connection and try again.");
+      throw new Error(navigator.onLine === false
+        ? "You're offline. The library still works, but writing something new needs internet."
+        : "Could not reach inkwand. Check your internet connection and try again.");
     }
     let data = null;
     try { data = await res.json(); } catch { /* ignore */ }
@@ -225,7 +227,10 @@
   }
 
   // ---------- saved progress (this browser only, no login) ----------
-  const KEY = { stickers: "inkwand.stickers", progress: "inkwand.progress", days: "inkwand.days", log: "inkwand.log" };
+  const KEY = {
+    stickers: "inkwand.stickers", progress: "inkwand.progress", days: "inkwand.days", log: "inkwand.log",
+    mistakes: "inkwand.mistakes", scores: "inkwand.scores", report: "inkwand.report",
+  };
   const store = {
     get(key, fallback) {
       try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
@@ -254,8 +259,8 @@
   function logActivity(entry) {
     const log = store.get(KEY.log, {});
     const list = (log[dateKey()] ||= []);
-    if (entry.kind === "stickers") {
-      const e = list.find((x) => x.kind === "stickers");
+    if (entry.n) {
+      const e = list.find((x) => x.kind === entry.kind);
       if (e) e.n += entry.n; else list.push(entry);
     } else if (entry.kind === "paper" || !list.some((x) => x.kind === entry.kind && x.ref === entry.ref)) {
       list.push(entry);
@@ -386,6 +391,7 @@
       case "cards": return `Flipped every flashcard on ${what}`;
       case "chapter": return `<b>Finished the chapter</b> ${what}`;
       case "stickers": return `Earned ${e.n} sticker${e.n === 1 ? "" : "s"}`;
+      case "fixed": return `Corrected ${e.n} old mistake${e.n === 1 ? "" : "s"}`;
       default: return "Studied";
     }
   }
@@ -393,7 +399,7 @@
   function dayNote(key, col) {
     const list = store.get(KEY.log, {})[key] || [];
     // Chapters first, then papers, then the rest, stickers last.
-    const order = { chapter: 0, paper: 1, notes: 2, cards: 3, stickers: 4 };
+    const order = { chapter: 0, paper: 1, fixed: 2, notes: 3, cards: 4, stickers: 5 };
     const sorted = [...list].sort((a, b) => order[a.kind] - order[b.kind]);
     const shown = sorted.slice(0, 7);
     const items = shown.length
@@ -430,6 +436,8 @@
   // #/book/<book>/ask/<topic>/<tab>    -> a custom topic, written live
   function parseRoute() {
     const parts = location.hash.replace(/^#\/?/, "").split("/").map((p) => { try { return decodeURIComponent(p); } catch { return p; } });
+    if (parts[0] === "mistakes") return { view: "mistakes" };
+    if (parts[0] === "report") return { view: "report" };
     if (parts[0] !== "book" || !state.books[parts[1]]) return { view: "shelf" };
     const book = state.books[parts[1]];
     if (parts[2] === "ask" && parts[3]) {
@@ -449,12 +457,17 @@
     state.token++;
     $("#shelf-view").hidden = route.view !== "shelf";
     $("#book-view").hidden = route.view !== "book";
+    $("#mistakes-view").hidden = route.view !== "mistakes";
+    $("#report-view").hidden = route.view !== "report";
     if (route.view === "shelf") {
       document.title = `${state.config.site_name} · GATE CSE library`;
       renderShelves();
       renderCalendar();
+      renderSlips();
       return;
     }
+    if (route.view === "mistakes") { document.title = `Mistakes notebook · ${state.config.site_name}`; renderMistakes(); return; }
+    if (route.view === "report") { document.title = `Report card · ${state.config.site_name}`; renderReport(); return; }
     renderBook(route);
   }
 
@@ -480,8 +493,9 @@
             ${prog.done === prog.total ? `<span class="spine-done">${ICON.greenTick}</span>` : ""}
           </a>`;
       }).join("");
+      const special = shelf === c.shelves[0] ? mistakesSpine() : "";
       return `<div class="shelf">
-          <div class="shelf-books">${spines}${ICON.bookend}</div>
+          <div class="shelf-books">${spines}${special}${ICON.bookend}</div>
           <div class="plank"></div>
           <span class="shelf-label">${escapeHtml(shelf.title)}</span>
         </div>`;
@@ -497,7 +511,7 @@
   function wireShelfClicks() {
     $("#shelves").addEventListener("click", (e) => {
       const spine = e.target.closest(".book-spine");
-      if (!spine || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      if (!spine || spine.dataset.special || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !Element.prototype.animate) return;
       e.preventDefault();
       if (!opening) openBook(spine);
@@ -799,6 +813,7 @@
 
       answered++;
       markStudiedToday();
+      if (!ok) addMistake(ctx, q, chosen);
       if (ok) {
         right++;
         const type = pick(STICKER_BAG);
@@ -814,10 +829,234 @@
         $(".score-slot", paper).innerHTML = `
           <div class="score-card"><span class="score-circle">${right}/${questions.length}${ICON.circle}</span><p>${msg}</p></div>`;
         logActivity({ kind: "paper", ...about(ctx), score: `${right}/${questions.length}` });
+        if (ctx.chapter) saveScore(ctx.book, ctx.chapter, right, questions.length);
         if (full) { slapSticker($(".score-card", paper), "cup"); awardSticker("cup"); }
         if (ctx.chapter) { markPart(ctx.book, ctx.chapter, "practice"); renderTabTicks(ctx.book, ctx.chapter); }
       }
     });
+  }
+
+  // ---------- mistakes notebook ----------
+  // Every wrong answer is copied here. Answer it right later and it gets corrected.
+  function mistakeId(text) {
+    let h = 5381;
+    for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+    return "m" + (h >>> 0).toString(36);
+  }
+
+  function addMistake(ctx, q, chosen) {
+    const list = store.get(KEY.mistakes, []);
+    const id = mistakeId(q.question);
+    const existing = list.find((m) => m.id === id);
+    if (existing) { existing.fixed = false; existing.chosen = chosen; existing.at = Date.now(); }
+    else {
+      list.push({
+        id, book: ctx.book.id, bookShort: ctx.book.short, where: ctx.topic || ctx.chapter.title,
+        question: q.question, options: q.options, correct_index: q.correct_index, explanation: q.explanation,
+        chosen, at: Date.now(), fixed: false,
+      });
+    }
+    store.set(KEY.mistakes, list);
+  }
+
+  function openMistakes() { return store.get(KEY.mistakes, []).filter((m) => !m.fixed); }
+
+  function mistakesSpine() {
+    const n = openMistakes().length;
+    return `<a class="book-spine special-spine" data-special="mistakes" href="#/mistakes"
+        style="--book:#c2185b;--h:186px;--w:50px;--tilt:-2deg" title="Mistakes notebook: ${n} to correct"
+        aria-label="Open the mistakes notebook. ${n} to correct.">
+        <span class="band"></span>
+        <span class="spine-title">Mistakes</span>
+        <span class="spine-count">${n}</span>
+      </a>`;
+  }
+
+  function renderSlips() {
+    const n = openMistakes().length;
+    const total = store.get(KEY.mistakes, []).length;
+    $("[data-mistake-count]").textContent = n ? `${n} to correct` : total ? "All corrected!" : "No mistakes yet";
+  }
+
+  function renderMistakes() {
+    const all = store.get(KEY.mistakes, []);
+    const open = all.filter((m) => !m.fixed).sort((a, b) => b.at - a.at);
+    const fixed = all.filter((m) => m.fixed).sort((a, b) => (b.fixedAt || 0) - (a.fixedAt || 0));
+    const body = $("#mistakes-body");
+    if (!all.length) {
+      body.innerHTML = `<div class="empty"><p>No mistakes yet. Every question you get wrong in a practice paper lands here, so you can come back and correct it later.</p><a class="btn" href="#/">Go practise</a></div>`;
+      return;
+    }
+    const card = (m) => `
+      <div class="mcq mistake" data-mid="${m.id}">
+        <p class="mistake-from">${escapeHtml(m.bookShort)} · ${escapeHtml(m.where)}</p>
+        <div class="q-text"><div>${formatText(m.question)}</div></div>
+        <ul class="options">
+          ${m.options.map((o, j) => `<li><button class="option" data-opt="${j}"><span class="opt-letter">${"ABCD"[j]}.</span>${inline(o)}</button></li>`).join("")}
+        </ul>
+        <div class="explain-slot"></div>
+      </div>`;
+    body.innerHTML = `
+      <p class="paper-head"><span>${open.length ? `${open.length} to correct. Get one right and it's crossed off.` : "All corrected. Nice work!"}</span></p>
+      <div class="paper mistakes-list">${open.map(card).join("")}</div>
+      ${fixed.length ? `<details class="fixed-list"><summary>Corrected (${fixed.length})</summary>
+        <ul>${fixed.map((m) => `<li><span class="struck">${inline(m.question.split("\n")[0].slice(0, 140))}</span> ${ICON.greenTick}</li>`).join("")}</ul>
+      </details>` : ""}`;
+
+    $(".mistakes-list", body).addEventListener("click", (e) => {
+      const opt = e.target.closest(".option");
+      if (!opt || opt.disabled) return;
+      const cardEl = opt.closest(".mcq");
+      const list = store.get(KEY.mistakes, []);
+      const m = list.find((x) => x.id === cardEl.dataset.mid);
+      if (!m) return;
+      const chosen = Number(opt.dataset.opt);
+      const ok = chosen === m.correct_index;
+      $$(".option", cardEl).forEach((b) => {
+        b.disabled = true;
+        const j = Number(b.dataset.opt);
+        if (j === m.correct_index) { b.classList.add("correct"); b.insertAdjacentHTML("beforeend", ICON.tick + (ok ? ICON.burst : "")); }
+        else if (j === chosen) { b.classList.add("chosen-wrong"); b.insertAdjacentHTML("beforeend", ICON.cross); }
+      });
+      $(".explain-slot", cardEl).innerHTML = `<div class="explain"><p class="verdict">${ok ? "Corrected! Crossing this one off." : `Still tricky. The answer is ${"ABCD"[m.correct_index]}.`}</p>${formatText(m.explanation)}</div>`;
+      markStudiedToday();
+      if (ok) {
+        m.fixed = true; m.fixedAt = Date.now();
+        store.set(KEY.mistakes, list);
+        cardEl.classList.add("corrected");
+        cardEl.insertAdjacentHTML("beforeend", `<span class="corrected-stamp">${ICON.greenTick}<span>corrected</span></span>`);
+        awardSticker("star");
+        logActivity({ kind: "fixed", n: 1 });
+      } else {
+        m.chosen = chosen; m.at = Date.now();
+        store.set(KEY.mistakes, list);
+      }
+    });
+  }
+
+  // ---------- report card ----------
+  function saveScore(book, chapter, right, total) {
+    const all = store.get(KEY.scores, {});
+    const key = `${book.id}/${chapter.id}`;
+    const prev = all[key] || { right: 0, total: 0, papers: 0 };
+    all[key] = { right: prev.right + right, total: prev.total + total, papers: prev.papers + 1 };
+    store.set(KEY.scores, all);
+  }
+
+  function subjectStats(book) {
+    const prog = bookProgress(book);
+    const scores = store.get(KEY.scores, {});
+    let right = 0, total = 0, papers = 0;
+    for (const c of book.chapters) {
+      const s = scores[`${book.id}/${c.id}`];
+      if (s) { right += s.right; total += s.total; papers += s.papers; }
+    }
+    const avg = total ? Math.round((right / total) * 100) : null;
+    return { book, done: prog.done, chapters: prog.total, pct: prog.pct, avg, papers, started: prog.pct > 0 || papers > 0 };
+  }
+
+  function gradeFor(s) {
+    if (!s.started) return { grade: "–", label: "Not started yet" };
+    const score = s.avg === null ? s.pct : Math.round(0.5 * s.pct + 0.5 * s.avg);
+    if (score >= 85) return { grade: "A+", label: "Outstanding" };
+    if (score >= 70) return { grade: "A", label: "Very good" };
+    if (score >= 55) return { grade: "B", label: "Good" };
+    if (score >= 40) return { grade: "C", label: "Getting there" };
+    return { grade: "New", label: "Just getting started" };
+  }
+
+  function reportPayload(stats) {
+    const days = new Set(store.get(KEY.days, []));
+    return {
+      subjects: stats.filter((s) => s.started).map((s) => ({
+        book: s.book.id, chapters_done: s.done, progress_pct: s.pct, avg_score_pct: s.avg, papers: s.papers,
+      })),
+      days_studied: days.size,
+      streak: streaks(days, new Date()).current,
+      stickers: stickerTotal(),
+    };
+  }
+
+  function renderReport() {
+    const stats = state.config.books.map(subjectStats);
+    const started = stats.filter((s) => s.started);
+    const payload = reportPayload(stats);
+    const saved = store.get(KEY.report, null);
+    const fresh = saved && saved.sig === JSON.stringify(payload);
+    const remarks = saved ? Object.fromEntries(saved.subjects.map((r) => [r.book, r.remark])) : {};
+    $("#report-term").textContent = `Term: ${new Date().toLocaleDateString(undefined, { month: "long", year: "numeric" })} · Days studied: ${payload.days_studied} · Stickers: ${payload.stickers}`;
+
+    const rows = stats.map((s) => {
+      const g = gradeFor(s);
+      return `<tr class="${s.started ? "" : "not-started"}">
+          <th scope="row"><span class="subj-dot" style="--book:${s.book.color}"></span>${escapeHtml(s.book.title)}</th>
+          <td>${s.done}/${s.chapters}<span class="sub"> ${s.pct}% done</span></td>
+          <td>${s.avg === null ? "–" : `${s.avg}%`}${s.papers ? `<span class="sub"> ${s.papers} paper${s.papers === 1 ? "" : "s"}</span>` : ""}</td>
+          <td class="grade grade-${g.grade === "A+" ? "ap" : g.grade.toLowerCase().replace("–", "none")}" title="${g.label}">${g.grade}</td>
+          <td class="remark">${s.started && remarks[s.book.id] ? escapeHtml(remarks[s.book.id]) : `<span class="sub">${g.label}</span>`}</td>
+        </tr>`;
+    }).join("");
+
+    let teacher;
+    if (!started.length) {
+      teacher = `<p class="report-note">Finish a practice paper or read some notes, and your class teacher will have something to say.</p>`;
+    } else if (saved) {
+      teacher = `<div class="teacher-remark"><p class="remark-label">Class teacher's remark</p>
+          <p class="red-pen">${escapeHtml(saved.overall)}</p>
+          <p class="signed">Signed, Gemma <span class="stamp">inkwand</span></p></div>
+        <p class="report-note">${fresh ? `Written ${new Date(saved.at).toLocaleDateString()}.` : "You've studied more since these remarks."}
+          <button class="btn small quiet" data-ask-teacher>${fresh ? "Ask for fresh remarks" : "Ask for updated remarks"}</button></p>`;
+    } else {
+      teacher = `<p class="report-note"><button class="btn" data-ask-teacher>Ask the class teacher for remarks</button>
+        <span class="sub">Gemma reads your progress and writes a note for each subject. Takes about a minute.</span></p>`;
+    }
+
+    $("#report-body").innerHTML = `
+      <table class="report-table">
+        <thead><tr><th scope="col">Subject</th><th scope="col">Chapters</th><th scope="col">Avg score</th><th scope="col">Grade</th><th scope="col">Teacher's remark</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="report-foot" id="report-foot">${teacher}</div>`;
+
+    const ask = $("[data-ask-teacher]");
+    if (ask) ask.onclick = () => askTeacher(payload);
+  }
+
+  async function askTeacher(payload) {
+    const foot = $("#report-foot");
+    const token = state.token;
+    foot.innerHTML = `<div class="writing" role="status">${ICON.pencil}<p class="writing-text">writing remarks<span class="dots"></span></p>
+      <p class="writing-sub">Your class teacher is reading your progress. Takes about a minute.</p></div>`;
+    try {
+      const data = await api("/api/report", payload);
+      store.set(KEY.report, { ...data, at: Date.now(), sig: JSON.stringify(payload) });
+      if (token === state.token) renderReport();
+    } catch (err) {
+      if (token === state.token) {
+        foot.innerHTML = `<div class="oops">${escapeHtml(err.message)}</div><button class="btn" data-ask-teacher>Try again</button>`;
+        $("[data-ask-teacher]").onclick = () => askTeacher(payload);
+      }
+    }
+  }
+
+  // ---------- offline ----------
+  async function setupOffline() {
+    const note = $("#offline-status");
+    const show = (text) => { note.textContent = text; note.hidden = false; };
+    window.addEventListener("offline", () => toast(`<span><b>You're offline.</b> The whole library still works. Writing something new needs internet.</span>`));
+    window.addEventListener("online", () => toast(`<span>Back online.</span>`));
+    if (!("serviceWorker" in navigator) || !("caches" in window)) return;
+    try {
+      await navigator.serviceWorker.register("/sw.js");
+      await navigator.serviceWorker.ready;
+      const total = state.config.books.reduce((n, b) => n + b.chapters.length, 0);
+      for (let i = 0; i < 30; i++) {
+        const keys = await (await caches.open("inkwand-v1")).keys();
+        const saved = keys.filter((r) => new URL(r.url).pathname.startsWith("/api/library/")).length;
+        if (saved >= total) { show(`Works offline: all ${total} chapters are saved on this device.`); return; }
+        await wait(1000);
+      }
+    } catch { /* offline support is a bonus; the site works without it */ }
   }
 
   // ---------- flashcards ----------
@@ -931,6 +1170,7 @@
     renderStickerSheet();
     wireAskForm();
     wireShelfClicks();
+    setupOffline();
     $$(".cal-nav").forEach((b) => b.addEventListener("click", () => {
       const d = new Date(state.cal.y, state.cal.m + Number(b.dataset.cal), 1);
       state.cal = { y: d.getFullYear(), m: d.getMonth() };

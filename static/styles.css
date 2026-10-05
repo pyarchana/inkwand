@@ -665,6 +665,82 @@ pre code { background: none; padding: 0; }
 .title-tick .green-tick { width: 34px; height: 34px; }
 .title-tick.just-done { animation: slap .45s cubic-bezier(.2, 1.6, .4, 1); }
 
+/* ---------- pinned slips: mistakes notebook + report card ---------- */
+.slips { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.slip {
+  display: flex; flex-direction: column; gap: 2px; padding: 12px 12px 10px; text-decoration: none; color: var(--ink);
+  background: #fff; border: 2.2px solid var(--ink); border-radius: var(--sketch-2); box-shadow: 3px 4px 0 rgba(31, 42, 68, .12);
+  transition: transform .15s ease;
+}
+.slip:hover { transform: translateY(-2px) rotate(-1deg); }
+.slip-mistakes { border-top: 6px solid #c2185b; transform: rotate(-1deg); }
+.slip-report { border-top: 6px solid var(--pen-blue); transform: rotate(1deg); }
+.slip-title { font: 700 1.05rem/1.2 var(--hand); }
+.slip-sub { font-size: .85rem; color: var(--ink-soft); line-height: 1.25; }
+.offline-status { margin-top: 8px !important; font-size: .95rem; color: var(--tick); }
+.offline-status::before { content: "\2713  "; font-weight: 700; }
+
+/* the red mistakes notebook on the shelf */
+.special-spine { background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0 2px, transparent 2px 14px), linear-gradient(90deg, rgba(0,0,0,.15), transparent 18%); }
+.special-spine .spine-count { background: #fff; color: #c2185b; }
+
+/* ---------- mistakes notebook page ---------- */
+.mistakes-page .paper-head { margin-top: 0; }
+.mistake-from { margin: 0 0 4px; font: 700 .9rem var(--hand); color: #c2185b; }
+.mcq.mistake { position: relative; }
+.mcq.corrected .q-text { text-decoration: line-through; text-decoration-color: rgba(47, 163, 90, .7); text-decoration-thickness: 2px; }
+.corrected-stamp {
+  position: absolute; top: 6px; right: -6px; display: inline-flex; align-items: center; gap: 2px;
+  font: 700 1.1rem var(--hand); color: #2fa35a; transform: rotate(-8deg); animation: slap .45s cubic-bezier(.2, 1.6, .4, 1); --tilt: -8deg;
+}
+.corrected-stamp .green-tick { width: 34px; height: 34px; }
+.fixed-list { margin-top: 22px; border-top: 2px dashed var(--grid); padding-top: 10px; }
+.fixed-list summary { cursor: pointer; font: 700 1.05rem var(--hand); color: var(--tick); }
+.fixed-list ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
+.fixed-list li { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
+.fixed-list .struck { text-decoration: line-through; text-decoration-color: rgba(47, 163, 90, .7); }
+.fixed-list .green-tick { flex: 0 0 22px; }
+
+/* ---------- report card ---------- */
+.report-card {
+  position: relative; padding: 26px 28px 30px; background: #fffdf6;
+  border: 3px double var(--ink); border-radius: 6px; box-shadow: 5px 7px 0 rgba(31, 42, 68, .12);
+}
+.report-head { text-align: center; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 16px; }
+.report-school { margin: 0; font: 700 1.1rem var(--hand); color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; }
+.report-head h2 { margin: 2px 0 4px; font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.report-term { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+.report-table th, .report-table td { padding: 8px 10px; border-bottom: 1.5px solid #d7e5f4; text-align: left; vertical-align: top; }
+.report-table thead th { font: 700 .95rem var(--hand); border-bottom: 2px solid var(--ink); }
+.report-table tbody th { font-weight: 400; white-space: nowrap; }
+.report-table .sub { display: block; font-size: .8rem; color: var(--pencil); }
+.report-table tr.not-started { color: var(--pencil); }
+.subj-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--book); margin-right: 8px; vertical-align: middle; border: 1.5px solid var(--ink); }
+.grade { font: 700 1.5rem/1 var(--hand); text-align: center !important; }
+.grade-ap, .grade-a { color: #2fa35a; }
+.grade-b { color: var(--pen-blue); }
+.grade-c { color: #e0823d; }
+.grade-new { color: #8e7cc3; font-size: 1.05rem; }
+.grade-none { color: #b9bec9; }
+.remark { font: 400 1.05rem/1.35 var(--hand); color: #c2185b; min-width: 220px; }
+.report-foot { margin-top: 18px; }
+.teacher-remark { position: relative; padding: 12px 16px; border: 2px dashed #e7a6bd; border-radius: 10px; background: #fff7fa; }
+.remark-label { margin: 0 0 4px; font: 700 .95rem var(--hand); color: var(--ink-soft); }
+.red-pen { margin: 0; font: 400 1.25rem/1.4 var(--hand); color: #c2185b; }
+.signed { margin: 8px 0 0; text-align: right; font: 700 1rem var(--hand); color: #c2185b; }
+.stamp {
+  display: inline-block; margin-left: 10px; padding: 2px 10px; font: 700 .85rem var(--hand); letter-spacing: .1em; text-transform: uppercase;
+  color: #2f6fb0; border: 2.5px solid #2f6fb0; border-radius: 50%; transform: rotate(-12deg); opacity: .8;
+}
+.report-note { margin: 12px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--ink-soft); }
+.report-note .sub { font-size: .9rem; color: var(--pencil); }
+@media (max-width: 760px) {
+  .report-card { padding: 18px 12px; }
+  .report-table { display: block; overflow-x: auto; }
+  .slips { grid-template-columns: 1fr; }
+}
+
 /* ---------- small screens ---------- */
 @media (max-width: 1240px) {
   .margin-doodles { display: none; }

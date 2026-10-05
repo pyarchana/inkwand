@@ -55,12 +55,23 @@
         <div class="sticky-note intro-note">
           <span class="tape" aria-hidden="true"></span>
           <p>Free forever. No login. Made for self-taught students.</p>
+          <p class="offline-status" id="offline-status" hidden></p>
           <svg class="arrow-doodle" viewBox="0 0 120 90" aria-hidden="true"><path d="M10 8 C 40 10, 70 30, 72 78" /><path d="M60 66 L72 80 L82 64" /></svg>
         </div>
       </div>
       <div class="home-grid">
         <div id="shelves" class="bookcase"></div>
         <aside class="home-side">
+          <nav class="slips" aria-label="Your notebooks">
+            <a class="slip slip-mistakes" href="#/mistakes">
+              <span class="slip-title">Mistakes notebook</span>
+              <span class="slip-sub" data-mistake-count>No mistakes yet</span>
+            </a>
+            <a class="slip slip-report" href="#/report">
+              <span class="slip-title">Report card</span>
+              <span class="slip-sub">Grades and a note from your teacher</span>
+            </a>
+          </nav>
           <section class="calendar" aria-labelledby="cal-title">
             <div class="rings" aria-hidden="true"></div>
             <div class="cal-head">
@@ -78,6 +89,30 @@
           </section>
         </aside>
       </div>
+    </section>
+
+    <!-- Mistakes notebook -->
+    <section id="mistakes-view" class="view" hidden>
+      <a href="#/" class="back-link">&larr; back to the shelf</a>
+      <article class="page mistakes-page">
+        <svg class="page-clip" viewBox="0 0 30 80" aria-hidden="true"><path d="M10 70 V16 a8 8 0 0 1 16 0 V62 a12 12 0 0 1 -24 0 V22" /></svg>
+        <p class="page-kicker">Corrections, like the ones teachers made us write</p>
+        <h2 class="page-title">My mistakes notebook</h2>
+        <div id="mistakes-body"></div>
+      </article>
+    </section>
+
+    <!-- Report card -->
+    <section id="report-view" class="view" hidden>
+      <a href="#/" class="back-link">&larr; back to the shelf</a>
+      <article class="report-card">
+        <header class="report-head">
+          <p class="report-school" data-site-name>inkwand</p>
+          <h2>Progress Report</h2>
+          <p class="report-term" id="report-term"></p>
+        </header>
+        <div id="report-body"></div>
+      </article>
     </section>
 
     <!-- Open book -->
