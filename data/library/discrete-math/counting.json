@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:33:24+00:00"
+   "written_at": "2026-10-10T15:32:00+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "How many distinct ways can the letters in the word **APPLE** be arranged?",
-   "options": [
-    "120",
-    "60",
-    "24",
-    "30"
-   ],
-   "correct_index": 1,
-   "explanation": "Since the letter 'P' is repeated twice, we divide the total permutations (5!) by the number of ways to arrange the repeated letters (2!). So, 120 / 2 = 60."
-  },
-  {
-   "question": "A bag contains 10 red, 10 blue, and 10 green balls. What is the minimum number of balls you must pick to guarantee that you have at least 3 balls of the same color?",
-   "options": [
-    "6",
-    "7",
-    "9",
-    "10"
-   ],
-   "correct_index": 1,
-   "explanation": "Think about the worst case: you pick 2 red, 2 blue, and 2 green balls (6 balls total). The very next ball you pick (the 7th) must complete a set of 3 for one of the colors."
-  },
-  {
-   "question": "In a class of 50 students, 30 study Python, 25 study Java, and 10 study both. How many students study neither Python nor Java?",
-   "options": [
-    "5",
-    "10",
-    "15",
-    "20"
-   ],
-   "correct_index": 0,
-   "explanation": "First, find how many students study at least one language using the inclusion-exclusion principle: 30 + 25 - 10 = 45. Then, subtract that from the total of 50 to get 5."
-  },
-  {
-   "question": "A committee of 3 members is to be formed from a group of 5 men and 4 women. How many ways can this be done if the committee must contain at least 1 woman?",
+   "question": "A committee of 3 is to be chosen from a group of 5 men and 4 women. How many ways can the committee be formed if it must contain at least one woman?",
+   "explanation": "It is easier to subtract the cases where no women are chosen (only men) from the total ways to choose 3 people. Total ways is 9C3 = 84, and ways with only men is 5C3 = 10, so 84 - 10 = 74.",
    "options": [
     "74",
-    "35",
-    "40",
+    "60",
+    "45",
     "84"
    ],
-   "correct_index": 0,
-   "explanation": "It's easier to subtract the 'bad' cases from the total. Total ways to pick 3 from 9 is 9C3 = 84, and the ways to pick only men is 5C3 = 10. So, 84 - 10 = 74."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "How many 3-digit numbers can be formed using the digits {1, 2, 3, 4, 5} if repetition is not allowed and the number must be even?",
+   "question": "What is the minimum number of students required in a class to ensure that at least 3 students were born in the same month?",
+   "explanation": "Using the Pigeonhole Principle, the worst-case scenario is having 2 students born in each of the 12 months (24 students). The 25th student must fall into one of those months, making it 3.",
    "options": [
-    "60",
+    "13",
     "24",
-    "120",
-    "12"
+    "25",
+    "26"
    ],
-   "correct_index": 1,
-   "explanation": "For the number to be even, the last digit must be 2 or 4 (2 choices). For the remaining two positions, you have 4 and 3 choices left, so 2 * 4 * 3 = 24."
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "In a group of 100 students, 50 study Java, 40 study Python, and 20 study both. How many students study neither Java nor Python?",
+   "explanation": "Using the Principle of Inclusion-Exclusion, the number of students studying at least one is 50 + 40 - 20 = 70. Subtracting this from the total gives 100 - 70 = 30.",
+   "options": [
+    "10",
+    "20",
+    "30",
+    "40"
+   ],
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "Which of the following statements are true regarding combinations (nC_r)?",
+   "explanation": "The first three are standard properties of combinations. The last one is false because nP_r = nC_r * r!, so for r > 1, nP_r will actually be larger than nC_r.",
+   "options": [
+    "nC_r = nC_(n-r)",
+    "nC_r = n! / (r! * (n-r)!)",
+    "nC_r is always an integer",
+    "nC_r is always greater than nP_r for r > 1"
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question": "How many distinct ways can the letters of the word APPLE be arranged?",
+   "explanation": "The word has 5 letters with 'P' repeating twice. The number of arrangements is 5! / 2! = 120 / 2 = 60.",
+   "type": "nat",
+   "answer": 60.0,
+   "tolerance": 0
   }
  ]
 }

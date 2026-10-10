@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:33:02+00:00"
+   "written_at": "2026-10-10T15:32:57+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "A connected graph has 6 vertices and 5 edges. Which of the following must be true?",
+   "question": "A simple undirected graph has 6 vertices and 7 edges. What is the maximum number of connected components this graph can have?",
+   "explanation": "To maximize components, we try to pack all edges into the smallest possible subgraph. For 7 edges, the smallest number of vertices needed is 5 (since 4 vertices only allow 6 edges). This leaves 1 vertex isolated, giving us 1 (the subgraph) + 1 (the isolated vertex) = 2 components.",
    "options": [
-    "It is a tree",
-    "It contains a cycle",
-    "It has no cut-vertices",
-    "It is a complete graph"
-   ],
-   "correct_index": 0,
-   "explanation": "Since the graph is connected and has exactly n-1 edges, it's a **tree** by definition. You'll see this property quite often!"
-  },
-  {
-   "question": "What is the size of the maximum matching in a complete bipartite graph `K_{4,5}`?",
-   "options": [
-    "4",
-    "5",
-    "9",
-    "20"
-   ],
-   "correct_index": 0,
-   "explanation": "For any complete bipartite graph `K_{m,n}`, the maximum matching size is just `min(m, n)`. So, `min(4, 5)` is 4."
-  },
-  {
-   "question": "What is the chromatic number of a cycle graph with 7 vertices (`C_7`)?",
-   "options": [
+    "1",
     "2",
     "3",
-    "7",
     "4"
    ],
-   "correct_index": 1,
-   "explanation": "Remember, any cycle with an odd number of vertices will always need 3 colors to ensure no two adjacent vertices match."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "If a graph is 3-connected, what is the minimum possible degree of any vertex in that graph?",
+   "question": "What is the chromatic number of a cycle graph with 5 vertices (C_5)?",
+   "explanation": "For any odd cycle, you will always need at least 3 colours to ensure that no two adjacent vertices share the same colour.",
    "options": [
     "2",
     "3",
     "4",
-    "6"
+    "5"
    ],
-   "correct_index": 1,
-   "explanation": "To be k-connected, you must remove at least k vertices to disconnect the graph, which implies every vertex must have at least k neighbors."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "A graph has a maximum degree `Delta = 3`. According to Vizing's Theorem, what are the possible values for its edge chromatic number?",
+   "question": "What is the size of the maximum matching in a complete bipartite graph K_{3,4}?",
+   "explanation": "In a complete bipartite graph K_{m,n}, the maximum matching size is always min(m, n). Here, min(3, 4) = 3.",
    "options": [
-    "2 or 3",
-    "3 or 4",
-    "3 or 5",
-    "Only 3"
+    "3",
+    "4",
+    "7",
+    "12"
    ],
-   "correct_index": 1,
-   "explanation": "Vizing's Theorem is a handy rule: the edge chromatic number is always either `Delta` or `Delta + 1`."
+   "type": "mcq",
+   "correct_index": 0
+  },
+  {
+   "question": "Which of the following statements are true for a simple undirected graph G with n vertices?",
+   "explanation": "Trees are minimally connected with n-1 edges, bipartite graphs are defined by the absence of odd cycles, and K_n requires n colours. A tree is connected but has no cycles, making the last option false.",
+   "options": [
+    "A tree with n vertices has exactly n-1 edges.",
+    "A graph is bipartite if and only if it contains no odd cycles.",
+    "The chromatic number of a complete graph K_n is n.",
+    "Every connected graph must contain at least one cycle."
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question": "What is the maximum number of edges a bipartite graph with 10 vertices can have?",
+   "explanation": "To maximize edges in a bipartite graph with n vertices, we split the vertices into two sets as equally as possible. For n=10, we use two sets of 5 vertices, giving 5 * 5 = 25 edges.",
+   "type": "nat",
+   "answer": 25.0,
+   "tolerance": 0
   }
  ]
 }

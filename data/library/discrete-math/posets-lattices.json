@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:30:27+00:00"
+   "written_at": "2026-10-10T15:32:01+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "A partially ordered set (poset) where every pair of elements has a unique least upper bound (LUB) and a unique greatest lower bound (GLB) is called a:",
+   "question": "Let S = {2, 3, 4, 6, 12} be a set ordered by the divisibility relation (x | y). Which of the following is true?",
+   "explanation": "For a poset to be a lattice, every pair must have both a LUB (least upper bound) and a GLB (greatest lower bound) within the set. Here, 2 and 3 have no common divisor in S, so their GLB does not exist in S.",
    "options": [
-    "Total order",
-    "Chain",
-    "Lattice",
-    "Boolean algebra"
+    "The poset is a lattice.",
+    "The poset is not a lattice because the pair {2, 3} has no greatest lower bound in S.",
+    "The poset is not a lattice because the pair {4, 6} has no least upper bound in S.",
+    "The poset is not a lattice because the pair {3, 4} has no greatest lower bound in S."
    ],
-   "correct_index": 2,
-   "explanation": "By definition, a lattice is a poset where every pair of elements has a unique join (LUB) and meet (GLB)."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Let L be a lattice. If for all a, b, and c in L, the condition a meet (b join c) = (a meet b) join (a meet c) holds, then the lattice is:",
+   "question": "Let L be a lattice. If L contains a sublattice isomorphic to the pentagon lattice (N5), then L is:",
+   "explanation": "A fundamental theorem in lattice theory states that a lattice is distributive if and only if it does not contain the pentagon lattice (N5) or the diamond lattice (M3) as a sublattice.",
    "options": [
-    "Modular",
-    "Distributive",
-    "Complemented",
-    "Bounded"
+    "A distributive lattice.",
+    "A complemented lattice.",
+    "Not a distributive lattice.",
+    "A Boolean lattice."
    ],
-   "correct_index": 1,
-   "explanation": "This identity is one of the two distributive laws. If it holds for all elements, the lattice is distributive."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "Consider the set S = {2, 3, 4, 6, 8, 12} under the relation 'a divides b'. How many maximal elements does this poset have?",
+   "question": "Consider the set of all subsets of {a, b, c} ordered by the subset relation (⊆). How many elements are in the longest chain in this poset?",
+   "explanation": "A chain is a sequence where each element is a subset of the next. For a set of size n, the longest chain has n + 1 elements. For n=3, the chain is ∅ ⊂ {a} ⊂ {a, b} ⊂ {a, b, c}, which contains 4 elements.",
    "options": [
-    "1",
-    "2",
     "3",
-    "0"
+    "4",
+    "8",
+    "7"
    ],
-   "correct_index": 1,
-   "explanation": "Maximal elements are those that do not divide any other element in the set. In this set, 8 and 12 are maximal."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Let S = {1, 2, 3, 4, 6, 12} be ordered by the relation 'a divides b'. What is the value of (4 join 6) meet 3?",
+   "question": "Let (L, <=) be a lattice. Which of the following statements are always true?",
+   "explanation": "By definition, a lattice is a poset (which is reflexive, antisymmetric, and transitive) where every pair has a unique LUB (supremum) and GLB (infimum). Not all lattices have a top or bottom element; only 'bounded' lattices do.",
    "options": [
-    "1",
-    "2",
-    "3",
-    "6"
+    "Every pair of elements has a unique supremum.",
+    "Every pair of elements has a unique infimum.",
+    "The relation is reflexive, antisymmetric, and transitive.",
+    "The lattice must have a greatest element (top) and a least element (bottom)."
    ],
-   "correct_index": 2,
-   "explanation": "In a 'divides' relation, join is the Least Common Multiple (LCM) and meet is the Greatest Common Divisor (GCD). So, LCM(4, 6) = 12, and GCD(12, 3) = 3."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
   },
   {
-   "question": "In the power set lattice of S = {a, b, c} ordered by the subset relation, what is the complement of the set {a, b}?",
-   "options": [
-    "{c}",
-    "{a, b, c}",
-    "empty set",
-    "{a}"
-   ],
-   "correct_index": 0,
-   "explanation": "In a power set lattice, the complement of a set A is the set containing all elements of S that are not in A. Here, {a, b, c} minus {a, b} leaves {c}."
+   "question": "Consider the set S = {1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60} ordered by the divisibility relation. How many elements in S are incomparable with the element 12?",
+   "explanation": "An element x is comparable to 12 if x divides 12 or 12 divides x. The comparable elements are {1, 2, 3, 4, 6, 12, 60}. The remaining elements {5, 10, 15, 20, 30} are incomparable with 12. Total = 5.",
+   "type": "nat",
+   "answer": 5.0,
+   "tolerance": 0
   }
  ]
 }

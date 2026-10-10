@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:35:31+00:00"
+   "written_at": "2026-10-10T15:35:13+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,62 @@
  ],
  "practice": [
   {
-   "question": "If a 2x2 matrix has eigenvalues 3 and -2, what are its trace and determinant?",
+   "question": "For a 2x2 matrix A = [[2, 1], [0, 3]], what is the sum of its eigenvalues?",
+   "explanation": "Remember, the sum of eigenvalues is always equal to the trace of the matrix (the sum of the main diagonal elements). Here, 2 + 3 = 5!",
    "options": [
-    "Trace: 1, Determinant: -6",
-    "Trace: -1, Determinant: -6",
-    "Trace: 1, Determinant: 6",
-    "Trace: 5, Determinant: -6"
+    "5",
+    "4",
+    "6",
+    "7"
    ],
-   "correct_index": 0,
-   "explanation": "Remember the two golden rules: the sum of eigenvalues is the trace, and their product is the determinant. Just add them (3 + -2 = 1) and multiply them (3 * -2 = -6)!"
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "What are the eigenvalues of the following upper triangular matrix: [[5, 2, 3], [0, 1, 4], [0, 0, 8]]?",
+   "question": "Given a matrix A = [[4, 1], [2, 3]], what is the product of its eigenvalues?",
+   "explanation": "The product of eigenvalues is equal to the determinant of the matrix. For this one, det(A) = (4 * 3) - (1 * 2) = 10.",
    "options": [
-    "5, 1, 8",
-    "5, 2, 3",
-    "0, 1, 8",
-    "5, 4, 8"
+    "8",
+    "10",
+    "12",
+    "14"
    ],
-   "correct_index": 0,
-   "explanation": "For any triangular matrix, you don't even need to solve the characteristic equation; the eigenvalues are simply the numbers sitting on the main diagonal."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "If v is an eigenvector of matrix A with eigenvalue lambda, what is the eigenvalue of the matrix A^2 for the same vector v?",
+   "question": "If v is an eigenvector of matrix A corresponding to the eigenvalue L, which of the following is the result of A^2 * v?",
+   "explanation": "Think of it as applying the matrix twice: A * (A * v) = A * (L * v) = L * (A * v) = L * (L * v) = L^2 * v.",
    "options": [
-    "lambda",
-    "lambda^2",
-    "1/lambda",
-    "2 * lambda"
+    "L * v",
+    "v",
+    "L^2 * v",
+    "2 * L * v"
    ],
-   "correct_index": 1,
-   "explanation": "If you apply the matrix twice, you are essentially multiplying the eigenvalue by itself. So, the new eigenvalue becomes lambda^2."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "Find the characteristic equation for the matrix A = [[1, 2], [2, 1]].",
+   "question": "A is a 3x3 matrix with eigenvalues 1, 2, and 3. Which of the following statements are true?",
+   "explanation": "The determinant is the product (1*2*3=6) and eigenvalues of A^2 are the squares of the original ones (1, 4, 9). Trace is 6 and det is non-zero, so it is not singular.",
    "options": [
-    "lambda^2 - 2lambda - 3 = 0",
-    "lambda^2 + 2lambda - 3 = 0",
-    "lambda^2 - 2lambda + 3 = 0",
-    "lambda^2 + 2lambda + 3 = 0"
+    "The determinant of A is 6",
+    "The trace of A is 5",
+    "The eigenvalues of A^2 are 1, 4, and 9",
+    "The matrix A is singular"
    ],
-   "correct_index": 0,
-   "explanation": "The characteristic equation is found by solving det(A - lambda*I) = 0. For this matrix, it expands to (1 - lambda)^2 - 4 = 0, which simplifies to lambda^2 - 2lambda - 3 = 0."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2
+   ]
   },
   {
-   "question": "If a 3x3 matrix is singular, which of the following must be true about its eigenvalues?",
-   "options": [
-    "All eigenvalues are 0",
-    "At least one eigenvalue is 0",
-    "No eigenvalue is 0",
-    "The sum of eigenvalues is 0"
-   ],
-   "correct_index": 1,
-   "explanation": "A singular matrix has a determinant of 0. Since the product of all eigenvalues equals the determinant, at least one of those eigenvalues must be zero."
+   "question": "Find the largest eigenvalue of the matrix A = [[1, 2], [2, 1]].",
+   "explanation": "Solve the characteristic equation det(A - L*I) = 0: (1-L)(1-L) - (2*2) = 0. This gives (1-L)^2 = 4, so 1-L = 2 or 1-L = -2, meaning L = -1 or L = 3. The largest is 3.",
+   "type": "nat",
+   "answer": 3.0,
+   "tolerance": 0
   }
  ]
 }

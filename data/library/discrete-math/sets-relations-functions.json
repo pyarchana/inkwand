@@ -44,65 +44,68 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:28:31+00:00"
+   "written_at": "2026-10-10T15:30:58+00:00"
   }
  },
  "notes": "Hey! I know Discrete Math can feel heavy at first, but you've got this. Here are my quick notes to help you revise.\n\nThe core idea:\n- **Sets** are just collections of unique items. Pro-tip: the **Power Set** of a set with `n` elements always has `2^n` elements.\n- **Relations** connect elements. We look for three properties: **Reflexive** (`aRa`), **Symmetric** (`aRb` implies `bRa`), and **Transitive** (`aRb` and `bRc` implies `aRc`).\n- An **Equivalence Relation** is a relation that is all three. These are great because they partition a set into disjoint \"equivalence classes.\"\n- **Functions** are special relations where every input has exactly one output. If a function is both **Injective** (one-to-one) and **Surjective** (onto), it is **Bijective**.\n\nExample: Let A = {1, 2}. Is R = {(1,1), (2,2), (1,2",
  "practice": [
   {
-   "question": "Let set A = {1, 2, {3}}. What is the number of elements in the power set of A?",
+   "question": "Let set A = {1, 2, {3, 4}}. How many elements are in the power set of A?",
+   "explanation": "The set A has 3 elements: 1, 2, and the set {3, 4}. The number of elements in a power set is 2^n, so 2^3 = 8.",
    "options": [
+    "3",
     "4",
     "8",
-    "3",
     "9"
    ],
-   "correct_index": 1,
-   "explanation": "Don't let the nested set {3} trip you up! A has 3 distinct elements: 1, 2, and the set {3}, so the power set has 2^3 = 8 elements."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "A relation R is defined on the set of all integers Z such that a R b if and only if (a - b) is divisible by 5. This relation is:",
+   "question": "Which of the following relations on the set of integers Z is an equivalence relation?",
+   "explanation": "An equivalence relation must be reflexive, symmetric, and transitive. The relation 'x - y is divisible by 3' satisfies all three properties.",
    "options": [
-    "reflexive but not symmetric",
-    "symmetric but not transitive",
-    "an equivalence relation",
-    "not reflexive"
+    "xRy if x <= y",
+    "xRy if x < y",
+    "xRy if x - y is divisible by 3",
+    "xRy if x + y = 0"
    ],
-   "correct_index": 2,
-   "explanation": "This is a classic congruence relation. Since it is reflexive, symmetric, and transitive, it qualifies as an equivalence relation."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "Let f be a function from set A = {1, 2, 3} to set B = {x, y, z, w} defined by f(1) = x, f(2) = y, and f(3) = z. The function f is:",
+   "question": "Let A = {1, 2, 3} and B = {a, b, c, d}. How many injective functions are there from A to B?",
+   "explanation": "An injective function maps each element of the domain to a unique element in the codomain. For the first element of A, there are 4 choices in B, for the second 3 choices, and for the third 2 choices, giving 4 * 3 * 2 = 24.",
    "options": [
-    "bijective",
-    "surjective",
-    "injective but not surjective",
-    "neither injective nor surjective"
+    "3",
+    "12",
+    "24",
+    "64"
    ],
-   "correct_index": 2,
-   "explanation": "Since every input maps to a unique output, the function is injective. However, it is not surjective because the element 'w' in set B is never reached."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "Consider the relation R = {(1, 2), (2, 1), (1, 1)} on the set {1, 2, 3}. Which of the following is true?",
+   "question": "Let f: A -> B and g: B -> C be two functions. Which of the following statements are always true?",
+   "explanation": "The composition of two injective functions is injective, and the composition of two surjective functions is surjective. However, if the composition is injective, it only guarantees that f is injective, and if it is surjective, it only guarantees that g is surjective.",
    "options": [
-    "reflexive",
-    "symmetric",
-    "transitive",
-    "equivalence relation"
+    "If f and g are both injective, then g(f(x)) is injective.",
+    "If f and g are both surjective, then g(f(x)) is surjective.",
+    "If g(f(x)) is injective, then g is injective.",
+    "If g(f(x)) is surjective, then f is surjective."
    ],
-   "correct_index": 1,
-   "explanation": "It is symmetric because the pairs are mirrors of each other. It is not transitive because (2, 1) and (1, 2) are in R, but (2, 2) is missing!"
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1
+   ]
   },
   {
-   "question": "How many different functions can be defined from a set with 3 elements to a set with 2 elements?",
-   "options": [
-    "6",
-    "8",
-    "9",
-    "5"
-   ],
-   "correct_index": 1,
-   "explanation": "A simple rule to remember: for functions from set A to set B, the total number is |B|^|A|. Here, that is 2^3 = 8."
+   "question": "How many surjective (onto) functions are there from a set with 4 elements to a set with 3 elements?",
+   "explanation": "Using inclusion-exclusion: Total functions (3^4) - functions missing at least one element (3 * 2^4) + functions missing at least two elements (3 * 1^4) = 81 - 48 + 3 = 36.",
+   "type": "nat",
+   "answer": 36.0,
+   "tolerance": 0
   }
  ]
 }

@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:35:04+00:00"
+   "written_at": "2026-10-10T15:34:00+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "A system of linear equations Ax = b is said to be inconsistent if:",
+   "question": "For a system of linear equations Ax = b, if the rank of the coefficient matrix A is strictly less than the rank of the augmented matrix [A|b], what can we conclude about the system?",
+   "explanation": "When rank(A) < rank(A|b), the equations are contradictory, meaning no set of values can satisfy all of them at once.",
    "options": [
-    "rank(A) = rank(A|b)",
-    "rank(A) < rank(A|b)",
-    "rank(A) = rank(A|b) = n",
-    "rank(A) = rank(A|b) < n"
+    "The system has a unique solution.",
+    "The system has infinitely many solutions.",
+    "The system is inconsistent and has no solution.",
+    "The system is consistent and has a unique solution."
    ],
-   "correct_index": 1,
-   "explanation": "A system is inconsistent when the rank of the coefficient matrix is less than the rank of the augmented matrix, which leads to a contradiction like 0 = 1."
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "Consider a system of 3 linear equations with 3 variables. If the rank of the coefficient matrix is 2 and the rank of the augmented matrix is also 2, how many solutions does the system have?",
+   "explanation": "Since rank(A) = rank(A|b), the system is consistent. Because the rank (2) is less than the number of variables (3), there is at least one free variable, leading to infinite solutions.",
+   "options": [
+    "Exactly one solution",
+    "Infinitely many solutions",
+    "No solution",
+    "Exactly two solutions"
+   ],
+   "type": "mcq",
+   "correct_index": 1
   },
   {
    "question": "For what value of k does the following system of equations have infinitely many solutions?\nx + y + z = 2\nx + 2y + 3z = 5\nx + 3y + kz = 8",
+   "explanation": "Using Gaussian elimination, the third row reduces to (k-5)z = 0. For infinite solutions, we need the rank to be less than the number of variables, so k-5 must be 0, which means k = 5.",
    "options": [
+    "1",
     "3",
-    "4",
     "5",
-    "6"
+    "7"
    ],
-   "correct_index": 2,
-   "explanation": "When k = 5, the last row of the augmented matrix becomes all zeros during Gaussian elimination. This makes the rank of both matrices 2, which is less than the 3 variables we have."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "If a square matrix A of size 3x3 is non-singular, how many solutions does the system Ax = b have for any vector b?",
+   "question": "Let a system of linear equations be represented by Ax = b. Which of the following statements are always true?",
+   "explanation": "Linear systems can only be inconsistent, have one solution, or have infinite solutions; they cannot have exactly two. If it is consistent, the number of solutions depends on whether the rank matches the number of variables.",
    "options": [
-    "No solution",
-    "Exactly one solution",
-    "Infinitely many solutions",
-    "Either one or infinitely many solutions"
+    "If the system is consistent, it can have either a unique solution or infinitely many solutions.",
+    "A system of linear equations can have exactly two distinct solutions.",
+    "If the number of variables is greater than the rank of the coefficient matrix and the system is consistent, it must have infinitely many solutions.",
+    "If the rank of the coefficient matrix is equal to the number of variables, the system must have a unique solution if it is consistent."
    ],
-   "correct_index": 1,
-   "explanation": "A non-singular matrix has a non-zero determinant, so its inverse exists, giving us exactly one solution: x = A^-1 * b."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2,
+    3
+   ]
   },
   {
-   "question": "Consider the system of equations:\n2x + 3y = 7\n4x + 6y = 14\nThe system has:",
-   "options": [
-    "A unique solution",
-    "No solution",
-    "Infinitely many solutions",
-    "Exactly two solutions"
-   ],
-   "correct_index": 2,
-   "explanation": "Notice that the second equation is just the first one multiplied by 2. This means they represent the same line, leading to infinitely many solutions."
-  },
-  {
-   "question": "In Gaussian elimination, if the row-echelon form of an augmented matrix [A|b] results in a row like [0 0 0 | 5], the system is:",
-   "options": [
-    "Consistent",
-    "Inconsistent",
-    "Dependent",
-    "Unique"
-   ],
-   "correct_index": 1,
-   "explanation": "A row like [0 0 0 | 5] translates to the equation 0 = 5, which is impossible. Therefore, the system cannot have any solution."
+   "question": "Find the value of 'a' for which the following system of equations has no solution:\nx + y + z = 2\nx + 2y + 4z = 3\nx + 4y + az = 4",
+   "explanation": "Reducing the augmented matrix via Gaussian elimination gives the third row as [0 0 a-10 | -1]. For there to be no solution, we need the coefficient of z to be 0, so a-10 = 0, which gives a = 10.",
+   "type": "nat",
+   "answer": 10.0,
+   "tolerance": 0
   }
  ]
 }

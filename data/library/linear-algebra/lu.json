@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:39:18+00:00"
+   "written_at": "2026-10-10T15:34:49+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "In **LU decomposition**, a square matrix A is factored into which two types of matrices?",
+   "question": "For a square matrix A, LU decomposition (without using pivoting/row swaps) is guaranteed to exist if which of the following conditions is met?",
+   "explanation": "Hey! Just remember, for LU to work without swapping rows, we need all those leading principal minors to be non-zero to avoid dividing by zero during the process.",
    "options": [
-    "A lower triangular matrix L and an upper triangular matrix U",
-    "An orthogonal matrix Q and a diagonal matrix D",
-    "A symmetric matrix and its inverse",
-    "A diagonal matrix and a permutation matrix"
+    "All elements of A are positive",
+    "All leading principal minors of A are non-zero",
+    "The determinant of A is non-zero",
+    "The matrix A is symmetric"
    ],
-   "correct_index": 0,
-   "explanation": "This is the basic definition: L stands for Lower and U stands for Upper."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Consider the matrix A = [[4, 3], [6, 3]]. If we perform **LU decomposition** such that the diagonal elements of L are all 1, what are the matrices L and U?",
+   "question": "Consider the matrix A = [[4, 3], [6, 3]]. If we perform LU decomposition such that L is a unit lower triangular matrix (meaning its diagonal elements are 1), what is the value of the element at the second row, second column of matrix U?",
+   "explanation": "Don't worry, just follow the steps. First, u11=4 and u12=3. Then, l21 = 6/4 = 1.5. Finally, u22 = 3 - (1.5 * 3) = -1.5.",
    "options": [
-    "L = [[1, 0], [1.5, 1]], U = [[4, 3], [0, -1.5]]",
-    "L = [[1, 0], [0.5, 1]], U = [[4, 3], [0, 1.5]]",
-    "L = [[1, 0], [1.5, 1]], U = [[4, 3], [0, 1.5]]",
-    "L = [[1, 0], [2, 1]], U = [[4, 3], [0, -3]]"
+    "3",
+    "-1.5",
+    "1.5",
+    "-3"
    ],
-   "correct_index": 0,
-   "explanation": "We use Gaussian elimination: R2 becomes R2 - (6/4)R1, so the multiplier is 1.5."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "For a square matrix A to have a unique **LU decomposition** where the diagonal elements of L are all 1, which of the following must be true?",
+   "question": "Let A = LU be the LU decomposition of a non-singular 3x3 matrix. If the determinant of L is 1, what is the relationship between det(A) and the diagonal elements of U (u11, u22, u33)?",
+   "explanation": "This is a cool property! Since det(A) = det(L) * det(U) and we know det(L) is 1, det(A) is simply the product of the diagonal elements of U.",
    "options": [
-    "A must be a symmetric matrix",
-    "All leading principal minors of A must be non-zero",
-    "The determinant of A must be zero",
-    "A must be a diagonal matrix"
+    "det(A) = u11 + u22 + u33",
+    "det(A) = u11 * u22 * u33",
+    "det(A) = 1 / (u11 * u22 * u33)",
+    "det(A) = u11^2 * u22^2 * u33^2"
    ],
-   "correct_index": 1,
-   "explanation": "If any leading principal minor is zero, we might encounter a division by zero during the elimination process."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "To solve the system of linear equations Ax = b using **LU decomposition** (where A = LU), what is the correct sequence of steps?",
+   "question": "Consider the LU decomposition of a non-singular square matrix A, where L is a unit lower triangular matrix and U is an upper triangular matrix. Which of the following statements are true?",
+   "explanation": "These are core properties you should keep in your notes. For a non-singular matrix, this specific LU form is unique; since L is unit lower triangular, its diagonal is all 1s; and because A is non-singular, U cannot have any zeros on its diagonal.",
    "options": [
-    "First solve Ux = b for x, then solve Ly = x for y",
-    "First solve Ly = b for y, then solve Ux = y for x",
-    "First solve Ly = x for y, then solve Ux = b for x",
-    "First solve Ux = y for y, then solve Ly = b for x"
+    "The decomposition is unique for a non-singular matrix",
+    "The product of the diagonal elements of L is always 1",
+    "The matrix U must always have all non-zero diagonal elements",
+    "The matrix L must always be a symmetric matrix"
    ],
-   "correct_index": 1,
-   "explanation": "We substitute Ax = b with LUx = b, let Ux = y, so we first solve Ly = b for y and then Ux = y for x."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
   },
   {
-   "question": "Given the matrix A = [[2, 1], [4, 7]], find the value of the multiplier used to zero out the element in the second row, first column during **LU decomposition** (with L having 1s on the diagonal).",
-   "options": [
-    "1",
-    "2",
-    "4",
-    "0.5"
-   ],
-   "correct_index": 1,
-   "explanation": "To make the element at (2,1) zero, we subtract (4/2) times the first row from the second row."
+   "question": "Find the value of the element l_21 (the element in the 2nd row, 1st column of L) in the LU decomposition of the matrix A = [[2, 1], [4, 7]], where L is a unit lower triangular matrix.",
+   "explanation": "A quick calculation: since u11 is the first element of A (which is 2), we solve l21 * u11 = 4, which gives l21 * 2 = 4, so l21 = 2.",
+   "type": "nat",
+   "answer": 2.0,
+   "tolerance": 0
   }
  ]
 }

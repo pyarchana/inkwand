@@ -44,65 +44,69 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:27:09+00:00"
+   "written_at": "2026-10-10T15:30:32+00:00"
   }
  },
  "notes": "Hey! Logic is the backbone of Computer Science. Don't let the symbols scare you; they are just a shorthand for English sentences.\n\n- **Propositional Logic (PL)**: Deals with statements (propositions) that are either True or False. We use connectives like `^` (AND), `v` (OR), `->` (Implication), and `~` (NOT).\n- **First Order Logic (FOL)**: This is more powerful. It uses variables and **quantifiers** to talk about objects and their properties.\n- **Quantifiers**: `∀` (Universal) means \"for all\", and `∃` (Existential) means \"there exists at least one\".\n- **Validity**: An argument is valid if whenever the premises are true, the conclusion must also be true.\n\nExample:\nNegate the statement: \"All students are hardworking.\"\n1. Let `S(x)` be \"x is a student\" and `H(x)` be \"x is hardworking\".\n2. Original: `∀x (S(x) -> H(x))`.\n3. Negation: `~[∀x (S(x) -> H(x))]`.\n4. Move the `~` inside: `∃x ~(S(x) -> H(x))`.\n5. Since `~(p -> q)` is equivalent to `p ^ ~q`, we get: `∃x (S(x) ^ ~H(x))`.\n6. In English: \"There is at least one student who is not hardworking.\"\n\nCommon traps:\n- Confusing `p -> q` with its converse `q -> p`. They are not logically equivalent!\n- Incorrectly negating quantifiers. Remember: `~∀x P(x)` becomes `∃x ~P(x)`, not `∀x ~P(x)`.\n\nRemember this: Propositional logic handles whole statements, while First Order Logic uses quantifiers to describe specific objects and their relations.",
  "practice": [
   {
-   "question": "Which of the following is a tautology?",
+   "question": "What is the contrapositive of the implication `p -> q`?",
+   "explanation": "The contrapositive of an implication is formed by negating both the antecedent and the consequent, and then swapping them.",
    "options": [
-    "(p -> q) <-> (!q -> !p)",
-    "(p v q) <-> (!p ^ !q)",
-    "(p -> q) <-> (!p -> !q)",
-    "p ^ !p"
+    "~p -> ~q",
+    "~q -> ~p",
+    "q -> p",
+    "~q -> p"
    ],
-   "correct_index": 0,
-   "explanation": "This is the law of contrapositive! Since a statement and its contrapositive are always equivalent, the whole expression is always true."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "What is the negation of the statement `forall x (P(x) -> Q(x))`?",
+   "question": "Which of the following is the correct negation of the statement `forall x (P(x) -> Q(x))`?",
+   "explanation": "Negating a universal quantifier changes it to an existential quantifier, and the negation of the implication `P(x) -> Q(x)` is `P(x) ^ ~Q(x)`.",
    "options": [
-    "exists x (P(x) and !Q(x))",
-    "exists x (!P(x) or Q(x))",
-    "forall x (P(x) and !Q(x))",
-    "exists x (!P(x) and !Q(x))"
+    "exists x (P(x) ^ ~Q(x))",
+    "exists x (~P(x) v Q(x))",
+    "forall x (P(x) ^ ~Q(x))",
+    "exists x (~P(x) ^ Q(x))"
    ],
-   "correct_index": 0,
-   "explanation": "Remember that negating a universal quantifier turns it into an existential one. Also, the negation of an implication `p -> q` is `p and !q`."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "Consider the following premises: 1. `p -> q`, 2. `q -> r`, 3. `p`. Is the conclusion `r` valid?",
+   "question": "Consider the following two premises:\n1. `p -> q` \n2. `r -> ~q` \nWhich of the following conclusions is logically valid?",
+   "explanation": "From `r -> ~q`, we get the contrapositive `q -> ~r`. Combining `p -> q` and `q -> ~r` gives `p -> ~r`, which is logically equivalent to `r -> ~p`.",
    "options": [
-    "Valid",
-    "Invalid",
-    "The premises are inconsistent",
-    "The conclusion must be false"
+    "p -> r",
+    "r -> ~p",
+    "~p -> r",
+    "q -> r"
    ],
-   "correct_index": 0,
-   "explanation": "This is a nice one for practicing Modus Ponens! You can use it twice: first to get `q` from `p`, and then to get `r` from `q`."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "The expression `exists x (P(x) and forall y Q(y))` is logically equivalent to:",
+   "question": "Which of the following statements are tautologies?",
+   "explanation": "Options 0 and 1 are fundamental properties of conjunction and disjunction. Option 3 is the law of double negation. Option 2 is not a tautology because the converse of an implication is not always true.",
    "options": [
-    "forall x (P(x) and forall y Q(y))",
-    "(exists x P(x)) and (forall y Q(y))",
-    "(exists x P(x)) or (exists y Q(y))",
-    "forall x (P(x) or Q(x))"
+    "(p ^ q) -> p",
+    "p -> (p v q)",
+    "(p -> q) -> (q -> p)",
+    "~(~p) <-> p"
    ],
-   "correct_index": 1,
-   "explanation": "Since `forall y Q(y)` does not contain the variable `x`, it acts like a constant relative to the `exists x` quantifier, so we can move it outside."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    3
+   ]
   },
   {
-   "question": "Which of the following is logically equivalent to `p v (q ^ r)`?",
-   "options": [
-    "(p v q) ^ (p v r)",
-    "(p ^ q) v (p ^ r)",
-    "p ^ (q v r)",
-    "(p v q) v (p v r)"
-   ],
-   "correct_index": 0,
-   "explanation": "This is just the distributive law. It works similarly to how `a * (b + c)` works in algebra, but with logic operators!"
+   "question": "Let the domain be the set of integers {1, 2, 3, ..., 10}. How many elements x in the domain satisfy the predicate `x^2 < 50`?",
+   "explanation": "Checking the squares: 1^2=1, 2^2=4, 3^2=9, 4^2=16, 5^2=25, 6^2=36, and 7^2=49 are all less than 50. 8^2=64 is not. Thus, there are 7 such elements: {1, 2, 3, 4, 5, 6, 7}.",
+   "type": "nat",
+   "answer": 7.0,
+   "tolerance": 0
   }
  ]
 }

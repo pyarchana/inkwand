@@ -44,65 +44,68 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:24:32+00:00"
+   "written_at": "2026-10-10T15:23:39+00:00"
   }
  },
  "notes": "Imagine you and a friend are drawing. You have the paper, they have the pen. You won't give the paper until you get the pen, and they won't give the pen until they get the paper. You're both stuck! That's a **deadlock**.\n\nFor a deadlock to occur, four conditions must hold simultaneously:\n- **Mutual Exclusion**: Resources cannot be shared.\n- **Hold and Wait**: A process holds a resource while waiting for another.\n- **No Preemption**: Resources cannot be forcibly taken away.\n- **Circular Wait**: A closed chain of processes exists where each waits for a resource held by the next.\n\nWe can **prevent** it by breaking one of these rules, or **avoid** it using the **Banker's Algorithm** to ensure the system stays in a **Safe State**. If we don't prevent or avoid it, we must use **Detection** to find the deadlock and **Recovery** (like killing a process) to fix it.\n\nExample:\nTotal Resources: 10.\nP1: Allocation = 4, Max = 8.\nP2: Allocation = 2, Max = 5.\nAvailable = 10 - (4 + 2) = 4.\nStep 1: P1's Need = 8 - 4 = 4. Since Need (4) <= Available (4), P1 can finish.\nStep 2: New Available = 4 + 4 (P1's allocation) = 8.\nStep 3: P2's Need = 5 - 2 = 3. Since Need (3) <= Available (8), P2 can finish.\nThe sequence <P1, P2> is a **Safe Sequence**.\n\nCommon traps:\n- Mixing up **Prevention** (changing the rules/conditions) and **Avoidance** (using math/Banker's to stay safe).\n- In Banker's algorithm, always remember to add the *allocated* resources back to the `Available` pool once a process finishes.\n\nRemember this: A deadlock only exists if all four Coffman conditions are met at the same time.",
  "practice": [
   {
-   "question": "Which of the following is NOT a necessary condition for a deadlock to occur?",
+   "question": "Which of the following is NOT a necessary condition for a deadlock to occur in a system?",
+   "explanation": "To have a deadlock, we need four conditions: mutual exclusion, hold and wait, **no preemption**, and circular wait. Since 'preemption' is the opposite of 'no preemption', it's not a condition for deadlock!",
    "options": [
     "Mutual exclusion",
     "Hold and wait",
     "Preemption",
     "Circular wait"
    ],
-   "correct_index": 2,
-   "explanation": "Remember, for a deadlock to happen, we need four specific conditions: Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. Since preemption is allowed here, it breaks the 'No Preemption' requirement."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "In a system with three processes P1, P2, and P3, the current available resources are A=3, B=3, C=2. The processes have the following needs and allocations: P1: Need(7,5,3), Alloc(0,1,0); P2: Need(1,2,2), Alloc(2,0,0); P3: Need(6,0,0), Alloc(3,0,2). Which process can be executed next?",
+   "question": "The Banker's algorithm is primarily used to achieve which of the following?",
+   "explanation": "Think of 'Avoidance' as being proactive. Instead of just breaking conditions (prevention), the Banker's algorithm looks at the current state and only grants requests if they keep the system in a 'safe state'.",
+   "options": [
+    "Deadlock prevention",
+    "Deadlock avoidance",
+    "Deadlock detection",
+    "Deadlock recovery"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "A system has 10 units of a single resource type. The current allocation is: P1 holds 2, P2 holds 3, and P3 holds 4. The maximum demand for P1 is 5, for P2 is 7, and for P3 is 6. Which of the following processes can be satisfied immediately with the currently available resources?",
+   "explanation": "First, find what's available: 10 - (2 + 3 + 4) = 1. Now check the needs: P1 needs 3, P2 needs 4, and P3 needs 2. Since 1 is less than all of them, no one can finish yet!",
    "options": [
     "P1",
     "P2",
     "P3",
     "None of the above"
    ],
-   "correct_index": 1,
-   "explanation": "Just compare the 'Need' with what's 'Available'. Only P2's requirements (1, 2, 2) fit within our current resources (3, 3, 2), so it's the only one that can move forward!"
+   "type": "mcq",
+   "correct_index": 3
   },
   {
-   "question": "Which of the following strategies can be used to prevent deadlock by attacking the 'Hold and Wait' condition?",
+   "question": "Which of the following statements are true regarding deadlock prevention?",
+   "explanation": "Prevention works by attacking the four necessary conditions. Note that 'Mutual Exclusion' often can't be broken (like a printer), and the Banker's algorithm is for 'Avoidance', not 'Prevention'.",
    "options": [
-    "Requiring processes to request all resources at once",
-    "Implementing a Banker's algorithm",
-    "Using a resource allocation graph",
-    "Allowing preemption of resources"
+    "Eliminating the 'Hold and Wait' condition can be done by requiring processes to request all resources at once before execution.",
+    "Eliminating the 'Circular Wait' condition can be done by imposing a strict linear ordering of resource types.",
+    "Eliminating 'Mutual Exclusion' is always possible by making all resources sharable.",
+    "The Banker's algorithm is a method used for deadlock prevention."
    ],
-   "correct_index": 0,
-   "explanation": "To stop 'Hold and Wait', we can make processes ask for everything they need right at the start. That way, they aren't holding one resource while waiting for another."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1
+   ]
   },
   {
-   "question": "If a Resource Allocation Graph (RAG) contains a cycle and each resource type has only a single instance, which of the following is true?",
-   "options": [
-    "A deadlock has definitely occurred",
-    "A deadlock might have occurred",
-    "No deadlock has occurred",
-    "The system is in a safe state"
-   ],
-   "correct_index": 0,
-   "explanation": "This is a classic! When there is only one instance per resource, a cycle in the graph is a sufficient condition, meaning a deadlock has definitely occurred."
-  },
-  {
-   "question": "Which of the following is a technique to prevent deadlock by breaking the 'Circular Wait' condition?",
-   "options": [
-    "Allowing preemption of resources",
-    "Forcing processes to request all resources at once",
-    "Imposing a total ordering of all resource types",
-    "Ensuring mutual exclusion"
-   ],
-   "correct_index": 2,
-   "explanation": "By giving every resource a number and making processes request them in increasing order, we make it impossible for a cycle to form. It's a great way to prevent circular wait!"
+   "question": "A system has 15 units of a resource. Process P1 holds 4 units, P2 holds 5 units, and P3 holds 3 units. If P2 completes its execution and releases all its held resources, how many units of the resource will be available in the system?",
+   "explanation": "First, find how many resources are currently free: 15 - (4 + 5 + 3) = 3. When P2 finishes, it returns its 5 units back to the pool, so 3 + 5 = 8.",
+   "type": "nat",
+   "answer": 8.0,
+   "tolerance": 0
   }
  ]
 }

@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:35:05+00:00"
+   "written_at": "2026-10-10T15:33:42+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "If A is a 3x3 matrix with det(A) = 5, what is the value of det(2A)?",
+   "question": "If A is a 3x3 matrix and det(A) = 5, what is the value of det(2A)?",
+   "explanation": "Remember the property: det(k*A) = k^n * det(A), where n is the order of the matrix. Here, n = 3 and k = 2, so we get 2^3 * 5 = 8 * 5 = 40.",
    "options": [
+    "5",
     "10",
-    "20",
     "40",
     "80"
    ],
-   "correct_index": 2,
-   "explanation": "Remember the property det(k*A) = k^n * det(A), where n is the dimension of the matrix. Here, it is 2^3 * 5 = 40."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "A 3x4 matrix A has the following rows: [1, 0, 2, 1], [2, 0, 4, 2], and [0, 1, 0, 1]. What is the rank of matrix A?",
+   "question": "Let A be a 3x4 matrix with rank(A) = 2. According to the Rank-Nullity Theorem, what is the dimension of the null space of A?",
+   "explanation": "The Rank-Nullity Theorem states that rank(A) + nullity(A) = number of columns. For this matrix, 2 + nullity = 4, so the nullity (dimension of the null space) is 2.",
    "options": [
     "1",
     "2",
     "3",
     "4"
    ],
-   "correct_index": 1,
-   "explanation": "Since the second row is just a multiple of the first, it doesn't add a new dimension. The first and third rows are independent, so the rank is 2."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "If A is a 3x3 matrix and det(A) = 0, which of the following must be true?",
+   "question": "If a 3x3 matrix A is found to have a determinant of 0, which of the following must be true?",
+   "explanation": "By definition, a square matrix is called 'singular' if its determinant is zero. This also means the matrix cannot be inverted.",
    "options": [
     "A is invertible",
-    "The rank of A is 3",
-    "The rows of A are linearly dependent",
-    "A^2 = 0"
+    "rank(A) = 3",
+    "A is singular",
+    "all elements of A are zero"
    ],
-   "correct_index": 2,
-   "explanation": "If the determinant is zero, the matrix is singular, which means its rows are linearly dependent."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "Let A be a 2x2 matrix with det(A) = 3. Let B be a 2x2 matrix with det(B) = -2. What is det(A * B^-1)?",
+   "question": "Let A be a 3x3 matrix. Which of the following statements are always true?",
+   "explanation": "A square matrix has full rank if and only if its determinant is non-zero. Also, the determinant of a matrix and its transpose are identical. However, the determinant of a sum is not typically equal to the sum of the determinants.",
    "options": [
-    "-6",
-    "-1.5",
-    "1.5",
-    "6"
+    "If det(A) != 0, then rank(A) = 3",
+    "If rank(A) < 3, then det(A) = 0",
+    "det(A^T) = det(A)",
+    "det(A + B) = det(A) + det(B)"
    ],
-   "correct_index": 1,
-   "explanation": "A handy property is det(A * B^-1) = det(A) / det(B). So, 3 / -2 = -1.5."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
   },
   {
-   "question": "In a system of 3 linear equations with 3 variables, if the determinant of the coefficient matrix is non-zero, how many solutions exist?",
-   "options": [
-    "No solution",
-    "Infinitely many solutions",
-    "Exactly one solution",
-    "Exactly two solutions"
-   ],
-   "correct_index": 2,
-   "explanation": "When the determinant is non-zero, the matrix is invertible, which guarantees a single unique solution."
+   "question": "Calculate the determinant of the following 2x2 matrix: [[3, 2], [1, 5]].",
+   "explanation": "For a 2x2 matrix [[a, b], [c, d]], the determinant is (a*d) - (b*c). So, (3 * 5) - (2 * 1) = 15 - 2 = 13.",
+   "type": "nat",
+   "answer": 13.0,
+   "tolerance": 0
   }
  ]
 }
