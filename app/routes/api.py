@@ -38,7 +38,7 @@ async def health() -> dict:
 
 @router.get("/library/{book_id}/{chapter_id}")
 async def get_chapter(book_id: str, chapter_id: str) -> dict:
-    """Pre-written notes, practice paper and flashcards for one chapter."""
+    """Pre-written notes, short notes, practice paper and flashcards for one chapter."""
     _book_or_404(book_id)
     chapter = _chapter_or_404(book_id, chapter_id)
     data = content.load_chapter(book_id, chapter_id)
@@ -48,6 +48,20 @@ async def get_chapter(book_id: str, chapter_id: str) -> dict:
         "title": chapter["title"],
         **{kind: data.get(kind) for kind in content.KINDS},
     }
+
+
+@router.get("/mocks")
+async def list_mocks() -> dict:
+    """The full-length mock tests that are ready to sit."""
+    return {"mocks": content.list_mocks()}
+
+
+@router.get("/mocks/{mock_id}")
+async def get_mock(mock_id: int) -> dict:
+    mock = content.load_mock(mock_id)
+    if not mock:
+        raise HTTPException(status_code=404, detail="That mock test isn't ready yet.")
+    return mock
 
 
 @router.post("/report")

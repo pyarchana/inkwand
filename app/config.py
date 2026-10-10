@@ -21,8 +21,33 @@ GITHUB_URL = "https://github.com/pyarchana/inkwand"
 # Leave empty to hide the DEV link in the footer.
 DEV_POST_URL = ""
 
-MCQS_PER_PAPER = 5
+# A practice paper mixes the three GATE question types: MCQ (one correct
+# option), MSQ (one or more correct options) and NAT (type in a number).
+PAPER_MIX = {"mcq": 3, "msq": 1, "nat": 1}
+QUESTIONS_PER_PAPER = sum(PAPER_MIX.values())
 FLASHCARDS_PER_DECK = 8
+
+# Mock tests follow the CS section of the GATE paper: 25 one-mark and 30
+# two-mark questions, 85 marks in all. A wrong MCQ loses a third of its marks;
+# MSQ and NAT have no negative marking. Each subject gets roughly its usual
+# share of the paper.
+MOCK_COUNT = 3
+MOCK_MINUTES = 150
+MOCK_BLUEPRINT = {  # book id: (one-mark questions, two-mark questions)
+    "discrete-math": (2, 2),
+    "linear-algebra": (1, 1),
+    "calculus": (1, 0),
+    "probability": (1, 1),
+    "digital-logic": (2, 2),
+    "coa": (2, 3),
+    "pds": (3, 4),
+    "algorithms": (2, 3),
+    "toc": (2, 3),
+    "compiler": (2, 2),
+    "os": (3, 3),
+    "dbms": (2, 3),
+    "cn": (2, 3),
+}
 STARS_PER_CORRECT = 1
 
 # Shelves are just groups on the bookshelf, top to bottom.

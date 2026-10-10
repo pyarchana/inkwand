@@ -1,10 +1,10 @@
 import json
 import re
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, Field, TypeAdapter, ValidationError, field_validator, model_validator
 
-Kind = Literal["notes", "practice", "flashcards"]
+Kind = Literal["notes", "short", "practice", "flashcards"]
 
 
 class GenerateRequest(BaseModel):
@@ -32,10 +32,8 @@ class GenerateRequest(BaseModel):
         return self
 
 
-class MCQ(BaseModel):
+class _Question(BaseModel):
     question: str = Field(min_length=1)
-    options: list[str] = Field(min_length=4, max_length=4)
-    correct_index: int = Field(ge=0, le=3)
     explanation: str = Field(min_length=1)
 
     @field_validator("question", "explanation")
@@ -46,6 +44,10 @@ class MCQ(BaseModel):
             raise ValueError("must not be blank")
         return v
 
+
+class _WithOptions(_Question):
+    options: list[str] = Field(min_length=4, max_length=4)
+
     @field_validator("options")
     @classmethod
     def clean_options(cls, v: list[str]) -> list[str]:
@@ -53,6 +55,45 @@ class MCQ(BaseModel):
         if any(not o for o in v):
             raise ValueError("options must not be blank")
         return v
+
+
+class MCQ(_WithOptions):
+    """Exactly one correct option."""
+
+    type: Literal["mcq"] = "mcq"
+    correct_index: int = Field(ge=0, le=3)
+
+
+class MSQ(_WithOptions):
+    """One or more correct options. Like GATE, it only counts if you pick all of them."""
+
+    type: Literal["msq"]
+    correct_indices: list[Annotated[int, Field(ge=0, le=3)]] = Field(min_length=1, max_length=4)
+
+    @field_validator("correct_indices")
+    @classmethod
+    def unique_sorted(cls, v: list[int]) -> list[int]:
+        return sorted(set(v))
+
+
+class NAT(_Question):
+    """Numerical answer type: no options, the student types a number."""
+
+    type: Literal["nat"]
+    answer: float = Field(allow_inf_nan=False)
+    tolerance: float = 0
+
+    @model_validator(mode="after")
+    def round_off_range(self):
+        # Whole numbers must match exactly. Anything else is "rounded off to two
+        # decimal places" in the question, so allow 0.01 either way.
+        self.tolerance = 0 if self.answer.is_integer() else 0.01
+        return self
+
+
+Question = Annotated[MCQ | MSQ | NAT, Field(discriminator="type")]
+_question_adapter = TypeAdapter(Question)
+QUESTION_ORDER = {"mcq": 0, "msq": 1, "nat": 2}
 
 
 class Flashcard(BaseModel):
@@ -72,7 +113,7 @@ class ParseError(ValueError):
     pass
 
 
-# Kept for readability at call sites that deal with MCQs.
+# Kept for readability at call sites that deal with questions.
 MCQParseError = ParseError
 
 _FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL | re.IGNORECASE)
@@ -99,13 +140,13 @@ def _extract_json(text: str):
     raise ParseError("Reply was not valid JSON")
 
 
-def _parse_list(text: str, key: str, model: type[BaseModel], expected: int, minimum: int):
+def _parse_list(text: str, key: str, validate, expected: int, minimum: int):
     data = _extract_json(text)
     items = data.get(key) if isinstance(data, dict) else data
     if not isinstance(items, list):
         raise ParseError(f"JSON has no list of {key}")
     try:
-        parsed = [model.model_validate(item) for item in items]
+        parsed = [validate(item) for item in items]
     except ValidationError as e:
         raise ParseError(f"{key} failed validation: {e.error_count()} error(s)") from e
     if len(parsed) < minimum:
@@ -113,8 +154,21 @@ def _parse_list(text: str, key: str, model: type[BaseModel], expected: int, mini
     return parsed[:expected]
 
 
-def parse_mcqs(text: str, expected: int) -> list[MCQ]:
-    return _parse_list(text, "questions", MCQ, expected, minimum=expected)
+def _validate_question(item) -> MCQ | MSQ | NAT:
+    # A question without a type is an MCQ (that's all older papers had).
+    if isinstance(item, dict):
+        item = {**item, "type": str(item.get("type") or "mcq").strip().lower()}
+    return _question_adapter.validate_python(item)
+
+
+def parse_questions(text: str, expected: int, mix: dict[str, int] | None = None) -> list[MCQ | MSQ | NAT]:
+    """Parse a practice paper. With a mix, every question type in it must show up."""
+    questions = _parse_list(text, "questions", _validate_question, expected, minimum=expected)
+    if mix:
+        missing = {t for t, n in mix.items() if n} - {q.type for q in questions}
+        if missing:
+            raise ParseError(f"Paper has no {', '.join(sorted(missing))} questions")
+    return sorted(questions, key=lambda q: QUESTION_ORDER[q.type])
 
 
 class SubjectProgress(BaseModel):
@@ -166,4 +220,4 @@ def parse_report(text: str, books: set[str]) -> ReportRemarks:
 
 def parse_flashcards(text: str, expected: int) -> list[Flashcard]:
     # A deck one or two cards short is still useful.
-    return _parse_list(text, "cards", Flashcard, expected, minimum=max(1, expected - 2))
+    return _parse_list(text, "cards", Flashcard.model_validate, expected, minimum=max(1, expected - 2))

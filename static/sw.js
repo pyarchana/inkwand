@@ -2,7 +2,7 @@
 // Pages, styles and scripts are network-first (so updates show up straight away) with the
 // cached copy as a fallback. Chapters are served from the cache and refreshed in the background.
 
-const CACHE = "inkwand-v1";
+const CACHE = "inkwand-v2";
 const SHELL = ["/", "/static/styles.css", "/static/app.js", "/favicon.svg", "/api/config"];
 
 self.addEventListener("install", (event) => {

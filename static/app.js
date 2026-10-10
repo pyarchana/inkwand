@@ -771,14 +771,144 @@
     obs.observe(end);
   }
 
+  // ---------- questions ----------
+  // The three GATE question types: mcq (one correct option), msq (one or more
+  // correct, all of them needed) and nat (type the number). Older papers and
+  // saved mistakes have no type, so they are MCQs.
+  const LETTERS = "ABCD";
+  const Q_TYPES = {
+    mcq: { tag: "MCQ", hint: "one correct answer" },
+    msq: { tag: "MSQ", hint: "one or more correct, pick them all" },
+    nat: { tag: "NAT", hint: "type in the number" },
+  };
+  const qType = (q) => (Q_TYPES[q.type] ? q.type : "mcq");
+  const fmtNum = (x) => String(Number(x.toFixed(4)));
+
+  function typeTag(q) {
+    const t = Q_TYPES[qType(q)];
+    return `<span class="q-type">${t.tag}<span> · ${t.hint}</span></span>`;
+  }
+
+  function answerHtml(q) {
+    const type = qType(q);
+    if (type === "nat") {
+      return `<div class="nat-row">
+          <input class="nat-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="your answer" aria-label="Your answer">
+          <button class="btn small" data-check>Check</button>
+        </div>`;
+    }
+    const multi = type === "msq";
+    const opts = q.options.map((o, j) => `<li><button class="option" data-opt="${j}"${multi ? ' aria-pressed="false"' : ""}><span class="opt-letter">${LETTERS[j]}.</span>${inline(o)}</button></li>`).join("");
+    return `<ul class="options${multi ? " multi" : ""}">${opts}</ul>${multi ? `<button class="btn small" data-check disabled>Check</button>` : ""}`;
+  }
+
+  function isRight(q, given) {
+    const type = qType(q);
+    if (type === "nat") return Math.abs(given - q.answer) <= (q.tolerance || 0) + 1e-9;
+    if (type === "msq") return given.length === q.correct_indices.length && given.every((j) => q.correct_indices.includes(j));
+    return given === q.correct_index;
+  }
+
+  function rightAnswer(q) {
+    const type = qType(q);
+    if (type === "nat") {
+      const tol = q.tolerance || 0;
+      return tol
+        ? `The answer is ${fmtNum(q.answer)} (anything from ${fmtNum(q.answer - tol)} to ${fmtNum(q.answer + tol)} counts).`
+        : `The answer is ${fmtNum(q.answer)}.`;
+    }
+    if (type === "msq") {
+      const ls = q.correct_indices.map((j) => LETTERS[j]);
+      return ls.length === 1 ? `Only ${ls[0]} is correct.` : `The correct options are ${ls.slice(0, -1).join(", ")} and ${ls[ls.length - 1]}.`;
+    }
+    return `The answer is ${LETTERS[q.correct_index]}.`;
+  }
+
+  // Ticks on the right answers, crosses on wrong picks.
+  function markAnswer(card, q, given, ok) {
+    card.classList.add("answered");
+    $("[data-check]", card)?.remove();
+    const type = qType(q);
+    if (type === "nat") {
+      const row = $(".nat-row", card);
+      $(".nat-input", row).disabled = true;
+      row.classList.add(ok ? "correct" : "chosen-wrong");
+      row.insertAdjacentHTML("beforeend", ok ? ICON.tick + ICON.burst : ICON.cross);
+      return;
+    }
+    const right = type === "msq" ? q.correct_indices : [q.correct_index];
+    const chosen = type === "msq" ? given : [given];
+    $$(".option", card).forEach((b) => {
+      b.disabled = true;
+      const j = Number(b.dataset.opt);
+      if (right.includes(j)) {
+        b.classList.add("correct");
+        if (!chosen.includes(j)) b.classList.add("missed");
+        b.insertAdjacentHTML("beforeend", ICON.tick + (ok ? ICON.burst : ""));
+      } else if (chosen.includes(j)) { b.classList.add("chosen-wrong"); b.insertAdjacentHTML("beforeend", ICON.cross); }
+    });
+  }
+
+  // One listener for a list of question cards. lookup(card) finds the question,
+  // done(card, q, given, ok) runs once it has been answered.
+  function wireQuestions(root, lookup, done) {
+    const submit = (card, q, given) => {
+      const ok = isRight(q, given);
+      markAnswer(card, q, given, ok);
+      done(card, q, given, ok);
+    };
+    const submitNat = (card, q) => {
+      const input = $(".nat-input", card);
+      const raw = input.value.trim();
+      const value = raw === "" ? NaN : Number(raw);
+      if (!Number.isFinite(value)) {
+        input.classList.remove("nudge");
+        void input.offsetWidth;
+        input.classList.add("nudge");
+        input.focus();
+        return;
+      }
+      submit(card, q, value);
+    };
+    const target = (e) => {
+      const card = e.target.closest(".mcq");
+      if (!card || card.classList.contains("answered")) return null;
+      const q = lookup(card);
+      return q ? { card, q } : null;
+    };
+
+    root.addEventListener("click", (e) => {
+      const t = target(e);
+      if (!t) return;
+      const { card, q } = t;
+      const opt = e.target.closest(".option");
+      if (opt && qType(q) === "mcq") return submit(card, q, Number(opt.dataset.opt));
+      if (opt && qType(q) === "msq") {
+        const on = !opt.classList.contains("picked");
+        opt.classList.toggle("picked", on);
+        opt.setAttribute("aria-pressed", String(on));
+        $("[data-check]", card).disabled = !$(".option.picked", card);
+        return;
+      }
+      if (!e.target.closest("[data-check]")) return;
+      if (qType(q) === "nat") submitNat(card, q);
+      else submit(card, q, $$(".option.picked", card).map((b) => Number(b.dataset.opt)));
+    });
+    root.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" || !e.target.matches(".nat-input")) return;
+      const t = target(e);
+      if (!t) return;
+      e.preventDefault();
+      submitNat(t.card, t.q);
+    });
+  }
+
   // ---------- practice paper ----------
   function paperHtml(questions) {
     const qs = questions.map((q, i) => `
-      <div class="mcq" data-q="${i}">
-        <div class="q-text"><span class="q-num">Q${i + 1}.</span><div>${formatText(q.question)}</div></div>
-        <ul class="options">
-          ${q.options.map((o, j) => `<li><button class="option" data-opt="${j}"><span class="opt-letter">${"ABCD"[j]}.</span>${inline(o)}</button></li>`).join("")}
-        </ul>
+      <div class="mcq q-${qType(q)}" data-q="${i}">
+        <div class="q-text"><span class="q-num">Q${i + 1}.</span><div>${typeTag(q)}${formatText(q.question)}</div></div>
+        ${answerHtml(q)}
         <div class="explain-slot"></div>
       </div>`).join("");
     return `<div class="paper"><div class="paper-head"><span>${questions.length} questions · a sticker for every right answer</span><span data-progress>0 / ${questions.length} answered</span></div>${qs}<div class="score-slot"></div></div>`;
@@ -794,26 +924,13 @@
     let answered = 0;
     let right = 0;
     const paper = $(".paper", body);
-    paper.addEventListener("click", (e) => {
-      const opt = e.target.closest(".option");
-      if (!opt || opt.disabled) return;
-      const card = opt.closest(".mcq");
-      const q = questions[Number(card.dataset.q)];
-      const chosen = Number(opt.dataset.opt);
-      const ok = chosen === q.correct_index;
-
-      $$(".option", card).forEach((b) => {
-        b.disabled = true;
-        const j = Number(b.dataset.opt);
-        if (j === q.correct_index) { b.classList.add("correct"); b.insertAdjacentHTML("beforeend", ICON.tick + (ok ? ICON.burst : "")); }
-        else if (j === chosen) { b.classList.add("chosen-wrong"); b.insertAdjacentHTML("beforeend", ICON.cross); }
-      });
+    wireQuestions(paper, (card) => questions[Number(card.dataset.q)], (card, q, given, ok) => {
       $(".explain-slot", card).innerHTML = `
-        <div class="explain"><p class="verdict">${ok ? pick(["Correct, nicely done!", "Well done!", "Spot on!", "Excellent!"]) : `Not quite. The answer is ${"ABCD"[q.correct_index]}.`}</p>${formatText(q.explanation)}</div>`;
+        <div class="explain"><p class="verdict">${ok ? pick(["Correct, nicely done!", "Well done!", "Spot on!", "Excellent!"]) : `Not quite. ${rightAnswer(q)}`}</p>${formatText(q.explanation)}</div>`;
 
       answered++;
       markStudiedToday();
-      if (!ok) addMistake(ctx, q, chosen);
+      if (!ok) addMistake(ctx, q, given);
       if (ok) {
         right++;
         const type = pick(STICKER_BAG);
@@ -851,8 +968,7 @@
     if (existing) { existing.fixed = false; existing.chosen = chosen; existing.at = Date.now(); }
     else {
       list.push({
-        id, book: ctx.book.id, bookShort: ctx.book.short, where: ctx.topic || ctx.chapter.title,
-        question: q.question, options: q.options, correct_index: q.correct_index, explanation: q.explanation,
+        ...q, id, book: ctx.book.id, bookShort: ctx.book.short, where: ctx.topic || ctx.chapter.title,
         chosen, at: Date.now(), fixed: false,
       });
     }
@@ -888,12 +1004,10 @@
       return;
     }
     const card = (m) => `
-      <div class="mcq mistake" data-mid="${m.id}">
+      <div class="mcq mistake q-${qType(m)}" data-mid="${m.id}">
         <p class="mistake-from">${escapeHtml(m.bookShort)} · ${escapeHtml(m.where)}</p>
-        <div class="q-text"><div>${formatText(m.question)}</div></div>
-        <ul class="options">
-          ${m.options.map((o, j) => `<li><button class="option" data-opt="${j}"><span class="opt-letter">${"ABCD"[j]}.</span>${inline(o)}</button></li>`).join("")}
-        </ul>
+        <div class="q-text"><div>${typeTag(m)}${formatText(m.question)}</div></div>
+        ${answerHtml(m)}
         <div class="explain-slot"></div>
       </div>`;
     body.innerHTML = `
@@ -903,32 +1017,22 @@
         <ul>${fixed.map((m) => `<li><span class="struck">${inline(m.question.split("\n")[0].slice(0, 140))}</span> ${ICON.greenTick}</li>`).join("")}</ul>
       </details>` : ""}`;
 
-    $(".mistakes-list", body).addEventListener("click", (e) => {
-      const opt = e.target.closest(".option");
-      if (!opt || opt.disabled) return;
-      const cardEl = opt.closest(".mcq");
-      const list = store.get(KEY.mistakes, []);
-      const m = list.find((x) => x.id === cardEl.dataset.mid);
-      if (!m) return;
-      const chosen = Number(opt.dataset.opt);
-      const ok = chosen === m.correct_index;
-      $$(".option", cardEl).forEach((b) => {
-        b.disabled = true;
-        const j = Number(b.dataset.opt);
-        if (j === m.correct_index) { b.classList.add("correct"); b.insertAdjacentHTML("beforeend", ICON.tick + (ok ? ICON.burst : "")); }
-        else if (j === chosen) { b.classList.add("chosen-wrong"); b.insertAdjacentHTML("beforeend", ICON.cross); }
-      });
-      $(".explain-slot", cardEl).innerHTML = `<div class="explain"><p class="verdict">${ok ? "Corrected! Crossing this one off." : `Still tricky. The answer is ${"ABCD"[m.correct_index]}.`}</p>${formatText(m.explanation)}</div>`;
+    const findMistake = (cardEl) => store.get(KEY.mistakes, []).find((x) => x.id === cardEl.dataset.mid);
+    wireQuestions($(".mistakes-list", body), findMistake, (cardEl, m, given, ok) => {
+      $(".explain-slot", cardEl).innerHTML = `<div class="explain"><p class="verdict">${ok ? "Corrected! Crossing this one off." : `Still tricky. ${rightAnswer(m)}`}</p>${formatText(m.explanation)}</div>`;
       markStudiedToday();
+      const list = store.get(KEY.mistakes, []);
+      const saved = list.find((x) => x.id === m.id);
+      if (!saved) return;
       if (ok) {
-        m.fixed = true; m.fixedAt = Date.now();
+        saved.fixed = true; saved.fixedAt = Date.now();
         store.set(KEY.mistakes, list);
         cardEl.classList.add("corrected");
         cardEl.insertAdjacentHTML("beforeend", `<span class="corrected-stamp">${ICON.greenTick}<span>corrected</span></span>`);
         awardSticker("star");
         logActivity({ kind: "fixed", n: 1 });
       } else {
-        m.chosen = chosen; m.at = Date.now();
+        saved.chosen = given; saved.at = Date.now();
         store.set(KEY.mistakes, list);
       }
     });

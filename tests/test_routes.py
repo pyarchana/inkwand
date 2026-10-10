@@ -1,20 +1,31 @@
+import asyncio
 import json
+from collections import Counter
 
 import pytest
 from fastapi.testclient import TestClient
 
 from app import content, llm
-from app.config import FLASHCARDS_PER_DECK, MCQS_PER_PAPER
+from app.config import FLASHCARDS_PER_DECK, MOCK_COUNT, MOCK_MINUTES, PAPER_MIX, QUESTIONS_PER_PAPER
 from app.main import app
 
 client = TestClient(app)
 
+
+def _paper_question(kind, i):
+    q = {"type": kind, "question": f"Q{i}?", "explanation": "Worked out."}
+    if kind == "nat":
+        return {**q, "answer": 12}
+    q["options"] = ["a", "b", "c", "d"]
+    return {**q, "correct_indices": [0, 2]} if kind == "msq" else {**q, "correct_index": 2}
+
+
+# Written NAT first to check the paper comes back in GATE order (MCQ, MSQ, NAT).
 GOOD_PAPER = json.dumps(
     {
         "questions": [
-            {"question": f"Q{i}?", "options": ["a", "b", "c", "d"],
-             "correct_index": 2, "explanation": "c is right."}
-            for i in range(MCQS_PER_PAPER)
+            _paper_question(kind, i)
+            for i, kind in enumerate(k for k in reversed(PAPER_MIX) for _ in range(PAPER_MIX[k]))
         ]
     }
 )
@@ -26,6 +37,7 @@ GOOD_CARDS = json.dumps(
 @pytest.fixture(autouse=True)
 def temp_library(tmp_path, monkeypatch):
     monkeypatch.setattr(content, "LIBRARY_DIR", tmp_path)
+    monkeypatch.setattr(content, "MOCKS_DIR", tmp_path / "mocks")
     return tmp_path
 
 
@@ -92,8 +104,10 @@ def test_generate_practice_ok(monkeypatch):
     r = client.post("/api/generate", json={"book": "os", "chapter": "deadlock", "kind": "practice"})
     assert r.status_code == 200
     qs = r.json()["content"]
-    assert len(qs) == MCQS_PER_PAPER
+    assert len(qs) == QUESTIONS_PER_PAPER
+    assert [q["type"] for q in qs] == [k for k in PAPER_MIX for _ in range(PAPER_MIX[k])]
     assert qs[0]["correct_index"] == 2
+    assert qs[-1]["answer"] == 12 and qs[-1]["tolerance"] == 0
 
 
 def test_generate_practice_retries_once_then_succeeds(monkeypatch):
@@ -240,4 +254,65 @@ def test_service_worker_served_from_root():
     assert r.status_code == 200
     assert "javascript" in r.headers["content-type"]
     assert r.headers["cache-control"] == "no-cache"
-    assert "inkwand-v1" in r.text
+    assert "const CACHE = \"inkwand-v" in r.text
+
+
+def test_generate_short_notes(monkeypatch):
+    calls = fake_llm(monkeypatch, ["Must know:\n- Four conditions."])
+    r = client.post("/api/generate", json={"book": "os", "chapter": "deadlock", "kind": "short"})
+    assert r.status_code == 200
+    assert r.json()["content"].startswith("Must know:")
+    assert "last month before GATE" in calls[0]
+
+
+# ---------- mock tests ----------
+
+def _mock_part_questions(part):
+    return [{**_paper_question(s["type"], i), "marks": part["marks"], "book": part["book"]["id"]}
+            for i, s in enumerate(part["slots"])]
+
+
+def test_every_mock_matches_the_gate_cs_section():
+    for n in range(1, MOCK_COUNT + 1):
+        slots = [(p["marks"], s["type"]) for p in content.mock_plan(n) for s in p["slots"]]
+        assert len(slots) == 55
+        assert sum(m for m, _ in slots) == 85
+        assert Counter(m for m, _ in slots) == {1: 25, 2: 30}
+        assert Counter(t for _, t in slots) == {"mcq": 30, "nat": 15, "msq": 10}
+
+
+def test_mocks_rotate_chapters():
+    first, second = content.mock_plan(1), content.mock_plan(2)
+    assert [s["chapter"] for p in first for s in p["slots"]] != [s["chapter"] for p in second for s in p["slots"]]
+
+
+def test_write_mock_part_tags_marks_and_subject(monkeypatch):
+    part = next(p for p in content.mock_plan(1) if p["marks"] == 2 and len(p["slots"]) >= 3)
+    reply = json.dumps({"questions": [_paper_question(s["type"], i) for i, s in enumerate(part["slots"])]})
+    calls = fake_llm(monkeypatch, [reply])
+    qs = asyncio.run(content.write_mock_part(part))
+    assert len(qs) == len(part["slots"])
+    assert {q["marks"] for q in qs} == {2}
+    assert {q["book"] for q in qs} == {part["book"]["id"]}
+    assert "carries 2 marks" in calls[0]
+    assert part["slots"][0]["chapter"] in calls[0]
+
+
+def test_mock_is_listed_only_once_complete():
+    assert client.get("/api/mocks").json() == {"mocks": []}
+    assert client.get("/api/mocks/1").status_code == 404
+
+    plan = content.mock_plan(1)
+    for part in plan[:-1]:
+        content.save_mock_part(1, part["key"], _mock_part_questions(part), "test-model")
+    assert client.get("/api/mocks").json() == {"mocks": []}
+    assert [p["key"] for p in content.missing_mock_parts(1)] == [plan[-1]["key"]]
+
+    content.save_mock_part(1, plan[-1]["key"], _mock_part_questions(plan[-1]), "test-model")
+    assert client.get("/api/mocks").json() == {
+        "mocks": [{"id": 1, "title": "Mock test 1", "minutes": MOCK_MINUTES, "marks": 85, "questions": 55}]
+    }
+    mock = client.get("/api/mocks/1").json()
+    assert len(mock["questions"]) == 55
+    assert mock["questions"][0]["book"] == "discrete-math"
+    assert client.get(f"/api/mocks/{MOCK_COUNT + 1}").status_code == 404

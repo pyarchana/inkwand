@@ -41,31 +41,109 @@ If the topic does not belong to the subject, gently say so and cover the closest
 """
 
 
-def practice_prompt(book: str, chapter: str, scope: str, count: int) -> str:
+def short_notes_prompt(book: str, chapter: str, scope: str) -> str:
     return f"""{VOICE}
 
-Write a practice paper of {count} GATE CSE style multiple choice questions.
+Write the short notes a student reads in the last month before GATE: a one-glance revision
+sheet for this topic, with only what is worth remembering on exam day.
 {_where(book, chapter, scope)}
 
-Each question has exactly 4 options and exactly one correct option.
-Mix concept checks with small numerical or tracing problems, like real GATE questions.
-Do not put letters like "A)" in front of options. Keep each explanation to 1 to 3 sentences.
-Double check every answer before you write it.
-{FORMAT_RULES}
+Use exactly these three labelled parts, each a list of bullet points starting with '- ':
+Must know: 4 to 6 key facts, definitions or results.
+Formulas and rules: the formulas, standard results and quick rules GATE questions use.
+Watch out: 2 or 3 traps that cost students marks.
 
-Return ONLY valid JSON, with no text before or after it and no markdown code fences.
+Every bullet fits on one line (at most 20 words). No examples, no paragraphs, no intro or
+closing line. Keep it under 180 words.
+{FORMAT_RULES}
+"""
+
+
+QUESTION_TYPES = """The three question types of the real GATE paper:
+- "mcq": exactly 4 options and exactly one correct option. "correct_index" is the 0-based
+  index of the correct option (0, 1, 2 or 3).
+- "msq": exactly 4 options, one or more of them correct (usually two or three).
+  "correct_indices" lists the 0-based index of every correct option. A student only gets it
+  right by picking all of them and nothing else, so each option must be clearly right or wrong.
+- "nat": no options. The answer is one number the student types in. Give it as "answer", a
+  JSON number with no units (put any units in the question). If the answer is not a whole
+  number, end the question with "(Round off to two decimal places.)" and give the answer
+  rounded to two decimal places."""
+
+QUESTION_STYLE = """Do not put letters like "A)" in front of options. Keep each explanation to 1 to 3
+sentences, and for a NAT question show the short working.
+Double check every answer before you write it."""
+
+QUESTIONS_JSON = """Return ONLY valid JSON, with no text before or after it and no markdown code fences.
 Use exactly this shape:
-{{
+{
   "questions": [
-    {{
+    {
+      "type": "mcq",
       "question": "string",
       "options": ["string", "string", "string", "string"],
       "correct_index": 0,
       "explanation": "string"
-    }}
+    },
+    {
+      "type": "msq",
+      "question": "string",
+      "options": ["string", "string", "string", "string"],
+      "correct_indices": [0, 2],
+      "explanation": "string"
+    },
+    {
+      "type": "nat",
+      "question": "string",
+      "answer": 12,
+      "explanation": "string"
+    }
   ]
-}}
-"correct_index" is the 0-based index of the correct option (0, 1, 2 or 3).
+}"""
+
+
+def practice_prompt(book: str, chapter: str, scope: str, mix: dict[str, int]) -> str:
+    total = sum(mix.values())
+    return f"""{VOICE}
+
+Write a GATE CSE practice paper of {total} questions: {mix["mcq"]} MCQ, {mix["msq"]} MSQ and
+{mix["nat"]} NAT, in that order.
+{_where(book, chapter, scope)}
+
+{QUESTION_TYPES}
+
+Mix concept checks with small numerical or tracing problems, like real GATE questions.
+{QUESTION_STYLE}
+{FORMAT_RULES}
+
+{QUESTIONS_JSON}
+"""
+
+
+def mock_prompt(book: str, marks: int, slots: list[dict]) -> str:
+    plan = "\n".join(
+        f"{i}. {s['type'].upper()} on {s['chapter']} ({s['scope']})" for i, s in enumerate(slots, 1)
+    )
+    weight = (
+        "a quick concept check or a one-step problem"
+        if marks == 1
+        else "a multi-step problem that takes two to four minutes, like a real 2-mark question"
+    )
+    return f"""{VOICE}
+
+Write {len(slots)} questions for a full-length GATE CSE mock test.
+Subject: {book}
+Every question here carries {marks} mark{"s" if marks > 1 else ""}, so each one is {weight}.
+Write exactly these questions, in this order:
+{plan}
+
+{QUESTION_TYPES}
+
+Make them as close as you can to real GATE questions in style and difficulty.
+{QUESTION_STYLE}
+{FORMAT_RULES}
+
+{QUESTIONS_JSON}
 """
 
 
