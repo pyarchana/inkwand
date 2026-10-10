@@ -6,12 +6,6 @@ A free study notebook for GATE CSE. Every subject is a book on a shelf, and ever
 
 ![A book sliding off the shelf and opening](docs/demo/1-open-a-book.gif)
 
-## Why I made it
-
-My brother is preparing for GATE, the big engineering exam in India that decides master's admissions at places like the IITs. The computer science paper covers pretty much everything from college, and studying for it on your own can feel lonely. Nobody is around to tell you that you're getting better.
-
-So I built him a notebook that does. It looks like the grid paper notebooks we all had in school, it hands out gold stars when you get things right, and it quietly keeps track of every day you show up :)
-
 ## What's inside
 
 - **The whole syllabus as a bookshelf.** 13 subjects and 86 chapters, straight from the official GATE 2027 CS syllabus. Click a book and it slides off the shelf and opens.
