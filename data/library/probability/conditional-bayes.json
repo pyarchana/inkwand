@@ -7,7 +7,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:42:52+00:00"
+   "written_at": "2026-10-10T15:40:56+00:00"
   },
   "flashcards": {
    "model": "gemma-4-26b-a4b-it",
@@ -16,59 +16,63 @@
  },
  "practice": [
   {
-   "question": "Given P(A) = 0.6, P(B) = 0.3, and P(A and B) = 0.2, what is the value of P(A|B)?",
-   "options": [
-    "0.2",
-    "0.5",
-    "0.67",
-    "2.0"
-   ],
-   "correct_index": 2,
-   "explanation": "Just remember the definition: **P(A|B)** is the probability of A occurring given that B has already happened. It is simply **P(A and B)** divided by **P(B)**!"
-  },
-  {
-   "question": "A factory uses two machines, M1 and M2. M1 produces 60% of the total output and M2 produces 40%. The probability that an item from M1 is defective is 0.05, and for M2 it is 0.10. What is the probability that a randomly selected item is defective?",
-   "options": [
-    "0.05",
-    "0.07",
-    "0.08",
-    "0.10"
-   ],
-   "correct_index": 1,
-   "explanation": "We use the **Law of Total Probability** here. We calculate the probability of a defect from each machine and add them up weighted by their production shares: (0.60 * 0.05) + (0.40 * 0.10)."
-  },
-  {
-   "question": "Using the machine scenario from the previous question, if a randomly selected item is found to be defective, what is the probability that it was produced by machine M1?",
-   "options": [
-    "3/7",
-    "4/7",
-    "5/7",
-    "6/7"
-   ],
-   "correct_index": 0,
-   "explanation": "This is a classic **Bayes' Theorem** problem. We take the probability of being from M1 and defective (0.03) and divide it by the total probability of being defective (0.07)."
-  },
-  {
-   "question": "If two events A and B are independent, which of the following statements is always true regarding their conditional probability?",
-   "options": [
-    "P(A|B) = P(B|A)",
-    "P(A|B) = P(A)",
-    "P(A|B) = 1",
-    "P(A|B) = P(A and B)"
-   ],
-   "correct_index": 1,
-   "explanation": "**Independence** means that the occurrence of event B provides no new information about event A, so the probability remains unchanged."
-  },
-  {
-   "question": "In a group of students, 40% like Mathematics, 30% like Computer Science, and 10% like both subjects. If a student is selected at random and we are told they like Mathematics, what is the probability that they also like Computer Science?",
+   "question": "If P(A) = 0.4, P(B) = 0.5, and P(A and B) = 0.2, what is the value of P(B|A)?",
+   "explanation": "Just plug the values into the conditional probability formula: P(B|A) = P(A and B) / P(A). So, 0.2 / 0.4 = 0.5. You're doing great!",
    "options": [
     "0.1",
-    "0.25",
-    "0.3",
-    "0.4"
+    "0.2",
+    "0.4",
+    "0.5"
    ],
-   "correct_index": 1,
-   "explanation": "Since we already know the student likes Math, our **sample space** shrinks to only the 40% who like Math. We then find what fraction of that group also likes CS: 0.1 / 0.4 = 0.25."
+   "type": "mcq",
+   "correct_index": 3
+  },
+  {
+   "question": "Two boxes contain balls. Box 1 has 2 red and 3 blue balls. Box 2 has 4 red and 1 blue ball. A box is chosen at random and one ball is drawn. If the ball is red, what is the probability it came from Box 1?",
+   "explanation": "Using Bayes' Theorem: P(Box1|Red) = P(Red|Box1)P(Box1) / [P(Red|Box1)P(Box1) + P(Red|Box2)P(Box2)]. This gives (2/5 * 1/2) / (2/5 * 1/2 + 4/5 * 1/2) = 0.2 / 0.6 = 1/3.",
+   "options": [
+    "1/2",
+    "1/3",
+    "2/3",
+    "1/4"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "Machine A produces 60% of the total items and Machine B produces 40%. The probability of an item being defective is 2% for Machine A and 5% for Machine B. What is the total probability that a randomly selected item is defective?",
+   "explanation": "By the Law of Total Probability, P(Defective) = P(Defective|A)P(A) + P(Defective|B)P(B) = (0.02 * 0.6) + (0.05 * 0.4) = 0.012 + 0.02 = 0.032.",
+   "options": [
+    "0.03",
+    "0.032",
+    "0.07",
+    "0.012"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "Consider two events A and B. Which of the following statements are correct?",
+   "explanation": "Independence means one event tells you nothing about the other, so P(A|B)=P(A) and P(A and B)=P(A)P(B). Mutually exclusive events are actually highly dependent because if one happens, the other cannot.",
+   "options": [
+    "If A and B are independent, then P(A|B) = P(A).",
+    "If A and B are mutually exclusive, then A and B are independent.",
+    "If P(A|B) = P(A), then A and B are independent.",
+    "If A and B are independent, then P(A and B) = P(A) * P(B)."
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2,
+    3
+   ]
+  },
+  {
+   "question": "A bag contains 3 red and 2 white balls. Another bag contains 2 red and 4 white balls. One bag is chosen at random and a ball is drawn. The ball is found to be red. What is the probability that it was chosen from the first bag? (Round off to two decimal places.)",
+   "explanation": "Apply Bayes' Theorem: P(Bag1|Red) = P(Red|Bag1)P(Bag1) / [P(Red|Bag1)P(Bag1) + P(Red|Bag2)P(Bag2)]. This is (0.6 * 0.5) / (0.6 * 0.5 + 1/3 * 0.5) = 0.3 / (0.3 + 1/6) = 9/14 approx 0.64.",
+   "type": "nat",
+   "answer": 0.64,
+   "tolerance": 0.01
   }
  ],
  "flashcards": [

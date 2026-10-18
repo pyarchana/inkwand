@@ -44,65 +44,69 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T13:23:43+00:00"
+   "written_at": "2026-10-10T15:51:41+00:00"
   }
  },
  "notes": "Recursion is a technique where a function calls itself to solve a smaller version of the same problem. It is like a set of nested Russian dolls; to reach the smallest doll, you must open the larger ones first.\n\nEvery recursive function must have:\n- **Base Case**: The condition that stops the recursion. This prevents an infinite loop.\n- **Recursive Step**: The part where the function calls itself with a modified input (usually smaller) to move closer to the base case.\n\nExample:\nTrace the output of `f(3)`:\n`f(n):`\n`  if n == 0: return 1`\n`  else: return n * f(n-1)`\n\nStep 1: `f(3)` calls `3 * f(2)`\nStep 2: `f(2)` calls `2 * f(1)`\nStep 3: `f(1)` calls `1 * f(0)`\nStep 4: `f(0)` hits the base case and returns `1`\nStep 5: Unwinding the stack (returning values):\n`f(1)` becomes `1 * 1 = 1`\n`f(2)` becomes `2 * 1 = 2`\n`f(3)` becomes `3 * 2 = 6`\nResult: `6`\n\nCommon traps:\n- **Missing Base Case**: If you forget the base case, the function calls itself indefinitely, leading to a **Stack Overflow** error.\n- **Incorrect Unwinding**: Many students forget that the function doesn't just \"stop\" at the base case; it must return values back up through every previous call in the stack.\n\nRemember this: Recursion is a two-phase process: going \"down\" through calls and \"up\" through returns.",
  "practice": [
   {
-   "question": "Consider the following C function: `int f(int n) { return f(n-1); }`. What happens when `f(5)` is called?",
+   "question": "What happens if a recursive function lacks a proper base case that is eventually reached?",
+   "explanation": "Without a base case, the function calls itself indefinitely, which eventually consumes all the stack memory, leading to a stack overflow.",
    "options": [
     "It returns 0",
-    "It returns -1",
-    "It causes a stack overflow",
-    "It returns 5"
+    "It results in a stack overflow error",
+    "It executes infinitely without using memory",
+    "It terminates immediately"
    ],
-   "correct_index": 2,
-   "explanation": "Since there is no base case to stop the recursion, the function keeps calling itself until the stack memory is exhausted. This is a classic way to get a stack overflow!"
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "What is the return value of the following recursive function call: `solve(5)`? \n`int solve(int n) { if (n <= 1) return 1; return n + solve(n-2); }`",
+   "question": "Consider the following C function: `int fun(int n) { if (n <= 1) return 1; return n + fun(n - 2); }`. What is the value of `fun(5)`?",
+   "explanation": "Let's trace it step-by-step: fun(5) = 5 + fun(3) = 5 + 3 + fun(1) = 5 + 3 + 1 = 9.",
    "options": [
     "5",
-    "8",
+    "7",
     "9",
     "15"
    ],
-   "correct_index": 2,
-   "explanation": "Try tracing it step-by-step: `solve(5)` is `5 + solve(3)`, and `solve(3)` is `3 + solve(1)`. Since `solve(1)` returns 1, the final answer is 5 + 3 + 1 = 9."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "What is the output of `f(4)` for the following function? \n`int f(int n) { if (n <= 1) return 1; return f(n-1) * 2; }`",
+   "question": "Which of the following is a characteristic of a recursive function call?",
+   "explanation": "Every time a function calls itself, the system pushes a new activation record (containing local variables and the return address) onto the stack.",
    "options": [
-    "4",
-    "8",
-    "16",
-    "32"
+    "It uses a queue to manage function calls",
+    "Each call creates a new activation record on the stack",
+    "It is always more memory-efficient than iteration",
+    "It does not use any auxiliary space"
    ],
-   "correct_index": 1,
-   "explanation": "If you trace the calls, you'll see that for n > 1, the function is essentially calculating 2^(n-1). For n=4, that's 2^3 = 8."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Which of the following best describes **tail recursion**?",
+   "question": "Consider the following C function: `void solve(int n) { if (n <= 0) return; print(n); solve(n - 1); solve(n - 1); }`. Which of the following statements are true?",
+   "explanation": "Each call branches into two more calls, creating a binary tree of calls with O(2^n) complexity. For n=2, the calls are: print(2), solve(1), solve(1), which results in 2, 1, 1.",
    "options": [
-    "The recursive call is the very last action performed by the function",
-    "The function calls itself at least twice in every step",
-    "The function must have no base case",
-    "The function uses more memory than a standard loop"
+    "For n = 2, the sequence of printed values is 2, 1, 1",
+    "The total number of times the print statement is executed for n = 3 is 7",
+    "The time complexity of this function is O(n)",
+    "The recursion follows a tree-like structure"
    ],
-   "correct_index": 0,
-   "explanation": "In tail recursion, the recursive call is the very last thing the function does before returning. This is helpful because compilers can optimize it to save stack space!"
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    3
+   ]
   },
   {
-   "question": "What will be the output of `printN(3)`? \n`void printN(int n) { if (n == 0) return; printN(n-1); printf(\"%d\", n); }`",
-   "options": [
-    "321",
-    "123",
-    "3",
-    "1"
-   ],
-   "correct_index": 1,
-   "explanation": "Since the `printf` comes after the recursive call, the function 'dives' all the way to the base case first. Then, it prints the numbers as it travels back up the recursion stack."
+   "question": "Consider the following C function: `int calc(int n) { if (n <= 0) return 0; if (n == 1) return 1; return calc(n - 1) + calc(n - 2); }`. What is the value of `calc(6)`?",
+   "explanation": "This is the Fibonacci sequence. The values are: calc(0)=0, calc(1)=1, calc(2)=1, calc(3)=2, calc(4)=3, calc(5)=5, and finally calc(6)=5+3=8.",
+   "type": "nat",
+   "answer": 8.0,
+   "tolerance": 0
   }
  ]
 }

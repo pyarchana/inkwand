@@ -7,7 +7,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T13:26:05+00:00"
+   "written_at": "2026-10-10T15:54:28+00:00"
   },
   "flashcards": {
    "model": "gemma-4-26b-a4b-it",
@@ -16,59 +16,63 @@
  },
  "practice": [
   {
-   "question": "What is the postfix form of the infix expression: `A + B * C / D`?",
+   "question": "Evaluate the following postfix expression: 5 3 + 8 2 / -",
+   "explanation": "Think of it step-by-step: 5 + 3 = 8, then 8 / 2 = 4, and finally 8 - 4 = 4. You've got this!",
    "options": [
-    "ABC*D/+",
-    "ABC/D*+",
-    "AB+CD/*",
-    "ABCD*/+"
-   ],
-   "correct_index": 0,
-   "explanation": "Always follow the order of operations: multiplication and division are performed before addition."
-  },
-  {
-   "question": "A stack is initially empty. The following operations are performed: `push(5), push(15), pop(), push(25), pop(), push(35), push(45), pop()`. What is the top element of the stack after these operations?",
-   "options": [
-    "5",
-    "15",
-    "25",
-    "35"
-   ],
-   "correct_index": 3,
-   "explanation": "It helps to draw a small box and track the stack elements as you go through each step!"
-  },
-  {
-   "question": "In a circular queue implemented using an array of size `n`, which of the following conditions correctly identifies that the queue is full?",
-   "options": [
-    "rear == front",
-    "(rear + 1) % n == front",
-    "rear == n - 1",
-    "front == 0"
-   ],
-   "correct_index": 1,
-   "explanation": "The modulo operator % is the secret to making the queue wrap around the array indices."
-  },
-  {
-   "question": "What is the postfix form of the infix expression: `(A + B) * (C - D)`?",
-   "options": [
-    "AB+CD-*",
-    "ABCD-+*",
-    "AB+*CD-",
-    "A+BC-D*"
-   ],
-   "correct_index": 0,
-   "explanation": "Treat the parts inside the parentheses as separate problems first, then combine them."
-  },
-  {
-   "question": "A queue is implemented using two stacks, `S1` and `S2`. To `enqueue`, you push onto `S1`. To `dequeue`, if `S2` is empty, you move all elements from `S1` to `S2`, then pop from `S2`. If you `enqueue` 10, 20, and 30, and then perform `dequeue` twice, what is the second element dequeued?",
-   "options": [
+    "4",
     "10",
-    "20",
-    "30",
+    "16",
     "0"
    ],
-   "correct_index": 1,
-   "explanation": "Even though we use two stacks, the transfer step ensures we get the first-in, first-out behavior."
+   "type": "mcq",
+   "correct_index": 0
+  },
+  {
+   "question": "A circular queue is implemented using an array of size 5. Initially, front = 0 and rear = -1. After performing the following operations: Enqueue(10), Enqueue(20), Enqueue(30), Dequeue(), Enqueue(40), Enqueue(50), and Enqueue(60), what are the values of front and rear?",
+   "explanation": "After the dequeue, the front moves to index 1. The last enqueue wraps around to index 0 because it's a circular queue.",
+   "options": [
+    "front = 1, rear = 0",
+    "front = 0, rear = 0",
+    "front = 1, rear = 1",
+    "front = 0, rear = 1"
+   ],
+   "type": "mcq",
+   "correct_index": 0
+  },
+  {
+   "question": "What is the postfix form of the infix expression: (A + B) * C?",
+   "explanation": "Remember, parentheses have high priority! A + B becomes A B +, and then we multiply by C to get A B + C *.",
+   "options": [
+    "A B C * +",
+    "A B + C *",
+    "+ A * B C",
+    "A B + * C"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "Which of the following statements about stacks and queues are true?",
+   "explanation": "Great job if you got these! Stacks and queues can simulate each other, and circular queues help reuse space, but searching in a stack takes O(n) time.",
+   "options": [
+    "A stack can be used to implement a queue using two stacks.",
+    "A queue can be used to implement a stack using two queues.",
+    "The time complexity of searching for an element in a stack is O(1).",
+    "A circular queue helps in reusing the empty spaces left by dequeue operations in an array-based linear queue."
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    3
+   ]
+  },
+  {
+   "question": "A stack is initially empty. Perform the following operations: Push(1), Push(2), Push(3), Pop(), Push(4), Pop(), Pop(), Push(5), Push(6), Pop(). How many elements are left in the stack?",
+   "explanation": "Just trace it carefully: [1,2,3] -> pop -> [1,2] -> push 4 -> [1,2,4] -> pop, pop -> [1] -> push 5,6 -> [1,5,6] -> pop -> [1,5]. There are 2 elements left!",
+   "type": "nat",
+   "answer": 2.0,
+   "tolerance": 0
   }
  ],
  "flashcards": [

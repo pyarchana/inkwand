@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:47:38+00:00"
+   "written_at": "2026-10-10T15:45:07+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "In the instruction `ADD R1, #25`, where `#25` represents the constant value 25, which addressing mode is being used?",
+   "question": "In the instruction `MOV R1, [R2 + 10]`, which addressing mode is being used to calculate the effective address of the operand?",
+   "explanation": "This mode calculates the effective address by adding a constant displacement (10) to the contents of a register (R2). It's super helpful for accessing array elements or local variables!",
    "options": [
     "Immediate addressing",
-    "Direct addressing",
-    "Register addressing",
-    "Indirect addressing"
-   ],
-   "correct_index": 0,
-   "explanation": "In immediate addressing, the operand is actually part of the instruction itself. This makes it very quick since you don't need to fetch from memory!"
-  },
-  {
-   "question": "Suppose memory address 100 contains the value 200, and memory address 200 contains the value 50. If an instruction uses indirect addressing with the operand address 100, what is the effective address?",
-   "options": [
-    "100",
-    "200",
-    "50",
-    "0"
-   ],
-   "correct_index": 1,
-   "explanation": "In indirect addressing, the address provided points to a memory location that holds the actual effective address. So, we look at 100 and find 200!"
-  },
-  {
-   "question": "A computer calculates the effective address by adding the contents of a base register, an index register, and a displacement. If the base register contains 1000, the index register contains 50, and the displacement is 20, what is the effective address?",
-   "options": [
-    "1020",
-    "1050",
-    "1070",
-    "1570"
-   ],
-   "correct_index": 2,
-   "explanation": "For this mode, you just add the base, the index, and the displacement together. It's like finding a specific seat in a theater row!"
-  },
-  {
-   "question": "An instruction format uses a 4-bit opcode and 3-bit register specifiers. If the instruction is a 3-address instruction, how many bits are required for the entire instruction?",
-   "options": [
-    "13 bits",
-    "10 bits",
-    "16 bits",
-    "7 bits"
-   ],
-   "correct_index": 0,
-   "explanation": "You just sum up the bits: 4 for the opcode plus 3 bits for each of the three registers. That gives us 4 + 9 = 13 bits total."
-  },
-  {
-   "question": "Which addressing mode is most useful for implementing pointers in high-level languages like C?",
-   "options": [
-    "Immediate addressing",
-    "Direct addressing",
     "Register indirect addressing",
-    "Displacement addressing"
+    "Displacement addressing",
+    "Direct addressing"
    ],
-   "correct_index": 2,
-   "explanation": "Register indirect addressing lets a register hold a memory address, which is exactly how pointers work. Keep practicing, you're doing great!"
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "A processor uses 16-bit instructions. The opcode takes 4 bits, and each register operand takes 3 bits. If an instruction format uses one opcode and two register operands, how many bits are left for an immediate value?",
+   "explanation": "Just subtract the bits used by the opcode and both registers from the total bits. 16 - 4 - 3 - 3 = 6 bits remaining.",
+   "options": [
+    "4",
+    "6",
+    "8",
+    "10"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "In Register Indirect addressing mode, what is the effective address of the operand?",
+   "explanation": "This is a common trap! The effective address is the 'where' (the location), and in register indirect mode, the register holds that location. The content of the memory location is the actual operand.",
+   "options": [
+    "The content of the register",
+    "The address field in the instruction",
+    "The content of the memory location pointed to by the register",
+    "The sum of the register content and the instruction's constant"
+   ],
+   "type": "mcq",
+   "correct_index": 0
+  },
+  {
+   "question": "Which of the following statements are true regarding addressing modes?",
+   "explanation": "Immediate uses constants, Direct uses memory addresses (requiring one data memory access), and Register Indirect uses a register as a pointer. Option 3 is wrong because direct addressing fetches from memory, not registers.",
+   "options": [
+    "Immediate addressing mode uses the constant value provided in the instruction itself as the operand.",
+    "Direct addressing mode requires one additional memory access to fetch the operand after the instruction is fetched.",
+    "In register indirect addressing, the effective address is stored in a register.",
+    "Direct addressing mode uses a register to store the operand."
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question": "A processor uses base-register addressing. The base register `B` contains the value 5000. The instruction provides a displacement of 350. What is the effective address of the operand?",
+   "explanation": "In base-register addressing, we simply add the base value to the displacement. 5000 + 350 = 5350.",
+   "type": "nat",
+   "answer": 5350.0,
+   "tolerance": 0
   }
  ]
 }

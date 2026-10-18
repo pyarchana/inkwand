@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:40:45+00:00"
+   "written_at": "2026-10-10T15:39:07+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,62 @@
  ],
  "practice": [
   {
-   "question": "A Binomial distribution with `n = 100` and `p = 0.01` can be best approximated by which Poisson distribution?",
+   "question": "A Binomial distribution B(n, p) can be approximated by a Poisson distribution with parameter lambda if:",
+   "explanation": "When n is large and p is small, the Binomial distribution behaves very similarly to a Poisson distribution where lambda = np. This is a super handy trick for calculations!",
    "options": [
-    "Poisson(100)",
-    "Poisson(1)",
-    "Poisson(0.01)",
-    "Poisson(99)"
+    "n is very small and p is close to 0.5",
+    "n is very large and p is very small, such that np is constant",
+    "n is very large and p is close to 1",
+    "n is very small and p is close to 1"
    ],
-   "correct_index": 1,
-   "explanation": "When `n` is large and `p` is small, we use the Poisson approximation where `lambda = n * p`. Here, `100 * 0.01 = 1`."
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "The number of emails received by a server follows a Poisson distribution with an average of 2 emails per minute. What is the probability that the server receives exactly 2 emails in a given minute? (Use e^-2 = 0.135)",
+   "explanation": "Using the Poisson formula P(X=k) = (lambda^k * e^-lambda) / k!, we get (2^2 * 0.135) / 2! = (4 * 0.135) / 2 = 0.27. You're doing great, just keep practicing those formula applications!",
+   "options": [
+    "0.135",
+    "0.270",
+    "0.540",
+    "0.067"
+   ],
+   "type": "mcq",
+   "correct_index": 1
   },
   {
    "question": "A fair coin is tossed 5 times. What is the probability of getting exactly 3 heads?",
+   "explanation": "For Binomial, we use C(n, k) * p^k * (1-p)^(n-k). Here, C(5,3) is 10, and since p = 0.5, it is 10 * (0.5)^5, which is 10/32 or 5/16.",
    "options": [
-    "5/16",
     "5/32",
     "1/4",
+    "5/16",
     "3/8"
    ],
-   "correct_index": 0,
-   "explanation": "Using the Binomial formula `nCk * p^k * (1-p)^(n-k)`, we get `5C3 * (0.5)^3 * (0.5)^2`, which simplifies to `10 * (0.5)^5 = 10/32 = 5/16`."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "If a random variable follows a Poisson distribution and its variance is 4, what is its mean?",
+   "question": "Which of the following statements are correct regarding a Poisson distribution with parameter lambda (where lambda > 0)?",
+   "explanation": "One of the unique things about the Poisson distribution is that its mean and variance are both exactly lambda. Also, it is typically skewed, not symmetric!",
    "options": [
-    "2",
-    "4",
-    "8",
-    "16"
+    "The mean is equal to lambda",
+    "The variance is always less than lambda",
+    "The variance is equal to lambda",
+    "The distribution is symmetric for all lambda"
    ],
-   "correct_index": 1,
-   "explanation": "This is a great property to remember: for any **Poisson distribution**, the mean and the variance are always equal."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2
+   ]
   },
   {
-   "question": "The number of emails received by a server follows a Poisson distribution with an average of 3 emails per minute. What is the probability that the server receives exactly 0 emails in a minute?",
-   "options": [
-    "e^-3",
-    "3e^-3",
-    "e^-2",
-    "1/3"
-   ],
-   "correct_index": 0,
-   "explanation": "The Poisson formula is `(e^-lambda * lambda^k) / k!`. Plugging in `lambda = 3` and `k = 0` gives `e^-3 * 3^0 / 0! = e^-3`."
-  },
-  {
-   "question": "For a Binomial distribution with parameters `n` and `p` (where `0 < p < 1`), which of the following is always true?",
-   "options": [
-    "Mean > Variance",
-    "Mean < Variance",
-    "Mean = Variance",
-    "Mean + Variance = 1"
-   ],
-   "correct_index": 0,
-   "explanation": "The mean is `np` and the variance is `np(1-p)`. Since `(1-p)` is less than 1, the variance will always be smaller than the mean."
+   "question": "A Poisson process has an average of 4 arrivals per hour. What is the probability of seeing exactly 1 arrival in a 30-minute interval? (Use e^-2 = 0.135 and round off to two decimal places.)",
+   "explanation": "Since the rate is 4 per hour, the rate for 30 minutes is 2. Plugging lambda=2 and k=1 into the Poisson formula gives 2 * e^-2, which is 2 * 0.135 = 0.27.",
+   "type": "nat",
+   "answer": 0.27,
+   "tolerance": 0.01
   }
  ]
 }

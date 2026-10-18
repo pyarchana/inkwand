@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T13:25:12+00:00"
+   "written_at": "2026-10-10T15:49:54+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,61 @@
  ],
  "practice": [
   {
-   "question": "What is the output of the following C code?\n\nint arr[] = {10, 20, 30, 40, 50};\nint *p = arr;\np++;\nprintf(\"%d\", *(p + 2));",
+   "question": "What will be the output of the following C code?\n\nint arr[] = {10, 20, 30, 40, 50};\nint *p = arr;\nprintf(\"%d\", *(p + 2) + p[1]);",
+   "explanation": "Here, `p + 2` points to the third element (30), and `p[1]` is the second element (20). So, 30 + 20 = 50.",
    "options": [
     "20",
     "30",
-    "40",
-    "50"
+    "50",
+    "70"
    ],
-   "correct_index": 2,
-   "explanation": "Remember that p++ moves the pointer to the next element first. So p starts pointing at 20, and moving two more steps lands us at 40."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "What is the output of the following C code?\n\nvoid swap(int x, int *y) {\n    int temp = x;\n    x = *y;\n    *y = temp;\n}\n\nint main() {\n    int a = 5, b = 10;\n    swap(a, &b);\n    printf(\"%d %d\", a, b);\n    return 0;\n}",
+   "question": "What is the output of the following C program?\n\nvoid swap(int a, int b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n\nint main() {\n    int x = 5, y = 10;\n    swap(x, y);\n    printf(\"%d %d\", x, y);\n    return 0;\n}",
+   "explanation": "Since C uses call-by-value for integers, the `swap` function only modifies local copies of `a` and `b`. The original `x` and `y` in `main` remain unchanged.",
    "options": [
     "5 10",
-    "5 5",
     "10 5",
+    "5 5",
     "10 10"
    ],
-   "correct_index": 1,
-   "explanation": "Since a is passed by value, its original value stays safe. But b is passed via its address, so the change inside the function sticks!"
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "What is the output of the following C code?\n\nint func() {\n    static int count = 0;\n    count++;\n    return count;\n}\n\nint main() {\n    int x = func();\n    func();\n    x = func();\n    printf(\"%d\", x);\n    return 0;\n}",
+   "question": "What will the following code print?\n\nint arr[] = {1, 2, 3, 4, 5};\nint *p = arr;\nprintf(\"%d\", *(arr + 3) - *(p + 1));",
+   "explanation": "`*(arr + 3)` is the element at index 3 (which is 4), and `*(p + 1)` is the element at index 1 (which is 2). The result is 4 - 2 = 2.",
    "options": [
     "1",
     "2",
     "3",
     "4"
    ],
-   "correct_index": 2,
-   "explanation": "The static keyword is key here; it keeps the variable count alive across multiple function calls instead of resetting it to 0 every time."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "What is the output of the following C code?\n\nint a = 10;\nint *p = &a;\nint **q = &p;\n**q = 20;\nprintf(\"%d\", a);",
+   "question": "Which of the following statements are true regarding arrays and pointers in C?\n\n(i) `arr[i]` is equivalent to `*(arr + i)`\n(ii) `arr[i]` can be written as `i[arr]`\n(iii) `arr = arr + 1` is a valid way to move the array to the next element\n(iv) `&arr[0]` is equivalent to `arr`",
+   "explanation": "Pointer arithmetic is commutative, so `*(i + arr)` is the same as `*(arr + i)`. Note that `arr` is a constant pointer, so you cannot reassign it using `arr = arr + 1`.",
    "options": [
-    "10",
-    "20",
-    "30",
-    "Error"
+    "(i) only",
+    "(i) and (ii) only",
+    "(i), (ii), and (iv) are true",
+    "All are true"
    ],
-   "correct_index": 1,
-   "explanation": "This is a classic pointer-to-pointer scenario. By dereferencing q twice, you are actually reaching all the way back to the original variable a."
+   "type": "msq",
+   "correct_indices": [
+    2
+   ]
   },
   {
-   "question": "What is the output of the following C code?\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *p = arr;\n    printf(\"%d\", *(p + 3) - *(p + 1));\n    return 0;\n}",
-   "options": [
-    "1",
-    "2",
-    "3",
-    "4"
-   ],
-   "correct_index": 1,
-   "explanation": "Pointer arithmetic is just like array indexing. *(p + 3) is the same as arr[3], which makes the subtraction 4 - 2 very straightforward."
+   "question": "What is the value of `res` after the following code executes?\n\nint arr[] = {1, 3, 5, 7, 9};\nint *p = arr;\nint res = 0;\nfor (int i = 0; i < 4; i++) {\n    res += *(p + i) * i;\n}",
+   "explanation": "Let's trace: i=0: 1*0=0; i=1: 3*1=3; i=2: 5*2=10; i=3: 7*3=21. Total sum = 0 + 3 + 10 + 21 = 34.",
+   "type": "nat",
+   "answer": 34.0,
+   "tolerance": 0
   }
  ]
 }

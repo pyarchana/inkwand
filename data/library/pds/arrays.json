@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T13:25:17+00:00"
+   "written_at": "2026-10-10T15:53:20+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "An array `A[10][20]` is stored in Row Major Order. The base address is 1000 and each element takes 4 bytes. What is the address of `A[5][10]` (assuming 0-based indexing)?",
+   "question": "A 2D array `A[10][20]` is stored in row-major order. If the base address is 1000 and each element occupies 4 bytes, what is the memory address of `A[5][10]`?",
+   "explanation": "Hey! Just use the row-major formula: Base + (i * total_cols + j) * size. Here, 1000 + (5 * 20 + 10) * 4 = 1440.",
    "options": [
     "1440",
     "1400",
     "1480",
-    "1520"
+    "1500"
    ],
-   "correct_index": 0,
-   "explanation": "In Row Major Order, you skip the full rows first. Here, we skip 5 rows of 20 elements each, plus 10 more elements in the current row, then multiply by the element size."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "An array `B[5][10]` is stored in Column Major Order. The base address is 500 and each element takes 2 bytes. What is the address of `B[3][4]` (assuming 0-based indexing)?",
+   "question": "A 2D array `B[5][10]` is stored in column-major order. If the base address is 500 and each element occupies 2 bytes, what is the memory address of `B[2][3]`?",
+   "explanation": "Remember, for column-major, we skip full columns first. The formula is Base + (j * total_rows + i) * size, so 500 + (3 * 5 + 2) * 2 = 534.",
    "options": [
-    "536",
+    "534",
+    "526",
     "540",
-    "546",
-    "550"
+    "516"
    ],
-   "correct_index": 2,
-   "explanation": "Since it is Column Major, we skip full columns. We skip 4 columns of 5 elements each, plus 3 more elements in the current column, then multiply by the element size."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "In a standard 1D array of size `n`, what is the time complexity to access the element at a specific index `k`?",
+   "question": "What is the time complexity to access any element in a 1D array of size N, given its index?",
+   "explanation": "Since the array is in contiguous memory, we can jump straight to any index using a simple math formula in constant time.",
    "options": [
-    "O(n)",
-    "O(log n)",
     "O(1)",
-    "O(n log n)"
+    "O(log N)",
+    "O(N)",
+    "O(N log N)"
    ],
-   "correct_index": 2,
-   "explanation": "Arrays allow direct access because the computer can calculate the exact memory location using a simple formula in constant time."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "A 2D array `C[1...10, 1...15]` is stored in Row Major Order. The base address is 2000 and each element takes 8 bytes. Find the address of `C[5][5]`.",
+   "question": "Which of the following statements about arrays are true?",
+   "explanation": "Arrays are great for fast access and contiguous storage. However, inserting at the start is O(n) because you have to shift all other elements.",
    "options": [
-    "2488",
-    "2504",
-    "2512",
-    "2520"
+    "Arrays provide constant time access to elements using an index.",
+    "Elements in an array are stored in contiguous memory locations.",
+    "Inserting an element at the beginning of an array takes O(1) time.",
+    "Arrays can only store elements of the same data type."
    ],
-   "correct_index": 2,
-   "explanation": "When indices don't start at 0, subtract the lower bound from your index first. Here, we skip (5-1) rows and (5-1) elements within the row."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    3
+   ]
   },
   {
-   "question": "Consider an array `A[M][N]` where `M` is the number of rows and `N` is the number of columns. Which expression correctly gives the offset of element `A[i][j]` in Row Major Order (0-based indexing)?",
-   "options": [
-    "i * M + j",
-    "j * N + i",
-    "i * N + j",
-    "j * M + i"
-   ],
-   "correct_index": 2,
-   "explanation": "To reach row `i`, you must pass `i` complete rows, and each row contains `N` elements. Then, you just add `j` to move within that row."
+   "question": "A 3D array `C[2][3][4]` is stored in row-major order. The base address is 2000 and each element takes 8 bytes. What is the address of `C[1][1][1]`?",
+   "explanation": "For 3D row-major, use: Base + (i * D2 * D3 + j * D3 + k) * size. Plugging in: 2000 + (1 * 3 * 4 + 1 * 4 + 1) * 8 = 2136.",
+   "type": "nat",
+   "answer": 2136.0,
+   "tolerance": 0
   }
  ]
 }

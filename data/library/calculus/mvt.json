@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:38:25+00:00"
+   "written_at": "2026-10-10T15:37:16+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "Which of the following is a necessary condition for Rolle's Theorem to be applicable to a function f(x) on the closed interval [a, b]?",
+   "question": "Which of the following functions satisfies all the conditions of Rolle's Theorem on the interval [-1, 1]?",
+   "explanation": "Rolle's Theorem requires the function to be continuous on [a, b], differentiable on (a, b), and f(a) = f(b). For f(x) = 1 / (x^2 + 1), f(-1) = f(1) = 0.5, and it is smooth and continuous everywhere.",
    "options": [
-    "f(x) must be a polynomial",
-    "f(a) must equal f(b)",
-    "f'(x) must be continuous on [a, b]",
-    "f(x) must be strictly increasing"
+    "f(x) = |x|",
+    "f(x) = 1 / (x^2 + 1)",
+    "f(x) = 1 / x",
+    "f(x) = x^2 + x"
    ],
-   "correct_index": 1,
-   "explanation": "Remember, for Rolle's theorem, the function has to 'return' to the same height it started at, so f(a) must equal f(b)."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "For the function f(x) = x^2 on the interval [1, 3], find the value of 'c' that satisfies the Lagrange Mean Value Theorem.",
+   "question": "Let f(x) = x^2 - 4x + 3. Find the value of c in the interval (1, 4) that satisfies the Lagrange Mean Value Theorem.",
+   "explanation": "First, find the slope: (f(4) - f(1)) / (4 - 1) = (3 - 0) / 3 = 1. Then, set f'(c) = 2c - 4 = 1, which gives c = 2.5.",
    "options": [
-    "c = 1",
-    "c = 1.5",
-    "c = 2",
-    "c = 2.5"
+    "1.5",
+    "2.0",
+    "2.5",
+    "3.0"
    ],
-   "correct_index": 2,
-   "explanation": "Just plug the values into the formula f'(c) = (f(b) - f(a)) / (b - a) and solve for c. You've got this!"
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "What is the relationship between Rolle's Theorem and Lagrange's Mean Value Theorem?",
+   "question": "If f(x) is a differentiable function such that f(0) = 5 and f(10) = 15, which of the following statements must be true?",
+   "explanation": "By Lagrange's Mean Value Theorem, there must be at least one point c where the instantaneous rate of change f'(c) equals the average rate of change (15 - 5) / (10 - 0) = 1.",
    "options": [
-    "Rolle's theorem is a special case of Lagrange's MVT when f(a) = f(b)",
-    "Lagrange's MVT is a special case of Rolle's theorem",
-    "They are completely unrelated concepts",
-    "Rolle's theorem only applies to even functions"
+    "f'(x) = 1 for all x in (0, 10)",
+    "There exists at least one point c in (0, 10) where f'(c) = 1",
+    "f(x) = x + 5 for all x in [0, 10]",
+    "f'(x) is always positive"
    ],
-   "correct_index": 0,
-   "explanation": "Think of Lagrange's MVT as the 'big brother' of Rolle's theorem; it works even when the start and end heights are different."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Consider the function f(x) = |x| on the interval [-1, 1]. Does Rolle's Theorem apply to this function on this interval?",
+   "question": "Consider the function f(x) = x(x - 1)(x - 2) on the interval [0, 2]. Which of the following statements are correct?",
+   "explanation": "Since f(x) is a polynomial, it is continuous and differentiable. Because f(0) = f(1) = f(2) = 0, Rolle's Theorem guarantees a zero derivative between each pair of roots.",
    "options": [
-    "Yes, because f(-1) = f(1)",
-    "No, because the function is not differentiable at x = 0",
-    "Yes, because the function is continuous",
-    "No, because the function is not strictly increasing"
+    "f(x) is continuous on [0, 2] and differentiable on (0, 2)",
+    "f(0) = f(2), so Rolle's Theorem applies",
+    "There is at least one c in (0, 1) where f'(c) = 0",
+    "There is no value c in (0, 2) where f'(c) = 0"
    ],
-   "correct_index": 1,
-   "explanation": "Even though the ends are equal, the sharp corner at x = 0 means the derivative doesn't exist there, so Rolle's theorem fails."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
   },
   {
-   "question": "Find the value of 'c' in the interval (0, 2) for the function f(x) = x^2 + 2x using the Mean Value Theorem.",
-   "options": [
-    "c = 0",
-    "c = 1",
-    "c = 2",
-    "c = 1.5"
-   ],
-   "correct_index": 1,
-   "explanation": "Don't let the algebra scare you! Find the average slope first, then set the derivative equal to that value."
+   "question": "For the function f(x) = x^3, find the value of c in the interval (1, 3) that satisfies the Lagrange Mean Value Theorem. (Round off to two decimal places.)",
+   "explanation": "The average rate of change is (f(3) - f(1)) / (3 - 1) = (27 - 1) / 2 = 13. Setting f'(c) = 3c^2 = 13 gives c = sqrt(13/3), which is approximately 2.08.",
+   "type": "nat",
+   "answer": 2.08,
+   "tolerance": 0.01
   }
  ]
 }

@@ -7,7 +7,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:43:52+00:00"
+   "written_at": "2026-10-10T15:41:43+00:00"
   },
   "flashcards": {
    "model": "gemma-4-26b-a4b-it",
@@ -16,59 +16,62 @@
  },
  "practice": [
   {
-   "question": "What is the main difference between a Prime Implicant (PI) and an Essential Prime Implicant (EPI) in the Quine-McCluskey method?",
+   "question": "In the Quine-McCluskey method, how would you define a Prime Implicant?",
+   "explanation": "Think of a Prime Implicant as a 'maximal' group. It's a group that you simply cannot make any larger by combining it with others.",
    "options": [
-    "A PI is always part of the final minimal expression, while an EPI is not.",
-    "An EPI is a PI that covers at least one minterm that no other PI covers.",
-    "An EPI is a PI that contains more variables than a standard PI.",
-    "There is no difference; they are the same thing."
+    "A group of minterms that can still be combined with others to form a larger group.",
+    "A group of minterms that cannot be combined with any other group to form a larger group.",
+    "A single minterm that is not covered by any other term in the function.",
+    "The final simplified Boolean expression after all minimization steps are completed."
    ],
-   "correct_index": 1,
-   "explanation": "An EPI is a 'must-have' because it is the only way to cover certain minterms. All EPIs are PIs, but not all PIs are EPIs."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Consider a 3-variable function f(x, y, z) with minterms m(0, 1, 2, 5). How many Prime Implicants (PIs) will the Quine-McCluskey method identify?",
+   "question": "When using the tabular method, what is the necessary condition for two minterms (or groups) to be combined into a larger group?",
+   "explanation": "To combine two terms, they must be identical in every way except for one bit position. This is the core rule for expanding our groups!",
+   "options": [
+    "They must have the same number of 1s in their binary representation.",
+    "They must differ by exactly one bit position.",
+    "They must be adjacent in a K-map.",
+    "They must have the same number of 0s in their binary representation."
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "A Boolean function f(x, y, z) has minterms {0, 1, 2, 5}. How many Prime Implicants will be found using the Quine-McCluskey method?",
+   "explanation": "We find three pairs: (0,1) which is 00-, (0,2) which is 0-0, and (1,5) which is -01. Since none of these can be combined further, we have 3 Prime Implicants.",
    "options": [
     "1",
     "2",
     "3",
     "4"
    ],
-   "correct_index": 2,
-   "explanation": "By combining adjacent minterms, we find the pairs (0,1), (0,2), and (1,5). These three groups cannot be combined further, so they are the PIs."
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "In the first step of the Quine-McCluskey method, how are minterms grouped before the comparison process begins?",
+   "question": "Which of the following statements are correct regarding the Quine-McCluskey minimization process?",
+   "explanation": "An EPI is 'essential' because it is the only way to cover a specific minterm. Also, the tabular method is great because it handles many variables without the visual mess of K-maps.",
    "options": [
-    "Grouped by the number of 1s in their binary representation.",
-    "Grouped by the number of 0s in their binary representation.",
-    "Grouped alphabetically by their variable names.",
-    "Grouped into pairs of two regardless of their values."
+    "An Essential Prime Implicant is a Prime Implicant that covers at least one minterm not covered by any other Prime Implicant.",
+    "Every Prime Implicant is necessarily an Essential Prime Implicant.",
+    "The tabular method is more systematic and scalable for functions with many variables compared to K-maps.",
+    "The number of Prime Implicants depends only on the number of variables in the function."
    ],
-   "correct_index": 0,
-   "explanation": "We group minterms by the count of 1s to ensure we only compare terms that differ by exactly one bit. This makes the process systematic."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2
+   ]
   },
   {
-   "question": "Given the minterms m(1, 3, 7) for a 3-variable function, how many Essential Prime Implicants (EPIs) are there?",
-   "options": [
-    "There are 0 EPIs.",
-    "There is 1 EPI.",
-    "There are 2 EPIs.",
-    "There are 3 EPIs."
-   ],
-   "correct_index": 2,
-   "explanation": "The PIs are (1,3) and (3,7). Since minterm 1 is only covered by (1,3) and minterm 7 is only covered by (3,7), both are essential."
-  },
-  {
-   "question": "Why is the Quine-McCluskey (tabular) method preferred over the Karnaugh Map (K-map) method in certain scenarios?",
-   "options": [
-    "It is much faster for 2 or 3 variables.",
-    "It is easier to perform manually without any errors.",
-    "It can be easily generalized for functions with a large number of variables.",
-    "It eliminates the need for a Prime Implicant chart."
-   ],
-   "correct_index": 2,
-   "explanation": "While K-maps are great for visual learning, they become very difficult to use beyond 5 or 6 variables. The tabular method is algorithmic and scales much better."
+   "question": "Consider a function f(A, B, C, D) with minterms {0, 1, 2, 4, 8}. What is the total number of Prime Implicants?",
+   "explanation": "The minterms are 0000, 0001, 0010, 0100, and 1000. Comparing 0 with the others gives four groups: (0,1) -> 000-, (0,2) -> 00-0, (0,4) -> 0-00, and (0,8) -> -000. No other combinations are possible, so we have 4 PIs.",
+   "type": "nat",
+   "answer": 4.0,
+   "tolerance": 0
   }
  ],
  "flashcards": [

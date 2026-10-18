@@ -7,7 +7,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:42:49+00:00"
+   "written_at": "2026-10-10T15:40:23+00:00"
   },
   "flashcards": {
    "model": "gemma-4-26b-a4b-it",
@@ -16,59 +16,62 @@
  },
  "practice": [
   {
-   "question": "Simplify the Boolean expression: (A + B)' . (A' + B')'",
-   "options": [
-    "0",
-    "1",
-    "A",
-    "B"
-   ],
-   "correct_index": 0,
-   "explanation": "Just apply De Morgan's law to both parts first. You'll see that one part becomes A'B' and the other becomes AB, and since A and A' can't both be true, the whole expression becomes 0."
-  },
-  {
-   "question": "What is the simplest form of the function F(A, B, C) = A'B'C + A'BC + AB'C + ABC?",
+   "question": "Simplify the following Boolean expression: F = A'B'C + A'BC + AB'C + ABC",
+   "explanation": "Don't let the extra variables scare you! Just group the terms: `A'C(B' + B) + AC(B' + B)`. Since `B' + B = 1`, it simplifies to `A'C + AC`, which is just `C`.",
    "options": [
     "A",
     "B",
     "C",
     "A + B + C"
    ],
-   "correct_index": 2,
-   "explanation": "Try grouping the terms that have common variables. Grouping them as A'C(B' + B) and AC(B' + B) makes the simplification very smooth!"
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "According to the principle of duality, if the identity A + 0 = A holds true, what is its dual?",
+   "question": "Which of the following is equivalent to the expression A + A'B?",
+   "explanation": "A quick trick here is the distributive law. `A + A'B` can be rewritten as `(A + A')(A + B)`. Since `A + A' = 1`, you're left with `1 . (A + B)`, which is `A + B`.",
    "options": [
-    "A + 1 = A",
-    "A . 1 = A",
-    "A + 0 = 1",
-    "A . 0 = 0"
+    "A",
+    "B",
+    "A + B",
+    "AB"
    ],
-   "correct_index": 1,
-   "explanation": "Remember the rule for duality: just swap the AND (.) and OR (+) operators, and swap 0 with 1. It's a common trick used in GATE!"
+   "type": "mcq",
+   "correct_index": 2
   },
   {
-   "question": "Simplify the following expression: XY + X(Y + Z) + Y(Y + Z)",
+   "question": "The Boolean expression F = XY + X(Y + Z) + Y(Y + Z) can be simplified to a form containing how many literals?",
+   "explanation": "Take it step by step. First, `XY + XY` is just `XY`. Then, `XY + Y + YZ` simplifies to `Y` using the absorption law. The final form `Y + XZ` has 3 literals: `Y`, `X`, and `Z`.",
    "options": [
-    "X",
-    "Y",
-    "Y + XZ",
-    "XZ"
+    "2",
+    "3",
+    "4",
+    "5"
    ],
-   "correct_index": 2,
-   "explanation": "Expand the brackets first and look for terms like Y + YZ. Since Y is already there, adding YZ doesn't change anything because of the absorption law!"
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Which of the following represents the correct Consensus Theorem?",
+   "question": "Which of the following Boolean identities are always true for any Boolean variables A and B?",
+   "explanation": "Option 0 is the Absorption Law and Option 2 is a standard identity. Options 1 and 3 are common mistakes—be careful with those in the exam!",
    "options": [
-    "AB + A'C + BC = AB + A'C",
-    "AB + A'C + BC = BC",
-    "AB + A'C + BC = A'C",
-    "AB + A'C + BC = AB"
+    "A + AB = A",
+    "A(A + B) = B",
+    "A + A'B = A + B",
+    "(A + B)' = A' + B'"
    ],
-   "correct_index": 0,
-   "explanation": "The consensus theorem helps us remove the redundant term BC. It's a super handy shortcut for minimization problems!"
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2
+   ]
+  },
+  {
+   "question": "A Boolean function is defined as F(A, B, C) = sum(m1, m3, m4, m7). How many maxterms are in the canonical Maxterm form of this function?",
+   "explanation": "Since we have 3 variables, there are `2^3 = 8` total possible terms. If 4 are used as minterms, the remaining `8 - 4 = 4` must be the maxterms.",
+   "type": "nat",
+   "answer": 4.0,
+   "tolerance": 0
   }
  ],
  "flashcards": [

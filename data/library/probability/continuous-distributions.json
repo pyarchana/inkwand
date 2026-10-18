@@ -1,65 +1,69 @@
 {
  "practice": [
   {
-   "question": "If a continuous random variable X is uniformly distributed between 2 and 8, what is the probability that X is less than 5?",
-   "options": [
-    "0.25",
-    "0.5",
-    "0.75",
-    "0.3"
-   ],
-   "correct_index": 1,
-   "explanation": "For a uniform distribution on [a, b], the probability is the width of the target interval divided by the total width. Here, (5 - 2) / (8 - 2) = 3/6 = 0.5."
-  },
-  {
-   "question": "Which of the following is a unique property of the exponential distribution?",
-   "options": [
-    "The mean is always 1",
-    "The distribution is symmetric",
-    "The memoryless property",
-    "The variance is always equal to the mean"
-   ],
-   "correct_index": 2,
-   "explanation": "The memoryless property is a special feature where the probability of an event occurring in the future is independent of how much time has already passed. This is the hallmark of the exponential distribution!"
-  },
-  {
-   "question": "A normally distributed variable has a mean of 50 and a standard deviation of 5. What is the Z-score for the value 60?",
+   "question": "A continuous random variable X follows a uniform distribution on the interval [2, 8]. What is the variance of X?",
+   "explanation": "For a uniform distribution on [a, b], the variance is (b - a)^2 / 12. Here, (8 - 2)^2 / 12 = 36 / 12 = 3.",
    "options": [
     "1",
     "2",
-    "5",
-    "10"
-   ],
-   "correct_index": 1,
-   "explanation": "The Z-score tells us how many standard deviations a value is from the mean. We calculate it as (value - mean) / standard_deviation, which is (60 - 50) / 5 = 2."
-  },
-  {
-   "question": "The average time between arrivals of packets at a router is 0.02 seconds. If the arrival intervals follow an exponential distribution, what is the rate parameter lambda?",
-   "options": [
-    "0.02",
-    "20",
-    "50",
-    "100"
-   ],
-   "correct_index": 2,
-   "explanation": "In an exponential distribution, the mean is 1/lambda. Since the mean is 0.02, we find lambda by calculating 1 / 0.02 = 50."
-  },
-  {
-   "question": "A continuous random variable X is uniformly distributed on the interval [a, b]. If the variance of X is 3, what is the value of (b - a)?",
-   "options": [
     "3",
-    "6",
-    "12",
-    "36"
+    "4"
    ],
-   "correct_index": 1,
-   "explanation": "The variance of a uniform distribution is (b - a)^2 / 12. Setting (b - a)^2 / 12 = 3 gives (b - a)^2 = 36, so b - a = 6."
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "The time between arrivals of customers at a bank follows an exponential distribution with a mean of 5 minutes. What is the probability that the next customer arrives within 5 minutes?",
+   "explanation": "The rate lambda is 1/mean, so lambda = 1/5. The probability P(X <= x) is 1 - e^(-lambda * x), which gives 1 - e^(-(1/5)*5) = 1 - e^-1.",
+   "options": [
+    "e^-1",
+    "1 - e^-1",
+    "e^-5",
+    "0.5"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "For a standard normal random variable Z, what is the value of P(Z < 0)?",
+   "explanation": "The standard normal distribution is perfectly symmetric around its mean of 0. Therefore, exactly 50% of the area lies to the left of 0.",
+   "options": [
+    "0",
+    "0.5",
+    "1",
+    "-0.5"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "Which of the following statements are correct regarding probability distributions?",
+   "explanation": "Exponential is memoryless, and for a normal distribution, the mean, median, and mode are equal. Note that the normal distribution is symmetric, not skewed, and the exponential variance is indeed 1/lambda^2.",
+   "options": [
+    "The exponential distribution possesses the memoryless property.",
+    "The normal distribution is a positively skewed distribution.",
+    "For a normal distribution, the mean, median, and mode are all equal.",
+    "The variance of an exponential distribution with rate parameter lambda is 1/lambda^2."
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2,
+    3
+   ]
+  },
+  {
+   "question": "The lifetime of a certain electronic component follows an exponential distribution with a rate parameter lambda = 0.5 per year. What is the probability that the component lasts for more than 2 years? (Round off to two decimal places.)",
+   "explanation": "The probability P(X > x) is given by e^(-lambda * x). Here, e^(-0.5 * 2) = e^-1, which is approximately 0.37.",
+   "type": "nat",
+   "answer": 0.37,
+   "tolerance": 0.01
   }
  ],
  "meta": {
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:40:42+00:00"
+   "written_at": "2026-10-10T15:38:46+00:00"
   },
   "notes": {
    "model": "gemma-4-26b-a4b-it",

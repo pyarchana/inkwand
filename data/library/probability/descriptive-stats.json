@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:41:58+00:00"
+   "written_at": "2026-10-10T15:38:57+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "For a **positively skewed** (right-skewed) distribution, which of the following relationships is typically true?",
+   "question": "In a positively skewed (right-skewed) distribution, which of the following relationships is generally true?",
+   "explanation": "In a positively skewed distribution, the long tail on the right side pulls the mean towards the higher values, making it the largest of the three measures.",
    "options": [
-    "Mode < Median < Mean",
     "Mean < Median < Mode",
-    "Mean = Median = Mode",
-    "Median < Mode < Mean"
+    "Mode < Median < Mean",
+    "Median < Mode < Mean",
+    "Mean = Median = Mode"
    ],
-   "correct_index": 0,
-   "explanation": "In a positively skewed distribution, the long tail on the right pulls the **mean** towards the higher values, making it the largest of the three."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "A set of 10 observations has a **mean** of 50 and a **standard deviation** of 5. If every observation is multiplied by 2, what are the new **mean** and **standard deviation**?",
-   "options": [
-    "Mean = 50, SD = 10",
-    "Mean = 100, SD = 5",
-    "Mean = 100, SD = 10",
-    "Mean = 52, SD = 7"
-   ],
-   "correct_index": 2,
-   "explanation": "When you multiply all data points by a constant, both the **mean** and the **standard deviation** are scaled by that same constant."
-  },
-  {
-   "question": "What is the **median** of the following dataset: 10, 2, 38, 23, 7, 15, 11?",
-   "options": [
-    "10",
-    "11",
-    "15",
-    "23"
-   ],
-   "correct_index": 1,
-   "explanation": "Always remember to sort your numbers from smallest to largest first! Once sorted (2, 7, 10, 11, 15, 23, 38), the middle value is your **median**."
-  },
-  {
-   "question": "If the **variance** of a dataset is 16, what is its **standard deviation**?",
+   "question": "A dataset consists of the following numbers: {2, 4, 4, 4, 5, 5, 7, 9}. What is the mode of this dataset?",
+   "explanation": "The mode is the value that appears most frequently in a dataset. Here, 4 appears three times, which is more than any other number.",
    "options": [
     "4",
-    "8",
-    "256",
-    "2"
+    "5",
+    "7",
+    "9"
    ],
-   "correct_index": 0,
-   "explanation": "Don't overthink this one—the **standard deviation** is just the positive square root of the **variance**, so `sqrt(16)` is 4."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "In a dataset where all the values are identical (for example, {5, 5, 5, 5}), which of the following must be true?",
+   "question": "If every value in a dataset is multiplied by a constant k (where k > 0), how does the standard deviation change?",
+   "explanation": "When you scale every data point by a factor k, the spread (standard deviation) also scales by that same factor k.",
    "options": [
-    "Mean = 0",
-    "Standard deviation = 0",
-    "Median is undefined",
-    "Mode is 0"
+    "It remains the same",
+    "It becomes k + old_SD",
+    "It becomes k * old_SD",
+    "It becomes k^2 * old_SD"
    ],
-   "correct_index": 1,
-   "explanation": "Since there is no variation or spread between any of the numbers, the **standard deviation** will always be exactly 0."
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "Consider a set of observations X = {x_1, x_2, ..., x_n}. Which of the following statements are true?",
+   "explanation": "Outliers pull the mean towards them, while the median stays more central and stable. Also, if there is no variation in the data, the standard deviation is 0.",
+   "options": [
+    "The mean is highly sensitive to extreme outliers",
+    "The median is more robust to outliers than the mean",
+    "The standard deviation is zero if all elements in the dataset are identical",
+    "The mean is always equal to the median in any dataset"
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question": "Find the median of the following dataset: {12, 5, 22, 18, 30, 15, 10}",
+   "explanation": "First, sort the numbers: 5, 10, 12, 15, 18, 22, 30. Since there are 7 numbers, the middle (4th) value is 15.",
+   "type": "nat",
+   "answer": 15.0,
+   "tolerance": 0
   }
  ]
 }

@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:47:12+00:00"
+   "written_at": "2026-10-10T15:45:50+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,63 @@
  ],
  "practice": [
   {
-   "question": "Which of the following is a primary advantage of a microprogrammed control unit over a hardwired control unit?",
+   "question": "Which type of control unit is most commonly used in RISC processors due to its high speed?",
+   "explanation": "RISC architectures focus on speed, so they use hardwired control to get signals directly from logic gates without the delay of memory access.",
    "options": [
-    "Faster execution of instructions",
-    "Easier to implement and modify complex instruction sets",
-    "Requires less control memory",
-    "Achieves a higher clock frequency"
+    "Hardwired",
+    "Microprogrammed",
+    "Software-based",
+    "Cache-based"
    ],
-   "correct_index": 1,
-   "explanation": "Microprogrammed units use a control memory, which makes it much easier to add or change instructions by simply updating the memory instead of redesigning the hardware."
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "A microprogrammed control unit has 64 microinstructions. Each microinstruction contains 4 control signals and a 10-bit address for the next microinstruction. What is the total size of the control memory in bits?",
+   "question": "In a microprogrammed control unit, where are the microinstructions stored?",
+   "explanation": "Microprogrammed units work by fetching tiny instructions called microinstructions from a dedicated internal memory called the Control Memory.",
    "options": [
-    "896 bits",
-    "1024 bits",
-    "640 bits",
-    "512 bits"
-   ],
-   "correct_index": 0,
-   "explanation": "First, find the bits per microinstruction (4 + 10 = 14) and then multiply by the total number of microinstructions (64 * 14 = 896)."
-  },
-  {
-   "question": "In a hardwired control unit, what is the primary role of the instruction decoder?",
-   "options": [
-    "To store microprograms for each instruction",
-    "To convert the opcode into a unique signal pattern to drive the combinational logic",
-    "To calculate the effective address of the operand",
-    "To manage the sequence of microinstructions"
-   ],
-   "correct_index": 1,
-   "explanation": "The decoder takes the opcode from the instruction register and activates the specific lines needed to trigger the correct combinational logic circuits."
-  },
-  {
-   "question": "In a microprogrammed control unit, which component is responsible for determining the address of the next microinstruction to be executed?",
-   "options": [
+    "Main Memory",
     "Control Memory",
     "Instruction Register",
-    "Microprogram Sequencer",
-    "Arithmetic Logic Unit"
+    "Program Counter"
    ],
-   "correct_index": 2,
-   "explanation": "The microprogram sequencer acts as the next-address generator, deciding the next address based on flags, branches, or simple increments."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Suppose a microinstruction has a control word of 12 bits. If the first 4 bits are used for a jump address and the remaining 8 bits are for control signals, how many distinct control signal combinations can be represented?",
+   "question": "Which of the following is a characteristic of a Hardwired Control Unit?",
+   "explanation": "Unlike microprogrammed units that use memory, hardwired units use physical logic gates to generate signals immediately.",
    "options": [
-    "16",
-    "256",
-    "4096",
-    "64"
+    "It is easier to modify the instruction set",
+    "It is implemented using a control store",
+    "It uses combinational and sequential logic circuits",
+    "It is generally slower than microprogrammed units"
    ],
-   "correct_index": 1,
-   "explanation": "Since 8 bits are dedicated to control signals, the number of unique patterns is 2^8, which equals 256."
+   "type": "mcq",
+   "correct_index": 2
+  },
+  {
+   "question": "Which of the following statements are correct regarding Microprogrammed Control Units?",
+   "explanation": "Microprogrammed units are more flexible because you can update the instruction set by changing the microcode, and they are a staple in CISC architectures.",
+   "options": [
+    "They are easier to modify by updating the microcode",
+    "They are faster than hardwired control units",
+    "They utilize a control store to hold microinstructions",
+    "They are commonly found in CISC-based architectures"
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    2,
+    3
+   ]
+  },
+  {
+   "question": "A control memory stores 1024 microinstructions, and each microinstruction is 64 bits wide. What is the total capacity of the control memory in bits?",
+   "explanation": "To find the total capacity, just multiply the number of microinstructions by the width of each one: 1024 * 64 = 65536 bits.",
+   "type": "nat",
+   "answer": 65536.0,
+   "tolerance": 0
   }
  ]
 }

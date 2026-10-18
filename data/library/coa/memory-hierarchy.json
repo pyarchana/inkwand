@@ -7,7 +7,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:47:52+00:00"
+   "written_at": "2026-10-10T15:52:22+00:00"
   },
   "flashcards": {
    "model": "gemma-4-26b-a4b-it",
@@ -16,59 +16,63 @@
  },
  "practice": [
   {
-   "question": "A program accesses memory locations in the following sequence: 100, 104, 108, 112. This sequence most likely exploits which type of locality?",
+   "question": "If the hit ratio of a cache memory increases, how does the average memory access time change, assuming the access times of both the cache and the main memory remain constant?",
+   "explanation": "A higher hit ratio means we find the data in the fast cache more often, which reduces the overall average time spent waiting for memory.",
    "options": [
-    "Temporal locality",
-    "Spatial locality",
-    "Both temporal and spatial locality",
-    "Neither temporal nor spatial locality"
+    "It increases",
+    "It decreases",
+    "It remains the same",
+    "It becomes zero"
    ],
-   "correct_index": 1,
-   "explanation": "Since the memory addresses are close to each other, the program is accessing data in a contiguous manner, which is the definition of spatial locality."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "A processor has a cache with a hit time of 2 ns. On a cache miss, it takes an additional 100 ns to fetch the data from main memory. If the hit ratio is 0.9, what is the average memory access time (AMAT)?",
+   "question": "A system has a cache memory with an access time of 10 ns and a main memory with an access time of 100 ns. If the hit ratio is 0.9, what is the average memory access time in ns?",
+   "explanation": "Average Access Time = (Hit Ratio * Cache Time) + ((1 - Hit Ratio) * Main Memory Time) = (0.9 * 10) + (0.1 * 100) = 9 + 10 = 19 ns.",
    "options": [
-    "10 ns",
-    "12 ns",
-    "92 ns",
-    "102 ns"
-   ],
-   "correct_index": 1,
-   "explanation": "Using the formula AMAT = Hit Time + (Miss Rate * Miss Penalty), we get 2 + (0.1 * 100) = 12 ns."
-  },
-  {
-   "question": "A direct-mapped cache has a total capacity of 64 KB. If each cache block is 64 bytes, how many lines (slots) are available in the cache?",
-   "options": [
-    "64",
-    "512",
-    "1024",
-    "4096"
-   ],
-   "correct_index": 2,
-   "explanation": "The number of lines is the total cache size divided by the block size. So, 64 KB / 64 B = 1024 lines."
-  },
-  {
-   "question": "When a memory block is brought into the cache for the very first time, a cache miss occurs. What type of miss is this?",
-   "options": [
-    "Capacity miss",
-    "Conflict miss",
-    "Compulsory miss",
-    "Coherence miss"
-   ],
-   "correct_index": 2,
-   "explanation": "Compulsory misses (also called cold misses) happen because the data is being accessed for the first time and therefore cannot be in the cache."
-  },
-  {
-   "question": "A system has a hit time of 1 cycle and a miss penalty of 100 cycles. If the hit ratio improves from 0.9 to 0.99, by what factor does the average memory access time (AMAT) decrease?",
-   "options": [
-    "2",
-    "5.5",
     "10",
-    "11"
+    "19",
+    "90",
+    "100"
    ],
-   "correct_index": 1,
-   "explanation": "The old AMAT is 1 + (0.1 * 100) = 11, and the new AMAT is 1 + (0.01 * 100) = 2. Dividing the old by the new gives 11 / 2 = 5.5."
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "In a direct-mapped cache, if the number of cache lines is 2^k, which part of the memory address is typically used to select the specific cache line index?",
+   "explanation": "In direct mapping, the index is derived from the lower bits of the block address to quickly map a memory block to a specific cache line.",
+   "options": [
+    "The most significant k bits",
+    "The least significant k bits of the block address",
+    "The tag bits",
+    "The word offset bits"
+   ],
+   "type": "mcq",
+   "correct_index": 1
+  },
+  {
+   "question": "Which of the following statements regarding the memory hierarchy are correct?",
+   "explanation": "Moving down the hierarchy means storage becomes slower, cheaper, and larger. Hit ratio is not a guaranteed property of the hierarchy position itself but depends on the workload.",
+   "options": [
+    "As we move from the top (registers) to the bottom (disk) of the hierarchy, the access time increases.",
+    "As we move from the top to the bottom, the cost per bit decreases.",
+    "As we move from the top to the bottom, the total capacity increases.",
+    "As we move from the top to the bottom, the hit ratio of every level automatically increases."
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question": "A processor has a cache with an access time of 2 ns and a main memory with an access time of 100 ns. If the average memory access time is 4 ns, what is the hit ratio? (Round off to two decimal places.)",
+   "explanation": "4 = H * 2 + (1 - H) * 100 => 4 = 2H + 100 - 100H => 98H = 96 => H = 96/98 = 0.9795... which rounds to 0.98.",
+   "type": "nat",
+   "answer": 0.98,
+   "tolerance": 0.01
   }
  ],
  "flashcards": [

@@ -44,65 +44,68 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T13:23:38+00:00"
+   "written_at": "2026-10-10T15:47:57+00:00"
   }
  },
  "notes": "Hey! Let's tackle I/O. Think of the CPU as a busy professor.\n\n- **Interrupt-driven I/O**: Instead of the CPU constantly checking (polling) if a device is ready, the device sends a signal called an **interrupt**. The CPU pauses, runs an **Interrupt Service Routine (ISR)** to move the data, and then resumes. This saves the CPU from wasting time polling, but the CPU still has to do the actual work of moving every byte.\n- **DMA (Direct Memory Access)**: For large data blocks, even interrupts are too much work if the CPU has to move every byte. A **DMA Controller** takes over the system bus and moves data directly between the I/O device and memory. The CPU is only involved at the very start (to give the command) and at the very end (to receive a completion interrupt).\n\nExample:\nTransferring 100 bytes from a disk to memory:\n1. In **Programmed I/O**, the CPU polls the disk and moves each of the 100 bytes one by one.\n2. In **Interrupt-driven I/O**, the CPU works on other tasks, but gets interrupted 100 times to move each byte via the ISR.\n3. In **DMA**, the CPU tells the DMA controller: \"Move 100 bytes from Disk Address A to Memory Address B.\" The CPU then goes back to its work. The DMA controller moves all 100 bytes independently and sends **one** interrupt to the CPU when the whole block is finished.\n\nCommon traps:\n- Thinking **Interrupt-driven I/O** saves the CPU from moving data. It only saves the CPU from *waiting* for the device. The CPU still moves the data. Only **DMA** moves data without the CPU.\n- Forgetting that DMA uses **cycle stealing**, meaning it temporarily \"steals\" the bus from the CPU to move data.\n\nRemember this: Interrupts stop the CPU to handle a task, while DMA moves data so the CPU doesn't have to.",
  "practice": [
   {
-   "question": "In which of the following scenarios does **interrupt-driven I/O** provide a significant advantage over **programmed I/O** (polling)?",
+   "question": "In interrupt-driven I/O, how does the CPU know that an I/O device is ready for data transfer?",
+   "explanation": "Unlike polling where the CPU keeps asking the device if it is ready, in interrupt-driven I/O, the device proactively sends a signal to the CPU when it needs attention.",
    "options": [
-    "When the I/O device is much faster than the CPU",
-    "When the CPU needs to perform real-time calculations for the I/O device",
-    "When the I/O device is slow and the CPU can perform other tasks in the meantime",
-    "When the CPU is entirely dedicated to a single I/O task"
+    "By continuously polling the device status register",
+    "By receiving a hardware signal from the device",
+    "By checking a system timer",
+    "By reading a specific memory address mapped to the device"
    ],
-   "correct_index": 2,
-   "explanation": "In programmed I/O, the CPU wastes time busy-waiting for the device. Interrupts allow the CPU to work on other useful tasks until the device is actually ready."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "Which of the following is a primary characteristic of **Direct Memory Access (DMA)**?",
+   "question": "In the cycle stealing mode of DMA, what exactly does the DMA controller steal from the CPU?",
+   "explanation": "Cycle stealing allows the DMA controller to take over the system bus for one bus cycle to transfer a word, momentarily pausing the CPU's access to the bus.",
    "options": [
-    "The CPU manages the transfer of every single byte between the device and memory",
-    "The DMA controller takes control of the system buses to transfer data directly to memory",
-    "The CPU must pause all execution and cannot perform any other task during DMA",
-    "DMA is used only when the CPU is too slow to handle data"
+    "A full instruction execution cycle",
+    "A single bus cycle",
+    "A CPU clock cycle",
+    "An entire memory page"
    ],
-   "correct_index": 1,
-   "explanation": "DMA allows the controller to take over the system buses, enabling data transfer between I/O and memory without constant CPU intervention."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "An interrupt occurs while the CPU is executing an instruction. The CPU must: 1. Finish the current instruction (4 cycles), 2. Save the current state/PC (2 cycles), and 3. Fetch the first instruction of the ISR (3 cycles). What is the total **interrupt latency** in clock cycles?",
+   "question": "What is the primary advantage of using vectored interrupts over non-vectored interrupts?",
+   "explanation": "In vectored interrupts, the device provides the address (vector) of its ISR, so the CPU knows exactly where to jump without having to ask every device who sent the interrupt.",
    "options": [
-    "4",
-    "6",
-    "9",
-    "12"
+    "It completely removes the need for an interrupt controller",
+    "The CPU does not need to poll devices to identify the interrupt source",
+    "It allows DMA transfers to happen faster",
+    "It reduces the number of registers used during context switching"
    ],
-   "correct_index": 2,
-   "explanation": "Latency is the total time from the interrupt signal until the first instruction of the ISR is fetched, which is the sum of all these steps: 4 + 2 + 3 = 9."
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "In a **vectored interrupt** system, how does the CPU identify the starting address of the Interrupt Service Routine (ISR)?",
+   "question": "Which of the following statements about Direct Memory Access (DMA) are correct?",
+   "explanation": "DMA is designed for bulk transfers to free up the CPU. The CPU only handles the start and end of the transfer, while the DMA controller manages the actual data movement.",
    "options": [
-    "The CPU polls every device one by one to see who interrupted",
-    "The device provides a unique vector or index that points to the ISR address",
-    "The CPU always jumps to a fixed, hardcoded address for every interrupt",
-    "The programmer must write a loop to check the status of all I/O ports"
+    "DMA allows I/O devices to transfer data directly to/from memory without CPU intervention for every word",
+    "DMA reduces the CPU overhead for bulk data transfers",
+    "The CPU must be completely powered off during a DMA transfer",
+    "DMA requires the CPU to poll the device status register throughout the transfer"
    ],
-   "correct_index": 1,
-   "explanation": "Vectored interrupts are efficient because the device provides a 'vector' that tells the CPU exactly where its specific service routine is located."
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1
+   ]
   },
   {
-   "question": "A DMA controller is tasked to transfer a block of 512 words from a peripheral to memory. If each word transfer requires 4 bus cycles, how many total clock cycles are needed for the data transfer?",
-   "options": [
-    "512",
-    "1024",
-    "2048",
-    "4096"
-   ],
-   "correct_index": 2,
-   "explanation": "To find the total cycles, you simply multiply the number of words by the number of cycles required per word: 512 * 4 = 2048."
+   "question": "A DMA controller transfers a block of 1024 bytes from a disk to memory. The bus transfer rate is 10 MB/s. The CPU takes 2 microseconds to initialize the DMA and another 2 microseconds to handle the interrupt after the transfer is complete. What is the total time in microseconds spent to complete this transfer? (Round off to two decimal places.)",
+   "explanation": "Transfer time = 1024 bytes / (10 * 10^6 bytes/sec) = 0.0001024 seconds = 102.4 microseconds. Total time = Initialization + Transfer + Interrupt = 2 + 102.4 + 2 = 106.4 microseconds.",
+   "type": "nat",
+   "answer": 106.4,
+   "tolerance": 0.01
   }
  ]
 }

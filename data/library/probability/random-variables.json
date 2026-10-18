@@ -11,7 +11,7 @@
   },
   "practice": {
    "model": "gemma-4-26b-a4b-it",
-   "written_at": "2026-10-02T11:40:28+00:00"
+   "written_at": "2026-10-10T15:38:34+00:00"
   }
  },
  "flashcards": [
@@ -50,59 +50,62 @@
  ],
  "practice": [
   {
-   "question": "A discrete random variable X takes values 1, 2, and 3 with probabilities 0.2, 0.5, and 0.3 respectively. What is the expected value E[X]?",
+   "question": "A discrete random variable X can take values 1, 2, and 3. The probability mass function is given by P(X = x) = x/6 for x = 1, 2, 3. What is the expected value E[X]?",
+   "explanation": "Don't forget to check if the probabilities sum to 1 first! Then, just use the formula E[X] = sum(x * P(X=x)). Here, 1(1/6) + 2(2/6) + 3(3/6) = 14/6 = 7/3.",
    "options": [
-    "1.5",
-    "2.0",
-    "2.1",
-    "2.5"
+    "7/3",
+    "2",
+    "5/2",
+    "3"
    ],
-   "correct_index": 2,
-   "explanation": "To find the expectation, just multiply each value by its probability and sum them up. You've got this!"
+   "type": "mcq",
+   "correct_index": 0
   },
   {
-   "question": "If the variance of a random variable Y is 4, what is the variance of the new random variable Z = 3Y + 5?",
+   "question": "A continuous random variable X has a probability density function f(x) = c * x^2 for 0 <= x <= 2, and f(x) = 0 otherwise. What is the value of the constant c?",
+   "explanation": "Remember, the total area under a PDF must be 1. Just integrate c * x^2 from 0 to 2 and solve for c: c * [x^3/3] from 0 to 2 = 1, which gives c * 8/3 = 1.",
    "options": [
-    "4",
-    "12",
-    "36",
-    "41"
+    "1/8",
+    "3/8",
+    "1/4",
+    "1/2"
    ],
-   "correct_index": 2,
-   "explanation": "Remember the property: Var(aY + b) = a^2 * Var(Y). The constant 'b' doesn't affect the spread, but 'a' gets squared!"
+   "type": "mcq",
+   "correct_index": 1
   },
   {
-   "question": "A continuous random variable X has a probability density function f(x) = k * x for 0 <= x <= 2, and f(x) = 0 otherwise. What is the value of the constant k?",
-   "options": [
-    "0.25",
-    "0.5",
-    "1.0",
-    "2.0"
-   ],
-   "correct_index": 1,
-   "explanation": "For a PDF to be valid, the total area under the curve must be 1. Integrating kx from 0 to 2 gives 2k, so k must be 0.5."
-  },
-  {
-   "question": "Which of the following statements is true regarding a continuous random variable X?",
-   "options": [
-    "P(X = c) = 0 for any constant c",
-    "The sum of f(x) for all x must equal 1",
-    "The density f(x) must always be less than or equal to 1",
-    "The variance of a continuous random variable is always 0"
-   ],
-   "correct_index": 0,
-   "explanation": "In continuous distributions, we talk about intervals rather than exact points. The probability of hitting a single exact point is always zero!"
-  },
-  {
-   "question": "For a random variable X, if E[X] = 5 and E[X^2] = 29, what is the variance Var(X)?",
+   "question": "Given that the expected value of a random variable X is 5 and the expected value of X^2 is 29, find the variance of X.",
+   "explanation": "This one is a classic! Just use the identity Var(X) = E[X^2] - (E[X])^2. So, 29 - 5^2 = 29 - 25 = 4.",
    "options": [
     "4",
     "5",
     "24",
-    "29"
+    "34"
    ],
-   "correct_index": 0,
-   "explanation": "This is a classic formula! Just use Var(X) = E[X^2] - (E[X])^2 and plug in the numbers."
+   "type": "mcq",
+   "correct_index": 0
+  },
+  {
+   "question": "For any random variable X and any constant c, which of the following statements are always true?",
+   "explanation": "Expectation is linear, so adding a constant shifts the mean. But variance is about spread, so adding a constant doesn't change it! Note that Var(cX) actually equals c^2 * Var(X).",
+   "options": [
+    "E[X + c] = E[X] + c",
+    "Var(X + c) = Var(X)",
+    "Var(cX) = c * Var(X)",
+    "E[X^2] = (E[X])^2"
+   ],
+   "type": "msq",
+   "correct_indices": [
+    0,
+    1
+   ]
+  },
+  {
+   "question": "A discrete random variable X takes the values 1, 2, and 3 with probabilities 0.2, 0.5, and 0.3 respectively. Calculate the variance of X. (Round off to two decimal places.)",
+   "explanation": "First find E[X] = 1(0.2) + 2(0.5) + 3(0.3) = 2.1 and E[X^2] = 1(0.2) + 4(0.5) + 9(0.3) = 4.9. Then, Var(X) = 4.9 - (2.1)^2 = 4.9 - 4.41 = 0.49.",
+   "type": "nat",
+   "answer": 0.49,
+   "tolerance": 0.01
   }
  ]
 }
